@@ -1,0 +1,35 @@
+<resources>
+
+    <string name="app_name">تسبيح المسلم</string>
+    <string name="action_settings">Settings</string>
+    <string name="select_azkar">تحديد الاذكار</string>
+    <string name="select_time_azkar">تحديد أوقات الاذكار</string>
+    <string name="remember_me">ذكرني كل</string>
+    <string name="remember_me2">التذكير كل</string>
+    <string name="text_minute">دقيقة</string>
+    <string name="text_btn_start_remember">ابدأ بالتذكير</string>
+    <string name="text_btn_stop_remember">ايقاف التذكير</string>
+
+
+    <string name="three">ثلاثة</string>
+    <string name="tow">أثنان</string>
+    <string name="one">واحد</string>
+    <string name="num_time">التكرار</string>
+
+    <string name="run_stimulant">تم تشغيل منبه الاذكار</string>
+
+    <string name="titile_dialog">ذكرني كل</string>
+
+    <string-array name="kind_of_azkar">
+        <item>الحمد لله</item>
+        <item>الْحَمْدُ للّهِ رَبِّ الْعَالَمِينَ</item>
+        <item>أستغفر الله </item>
+        <item>لَا إِلَهَ إِلَّا اللَّهُ </item>
+        <item>الْلَّهُ أَكْبَرُُ </item>
+        <item>سُبْحَانَ اللهِ العَظِيمِ وَبِحَمْدِهِ </item>
+    </string-array>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+
+</resources>
