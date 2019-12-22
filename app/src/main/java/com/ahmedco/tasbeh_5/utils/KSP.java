@@ -1,4 +1,4 @@
-package com.ahmedco.tasbeh_5;
+package com.ahmedco.tasbeh_5.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
+import com.ahmedco.tasbeh_5.activities.WordWidget;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -40,12 +42,45 @@ public class KSP {
         return arr;
     }
 
+
+
+    public ArrayList GetAllBoolean(String k){
+        ArrayList arr = new ArrayList();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(_context);
+        Map<String, ?> keys_all = preferences.getAll();
+        SharedPreferences pref = _context.getSharedPreferences(k, _context.MODE_PRIVATE);
+        Map<String,?> keys = pref.getAll();
+        for(Map.Entry<String,?> entry : keys.entrySet()){
+            //  klib.Log.d("map values",entry.getKey() + ": " + entry.getValue().toString());
+            arr.add(entry.getValue());
+        }
+        return arr;
+    }
+
     public void saveFor(String key , String value) {
         SharedPreferences pref = _context.getSharedPreferences(_key, _context.MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
             editor.putString(key, String.valueOf(value));
             editor.commit();
     }
+
+
+    public void saveForBoolean(String key , boolean value) {
+        SharedPreferences pref = _context.getSharedPreferences(_key, _context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
+
+
+    public void saveForInt(String key , int value) {
+        SharedPreferences pref = _context.getSharedPreferences(_key, _context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(key, value);
+        editor.commit();
+    }
+
+
 
     public String getFor(String key ){
         SharedPreferences pref = _context.getSharedPreferences(_key, _context.MODE_PRIVATE);

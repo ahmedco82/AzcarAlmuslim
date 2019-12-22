@@ -1,4 +1,4 @@
-package com.ahmedco.tasbeh_5;
+package com.ahmedco.tasbeh_5.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,13 +8,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CustomGridViewActivity extends BaseAdapter {
+import com.ahmedco.tasbeh_5.R;
+
+public class gridViewHomeActivity extends BaseAdapter {
 
     private Context mContext;
     private final String[] gridViewString;
     private final int[] gridViewImageId;
 
-    public CustomGridViewActivity(Context context, String[] gridViewString, int[] gridViewImageId) {
+    public gridViewHomeActivity(Context context, String[] gridViewString, int[] gridViewImageId) {
         mContext = context;
         this.gridViewImageId = gridViewImageId;
         this.gridViewString = gridViewString;

@@ -1,29 +1,44 @@
-package com.ahmedco.tasbeh_5;
+package com.ahmedco.tasbeh_5.activities;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ahmedco.tasbeh_5.R;
+import com.ahmedco.tasbeh_5.WidgetAzcar_;
+import com.ahmedco.tasbeh_5.utils.DataProccessor;
+import com.ahmedco.tasbeh_5.utils.KSP;
+import com.ahmedco.tasbeh_5.utils.S_pref;
+import com.ahmedco.tasbeh_5.utils.SavePref;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
-public class FourActivity extends AppCompatActivity{
+//https://stackoverflow.com/questions/5914234/how-to-share-data-between-activity-and-widget
+public class ListAzcarActivity extends AppCompatActivity {
 
-        ToggleButton bt1,btnplay1,bt2,btnplay2,bt3,btnplay3,bt4,btnplay4;
+
         ToggleButton[] listBtnCheck;
         ToggleButton[] listBtnPlyStop;
         RadioGroup[] radioGroup;
@@ -31,50 +46,42 @@ public class FourActivity extends AppCompatActivity{
         int[] loopSound;
         String[] Azkar;
         boolean[] soundsBoolean;
-        int currentBtn;
+        int lengthListSounds;
         MediaPlayer mp1;
+        static DataProccessor dataProccessor;
+
+
+    private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+        // whatever code is needed for initialization goes here
 
         @Override
         protected void onCreate(Bundle savedInstanceState){
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_four);
-            ActionBarSetting();
-
-            mp1 = (MediaPlayer) MediaPlayer.create(FourActivity.this,R.raw.a1);
-            final MediaPlayer mp2 = (MediaPlayer) MediaPlayer.create(FourActivity.this,R.raw.a2);
-            final MediaPlayer mp3 = (MediaPlayer) MediaPlayer.create(FourActivity.this,R.raw.a3);
-            final MediaPlayer mp4 = (MediaPlayer) MediaPlayer.create(FourActivity.this,R.raw.a4);
-            final MediaPlayer mp5 = (MediaPlayer) MediaPlayer.create(FourActivity.this,R.raw.a5);
-           // t1.setText(R.string.text_minute);
-           // bt1 =(ToggleButton)viewR1.findViewById(R.id.bt_1);
-           // btnplay1=(ToggleButton)viewR1.findViewById(R.id.bt_play);
-
-            int[] rowId = new int[]{R.id.r1,R.id.r2,R.id.r3,R.id.r4,R.id.r5,R.id.r6};
-
-            // View v=(View)findViewById(rowId[0]);
-            /*
-            group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup , int i) {
-                    View radioButton = radioGroup.findViewById(i);
-                    int index = radioGroup.indexOfChild(radioButton);
-                    Log.v("radio_trace0",""+index);
-                }
-            });
-           */
-
-            listBtnCheck = new ToggleButton[6];
-            listBtnPlyStop = new ToggleButton[6];
-            View [] viewR  = new View[6];
-            textListTitle  = new TextView[6];
-            soundsBoolean  = new boolean[6];
-            radioGroup  = new RadioGroup[6];
-            loopSound = new int[6];
+          super.onCreate(savedInstanceState);
+          setContentView(R.layout.activity_list_azcar);
+          dataProccessor = new DataProccessor(this);
+          ActionBarSetting();
+            // ---------------------------------------------------------------------------------------------
+            setResult(RESULT_CANCELED);
+            // -----------------------------------------------------------------------------------------------
+            lengthListSounds = 6;
+            mp1 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this , R.raw.a1);
+            final MediaPlayer mp2 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a2);
+            final MediaPlayer mp3 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a3);
+            final MediaPlayer mp4 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a4);
+            final MediaPlayer mp5 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a5);
+            int[] rowId = new int[]{ R.id.r1,R.id.r2,R.id.r3,R.id.r4,R.id.r5,R.id.r6 };
+            listBtnCheck   = new ToggleButton[lengthListSounds];
+            listBtnPlyStop = new ToggleButton[lengthListSounds];
+            View [] viewR  = new View[lengthListSounds];
+            textListTitle  = new TextView[lengthListSounds];
+            soundsBoolean  = new boolean[lengthListSounds];
+            radioGroup  = new RadioGroup[lengthListSounds];
+            loopSound = new int[lengthListSounds];
             // RadioGroup group= (RadioGroup)v.findViewById(R.id.segmentedGroup);
             Resources res = getResources();
             Azkar = res.getStringArray(R.array.kind_of_azkar);
               for (int i = 0; i<listBtnCheck.length; i++){
-                for(int j = 0; j<6; j++) {
+                for(int j = 0; j<lengthListSounds; j++) {
                    viewR[j] = (View)findViewById(rowId[j]);
                      listBtnCheck[j] = (ToggleButton)viewR[j].findViewById(R.id.bt_check2);
                       listBtnPlyStop[j] = (ToggleButton)viewR[j].findViewById(R.id.bt_play);
@@ -84,7 +91,7 @@ public class FourActivity extends AppCompatActivity{
                          radioGroup[j].setTag(j);
                           soundsBoolean[j] = false;
                           loopSound[j] = 0;
-                           //listBtnPlyStop[j].setText("i"+i);
+                           // listBtnPlyStop[j].setText("i"+i);
                            textListTitle[j] = (TextView)viewR[j].findViewById(R.id._txt_kind_of_azkar);
                             textListTitle[j].setText(Azkar[j]);
                   }
@@ -108,16 +115,14 @@ public class FourActivity extends AppCompatActivity{
                     //loopSound
                 }
             });
-
            // Log.i("loopSound_00",""+  loopSound[3]);
-
           for(ToggleButton btn:listBtnCheck)
              //btn.setOnClickListener(btnListener);
             btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean checked){
                      // Change testLinearLayout direction based on toggle button checked status.
-                    // Intent k = new Intent(FourActivity.this , ThirdActivity.class);
+                    // Intent k = new Intent(ListAzcarActivity.this , DialogRememberInfoActivity.class);
                     // startActivity(k);
                     btn.setText(null);
                     if(checked){
@@ -132,29 +137,12 @@ public class FourActivity extends AppCompatActivity{
                    // Log.i("trace111_0",""+ soundsBoolean[0]);
                 }
             });
-             /*
-              if(button clicked){
-                list.add(editText.getText().toString());
-              }
-             */
-             // for(ToggleButton btn2:listBtnPlyStop)
-              //for(int j=0; j<listBtnPlyStop.length; j++) {
-              // currentBtn = listBtnPlyStop[j] ;
-               /*
-                listBtnPlyStop[j].setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        //rowId
-                      //  Log.i("trace00",""+ v.getTag());
-                        // int index = (Integer) v.getTag();
-                    }
-                });
-              */
+
             for(ToggleButton btn2:listBtnPlyStop)
                 btn2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                        //Intent k = new Intent(FourActivity.this , ThirdActivity.class);
+                        //Intent k = new Intent(ListAzcarActivity.this , DialogRememberInfoActivity.class);
                         // startActivity(k);
                         List<ToggleButton> btns = new ArrayList<>();
                         compoundButton.setText(null);
@@ -167,7 +155,7 @@ public class FourActivity extends AppCompatActivity{
                                    // btns.get(btns.size()-1).setBackgroundDrawable(getDrawable(b));
                                 }
                                 closeBtns((Integer) btn2.getTag());
-                                mp1 = (MediaPlayer) MediaPlayer.create(FourActivity.this,R.raw.a1);
+                                mp1 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a1);
                                 mp1.start();
                              // Log.i("isPlay_2","No");
                             }if(btn2.getTag().equals(1)){
@@ -177,7 +165,7 @@ public class FourActivity extends AppCompatActivity{
                                   //btns[0].setBackgroundDrawable(getDrawable(b));
                                 }
                                 closeBtns((Integer) btn2.getTag());
-                                mp1 = (MediaPlayer) MediaPlayer.create(FourActivity.this,R.raw.a2);
+                                mp1 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a2);
                                 //btns.add(btn2);
                                 mp1.start();
                             }if(btn2.getTag().equals(2)){
@@ -187,7 +175,7 @@ public class FourActivity extends AppCompatActivity{
                                     //btns.get(btns.size()-1).setBackgroundDrawable(getDrawable(b));
                                 }
                                 closeBtns((Integer) btn2.getTag());
-                                mp1 = (MediaPlayer) MediaPlayer.create(FourActivity.this,R.raw.a3);
+                                mp1 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a3);
                                 //btns.add(btn2);
                                 mp1.start();
                             }
@@ -195,7 +183,7 @@ public class FourActivity extends AppCompatActivity{
                                 if(mp1.isPlaying()){
                                     mp1.stop();
                                 }
-                                mp1 = (MediaPlayer) MediaPlayer.create(FourActivity.this,R.raw.a4);
+                                mp1 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a4);
                                 closeBtns((Integer) btn2.getTag());
                                 mp1.start();
                             }
@@ -206,7 +194,7 @@ public class FourActivity extends AppCompatActivity{
                                    // btns.get(btns.size()-1).setBackgroundDrawable(getDrawable(b));
                                 }
                                 //Log.i("trace00+++ ","44444");
-                                mp1 = (MediaPlayer) MediaPlayer.create(FourActivity.this,R.raw.a5);
+                                mp1 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a5);
                                 //btns.add(btn2);
                                 closeBtns((Integer)btn2.getTag());
                                 mp1.start();
@@ -217,7 +205,7 @@ public class FourActivity extends AppCompatActivity{
                                     //int b = R.drawable.btnplay;
                                     // btns.get(btns.size()-1).setBackgroundDrawable(getDrawable(b));
                                 }
-                                mp1 = (MediaPlayer) MediaPlayer.create(FourActivity.this,R.raw.a6);
+                                mp1 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a6);
                                 //btns.add(btn2);
                                 closeBtns((Integer)btn2.getTag());
                                 mp1.start();
@@ -225,56 +213,15 @@ public class FourActivity extends AppCompatActivity{
                         } else {
                             int b = R.drawable.btnplay;
                             btn2.setBackgroundDrawable(getDrawable(b));
-                            Toast.makeText(FourActivity.this, "You have clicked Btn", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ListAzcarActivity.this, "You have clicked Btn", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
-
-
-
-
-
-
-             /*
-            bt1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean checked){
-                    // Change testLinearLayout direction based on toggle button checked status.
-                    bt1.setText(null);
-                    if(checked){
-                        int d = R.drawable.chk;
-                        bt1.setBackgroundDrawable(getDrawable(d));
-                    }else{
-                        int f = R.drawable.unchk;
-                        bt1.setBackgroundDrawable(getDrawable(f));
-                    }
-                }
-            });
-            btnplay1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean checked){
-                    // Change testLinearLayout direction based on toggle button checked status.
-                    btnplay1.setText(null);
-                    if(checked){
-                        int a = R.drawable.btnpause;
-                        btnplay1.setBackgroundDrawable(getDrawable(a));
-                    }else{
-                        int b = R.drawable.btnplay;
-                        btnplay1.setBackgroundDrawable(getDrawable(b));
-                        Toast.makeText(FourActivity.this, "You have clicked Btn", Toast.LENGTH_LONG).show();
-                    }
-                }
-          });
-          */
-     }
-
-
-
+            }
     private void closeBtns(int i){
-        for(int j = 0 ; j<listBtnPlyStop.length; j++){
+        for(int j = 0; j<listBtnPlyStop.length; j++){
             int b = R.drawable.btnplay;
             int a = R.drawable.btnpause;
-            // i = 4
             if(j !=i ){
                 listBtnPlyStop[j].setBackgroundDrawable(getDrawable(b));
             }else {
@@ -286,47 +233,107 @@ public class FourActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                  for(int i = 0 ; i < 4 ; i++)
-                Toast.makeText(FourActivity.this, "You have clicked Btn", Toast.LENGTH_SHORT).show();
+                  Toast.makeText(ListAzcarActivity.this, "You have clicked Btn", Toast.LENGTH_SHORT).show();
             }
         };
 
-
         private void ActionBarSetting() {
-            this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-            getSupportActionBar().setDisplayShowCustomEnabled(true);
-            getSupportActionBar().setCustomView(R.layout.toolbar);
+         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+          getSupportActionBar().setDisplayShowCustomEnabled(true);
+           getSupportActionBar().setCustomView(R.layout.toolbar);
             getSupportActionBar().setElevation(1);
-            View view = getSupportActionBar().getCustomView();
-            // getSupportActionBar().setIcon(R.drawable.dot1);
-            ImageView imageButton = (ImageView)findViewById(R.id.Icon);
-            imageButton.setImageResource(R.drawable.arrow_left_black);
-            //imageButton.setPaddingRelative(0,0,0,0);
-            //imageButton.setForegroundGravity(Ri);
-            TextView name = view.findViewById(R.id.text_title);
-            view.findViewById(R.id.l_container).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            name.setText("أذكار مع التكرار");
-            imageButton.setOnClickListener(new View.OnClickListener() {
+              View view = getSupportActionBar().getCustomView();
+              // getSupportActionBar().setIcon(R.drawable.dot1);
+              ImageView imageButton = (ImageView)findViewById(R.id.Icon);
+               imageButton.setImageResource(R.drawable.arrow_left_black);
+              //imageButton.setPaddingRelative(0,0,0,0);
+              //imageButton.setForegroundGravity(Ri);
+               TextView name = view.findViewById(R.id.text_title);
+               view.findViewById(R.id.l_container).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+               name.setText("أذكار مع التكرار");
+                 imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                 // Toast.makeText(FourActivity.this, "You have clicked Back", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ListAzcarActivity.this, "You have clicked Back", Toast.LENGTH_SHORT).show();
                  // onBackPressed();
-                 handleSetupWidget();
+                 //handleSetupWidget();
                 }
             });
+         }
+
+
+
+
+    public void confirmConfiguration(View V){
+        appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+        //Retrieve the App Widget ID from the Intent that launched the Activity//
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+
+        if(extras != null){
+            appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID , AppWidgetManager.INVALID_APPWIDGET_ID);
+            // If the intent doesn’t have a widget ID, then call finish()
+            if(appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+                finish();
+            }
+            //TO DO, Perform the configuration and get an instance of the AppWidgetManager//
+            //Create the return intent//
+            Intent resultValue = new Intent();
+            //Pass the original appWidgetId//
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            //Set the results from the configuration Activity//
+            setResult(RESULT_OK , resultValue);
+            //Finish the Activity//
+            finish();
         }
 
-
-        private void handleSetupWidget(){
-         Intent intent = new Intent(WidgetAzcar_.ACTION_TEXT_CHANGED);
-         intent.putExtra("soundsBoolean", soundsBoolean);
-         intent.putExtra("loopSound", loopSound);
-         getApplicationContext().sendBroadcast(intent);
+        Log.i("gotoActivity","Yes0");
+        for(int i=0; i<soundsBoolean.length; i++){
+            dataProccessor.setBool("soundsBoolean"+i,soundsBoolean[i]);
+            dataProccessor.setInt("loopSound"+i,loopSound[i]);
+            Log.i("trace0","Yes_0"+   dataProccessor.getBool("soundsBoolean"+i));
+        }
+        this.startService(new Intent(this , WordWidget.UpdateService.class));
     }
 }
 
 
 
-// http://thetechnocafe.com/how-to-create-widget-for-your-android-app/
+
+
+// retriveSharedValue(shared,arrPackage);
+        /*
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("pre", "Ahmed");
+        editor.apply();
+        */
+// Log.i("trec_x0_ ", "" + ksp_bool.GetAll().get(0));
+// Log.i("trec_x0_ ", "" + ksp_int.GetAll().get(0));
+        /*
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(KEY_BUTTON_TEXT + appWidgetId, buttonText);
+        editor.apply();
+        */
+//intent.putExtra("soundsBoolean", soundsBoolean);
+//intent.putExtra("loopSound", loopSound);
+// resultValue.putExtra("soundsBoolean" , soundsBoolean);
+//resultValue.putExtra("loopSound" , loopSound);
+        /*
+        Intent intent2 = new Intent(WordWidget.ACTION_TEXT_CHANGED);
+        intent.putExtra("soundsBoolean",soundsBoolean);
+        intent.putExtra("loopSound",loopSound);
+        getApplicationContext().sendBroadcast(intent);
+        */
+         /*
+        Intent intent = new Intent(ListAzcarActivity.this , AzcarActivity.class);
+        intent.putExtra("soundsBoolean", soundsBoolean);
+        intent.putExtra("loopSound", loopSound);
+        startActivity(intent);
+        */
+
+             // http://thetechnocafe.com/how-to-create-widget-for-your-android-app/
             /*
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
             int[] widgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, WidgetAzcar_.class));
@@ -340,4 +347,11 @@ public class FourActivity extends AppCompatActivity{
          Intent intn = new Intent (this, WidgetAzcar.class);
          intn.setFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
          this.startActivity (intn);
+         */
+
+          /*
+         Intent intent = new Intent(WidgetAzcar_.ACTION_TEXT_CHANGED);
+         intent.putExtra("soundsBoolean", soundsBoolean);
+         intent.putExtra("loopSound", loopSound);
+         getApplicationContext().sendBroadcast(intent);
          */

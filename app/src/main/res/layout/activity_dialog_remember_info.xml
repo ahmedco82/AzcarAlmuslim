@@ -112,28 +112,7 @@
                     android:layout_centerVertical="true"
                     android:orientation="horizontal"
                     android:layout_alignParentEnd="true">
-                    <TextView
-                        android:id="@+id/text_minute_4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:fontFamily="@font/coor"
-                        android:gravity="center"
-                        android:paddingRight="5dp"
-                        android:text="ساعة"
-                        android:textColor="#65a699"
-                        android:textSize="22sp" />
 
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text=" : "
-                        android:paddingRight="3dp"
-                        android:textColor="#e38305"
-                        android:layout_weight="3"
-                        android:textSize="22sp"/>
 
                     <TextView
                         android:id="@+id/text_minute_5"
@@ -204,69 +183,139 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/r_container_6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="30dp"
             android:orientation="horizontal">
             <RelativeLayout
+                android:id="@+id/row_tow6"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:orientation="horizontal"
-                    android:layout_alignParentEnd="true">
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/text_select_time_azcar7"
+                        android:layout_width="120dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="5"
+                        android:textColor="#e38305"
+                        android:gravity="center"
+                        android:background="@drawable/rounded_edittext"
+                        android:paddingRight="20dp"
+                        android:text=""
+                        android:textSize="22sp" />
                     <TextView
-                        android:id="@+id/text_minute4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:fontFamily="@font/coor"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:textColor="#e38305"
+                        android:textSize="20dp"
                         android:gravity="center"
-                        android:paddingRight="5dp"
-                        android:text="ساعة"
+                        android:text=" : "/>
+                    <TextView
+                        android:id="@+id/text_select_time_azcar6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
                         android:textColor="#65a699"
-                        android:textSize="22sp" />
-                    <TextView
-                        android:id="@+id/text_minute5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:fontFamily="@font/coor"
-                        android:gravity="center"
                         android:paddingRight="5dp"
-                        android:text="2"
-                        android:textColor="#e38305"
-                        android:textSize="22sp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text=" : "
-                        android:paddingRight="3dp"
-                        android:textColor="#e38305"
-                        android:layout_weight="3"
-                        android:textSize="22sp"/>
-                    <TextView
-                        android:id="@+id/text_minute_num2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="30"
-                        android:paddingRight="3dp"
-                        android:textColor="#e38305"
-                        android:layout_weight="3"
-                        android:textSize="22sp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingEnd="20dp"
-                        android:layout_weight="3"
-                        android:gravity="center"
-                        android:paddingRight="3dp"
-                        android:text="دقيقة"
                         android:fontFamily="@font/coor"
-                        android:textColor="#65a699"
+                        android:gravity="center"
+                        android:text="من الساعه"
+                        android:textSize="18sp" />
+                    <ImageView
+                        android:id="@+id/icon_point6"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:src="@drawable/dot1"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/r_container_7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="30dp"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/row_tow7"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/text_select_time_azcar8"
+                        android:layout_width="120dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="5"
+                        android:textColor="#e38305"
+
+                        android:gravity="center"
+                        android:background="@drawable/rounded_edittext"
+                        android:paddingRight="20dp"
+                        android:text=""
                         android:textSize="22sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:textColor="#e38305"
+                        android:textSize="20dp"
+                        android:gravity="center"
+                        android:text=" : "/>
+                    <TextView
+                        android:id="@+id/text_select_time_azcar_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:textColor="#65a699"
+                        android:paddingRight="5dp"
+                        android:fontFamily="@font/coor"
+                        android:gravity="center"
+                        android:text="الى الساعه"
+                        android:textSize="18sp" />
+                    <ImageView
+                        android:id="@+id/icon_point7"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:src="@drawable/dot1"
+                        android:layout_weight="1"/>
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
@@ -288,7 +337,7 @@
             android:fontFamily="@font/coor"
             android:gravity="center"
             android:onClick="Click_start_remember_me3"
-            android:text="@string/text_btn_stop_remember"
+            android:text="@string/text_btn_OK"
             android:textColor="#FFFFFF"
             android:textSize="22dp" />
     </LinearLayout>

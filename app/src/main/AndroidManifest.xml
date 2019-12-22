@@ -10,32 +10,42 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <receiver android:name=".WidgetAzcar_">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="com.ahmedco.tasbeh_5.TEXT_CHANGED"/>
-            </intent-filter>
 
+        <receiver android:name=".activities.WordWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.ahmedco.tasbeh_5.TEXT_CHANGED" />
+            </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_azcar__info" />
         </receiver>
 
-        <activity android:name=".AzcarActivity" />
-        <activity android:name=".FiveActivity" />
+        <!-- Service to perform web API queries -->
+        <service android:name=".activities.WordWidget$UpdateService" />
+
+        <activity android:name=".activities.AzcarActivity" />
+        <activity android:name=".activities.SettingsActivity" />
+
         <activity
-            android:name=".ThirdActivity"
-            android:parentActivityName=".SecondActivity"
+            android:name=".activities.DialogRememberInfoActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
-        <activity android:name=".SecondActivity" />
-        <activity android:name=".FourActivity" />
-        <activity android:name=".MainActivity">
+
+        <activity android:name=".activities.ListAzcarActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activities.HomeActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
     </application>
 
 </manifest>

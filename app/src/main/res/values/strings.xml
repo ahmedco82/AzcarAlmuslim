@@ -6,10 +6,18 @@
     <string name="select_time_azkar">تحديد أوقات الاذكار</string>
     <string name="remember_me">ذكرني كل</string>
     <string name="remember_me2">التذكير كل</string>
-    <string name="text_minute">دقيقة</string>
+    <string name="text_timer_selected0">5دقيقة</string>
     <string name="text_btn_start_remember">ابدأ بالتذكير</string>
     <string name="text_btn_stop_remember">ايقاف التذكير</string>
+    <string name="text_btn_OK">موافق</string>
 
+
+
+    <string name="stop_remeber">إيقاف التذكير</string>
+
+    <string name="start_remeber">أبدأ التذكير</string>
+
+    <string name="finish_choice">أنتهيت من الاختيار</string>
 
     <string name="three">ثلاثة</string>
     <string name="tow">أثنان</string>

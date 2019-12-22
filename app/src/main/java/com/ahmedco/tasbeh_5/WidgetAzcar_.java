@@ -20,7 +20,7 @@ import java.util.Locale;
  * Implementation of App Widget functionality.
  */
 public class WidgetAzcar_ extends AppWidgetProvider {
-
+/*
 
     private static long equ = 60;
     private static long i1 = 5000;
@@ -128,49 +128,9 @@ public class WidgetAzcar_ extends AppWidgetProvider {
         private void putVarTimer(){
           long[] itemTimers = {i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11};
           START_TIME_IN_MILLIS = 500 * equ;
-          // String currentEvertTime = String.valueOf(FiveActivity.ksp1.GetAll().get(0));
-            // Log.i("fiveActivity000", "" + FiveActivity.ksp1.GetAll().get(0));
-            /*
-            switch (currentEvertTime){
-                case "0":
-                    START_TIME_IN_MILLIS = i1 * equ;
-                    break;
-                case "1":
-                    START_TIME_IN_MILLIS = i2 * equ;
-                    break;
-                case "2":
-                    START_TIME_IN_MILLIS = i3 * equ;
-                    break;
-                case "3":
-                    START_TIME_IN_MILLIS = i4 * equ;
-                    break;
-                case "4":
-                    START_TIME_IN_MILLIS = i5 * equ;
-                    break;
-                case "5":
-                    START_TIME_IN_MILLIS = i6 * equ;
-                    break;
-                case "6":
-                    START_TIME_IN_MILLIS = i7 * equ;
-                    break;
-                case "7":
-                    START_TIME_IN_MILLIS = i8 * equ;
-                    break;
-                case "8":
-                    START_TIME_IN_MILLIS = i9 * equ;
-                    break;
-                case "9":
-                    START_TIME_IN_MILLIS = i10 * equ;
-                    break;
-                case "10":
-                    START_TIME_IN_MILLIS = i11 * equ;
-                    break;
-               default:
-                // START_TIME_IN_MILLIS = i1 * equ;
-                START_TIME_IN_MILLIS = 500 * equ;
-               break;
-          }
-          */
+          // String currentEvertTime = String.valueOf(SettingsActivity.ksp1.GetAll().get(0));
+            // Log.i("fiveActivity000", "" + SettingsActivity.ksp1.GetAll().get(0));
+
      }
 
 
@@ -258,12 +218,49 @@ public class WidgetAzcar_ extends AppWidgetProvider {
         } else {
             timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
         }
-        // Construct the RemoteViews object
-        //RemoteViews views = new RemoteViews(WidgetAzcar_.this , R.layout.widget_azcar_);
-        //views.setTextViewText(R.id.appwidget_text, timeLeftFormatted);
-        //mTextViewCountDown.setText(timeLeftFormatted);
-    }
 
+    }
+*/
 }
 
-
+         /*
+            switch (currentEvertTime){
+                case "0":
+                    START_TIME_IN_MILLIS = i1 * equ;
+                    break;
+                case "1":
+                    START_TIME_IN_MILLIS = i2 * equ;
+                    break;
+                case "2":
+                    START_TIME_IN_MILLIS = i3 * equ;
+                    break;
+                case "3":
+                    START_TIME_IN_MILLIS = i4 * equ;
+                    break;
+                case "4":
+                    START_TIME_IN_MILLIS = i5 * equ;
+                    break;
+                case "5":
+                    START_TIME_IN_MILLIS = i6 * equ;
+                    break;
+                case "6":
+                    START_TIME_IN_MILLIS = i7 * equ;
+                    break;
+                case "7":
+                    START_TIME_IN_MILLIS = i8 * equ;
+                    break;
+                case "8":
+                    START_TIME_IN_MILLIS = i9 * equ;
+                    break;
+                case "9":
+                    START_TIME_IN_MILLIS = i10 * equ;
+                    break;
+                case "10":
+                    START_TIME_IN_MILLIS = i11 * equ;
+                    break;
+               default:
+                // START_TIME_IN_MILLIS = i1 * equ;
+                START_TIME_IN_MILLIS = 500 * equ;
+               break;
+          }
+          */
