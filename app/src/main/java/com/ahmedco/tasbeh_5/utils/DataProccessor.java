@@ -23,25 +23,19 @@ public class DataProccessor {
 
 
     public static int getInt(String key) {
-
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-
         return prefs.getInt(key , 0);
     }
 
     public static void setStr(String key, String value) {
-
         SharedPreferences sharedPref = context.getSharedPreferences(PREFS_NAME,0);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(key, value);
-
         editor.apply();
     }
 
     public static String getStr(String key) {
-
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME , 0);
-
         return prefs.getString(key ,"DNF");
     }
 

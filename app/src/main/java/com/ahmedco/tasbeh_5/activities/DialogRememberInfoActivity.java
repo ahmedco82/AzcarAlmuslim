@@ -1,6 +1,7 @@
 package com.ahmedco.tasbeh_5.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -53,16 +54,22 @@ public class DialogRememberInfoActivity extends Activity {
     }
 
     public void Click_start_remember_me3(View V){
-         // Intent k = new Intent(DialogRememberInfoActivity.this , ListAzcarActivity.class);
-         //  startActivity(k);
+          // Intent k = new Intent(DialogRememberInfoActivity.this , ListAzcarActivity.class);
+          // startActivity(k);
          // startRemember_btn.setText("إيقاف التذكير");
+         Intent intent = getIntent();
+         setResult(RESULT_OK ,intent);
+         finish();
+
+        /*
          Bundle extras = getIntent().getExtras();
 
-        if (extras != null) {
-            String value = extras.getString("key");
-             finish();
+        if(extras != null) {
+          String value = extras.getString("key");
+           finish();
             // Toast.makeText(getApplicationContext(),""+value,Toast.LENGTH_SHORT).show();
             //The key argument here must match that used in the other activity
         }
+        */
     }
  }

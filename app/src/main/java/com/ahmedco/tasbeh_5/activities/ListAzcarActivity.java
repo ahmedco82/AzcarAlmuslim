@@ -38,7 +38,7 @@ import java.util.Set;
 //https://stackoverflow.com/questions/5914234/how-to-share-data-between-activity-and-widget
 public class ListAzcarActivity extends AppCompatActivity {
 
-
+        public static final int REQUEST_CODE = 1;
         ToggleButton[] listBtnCheck;
         ToggleButton[] listBtnPlyStop;
         RadioGroup[] radioGroup;
@@ -262,96 +262,47 @@ public class ListAzcarActivity extends AppCompatActivity {
          }
 
 
-
-
     public void confirmConfiguration(View V){
-        appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-        //Retrieve the App Widget ID from the Intent that launched the Activity//
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+      // Log.i("gotoActivity","Yes0");
 
-        if(extras != null){
-            appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID , AppWidgetManager.INVALID_APPWIDGET_ID);
-            // If the intent doesn’t have a widget ID, then call finish()
-            if(appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-                finish();
-            }
-            //TO DO, Perform the configuration and get an instance of the AppWidgetManager//
-            //Create the return intent//
-            Intent resultValue = new Intent();
-            //Pass the original appWidgetId//
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            //Set the results from the configuration Activity//
-            setResult(RESULT_OK , resultValue);
-            //Finish the Activity//
-            finish();
-        }
-
-        Log.i("gotoActivity","Yes0");
         for(int i=0; i<soundsBoolean.length; i++){
             dataProccessor.setBool("soundsBoolean"+i,soundsBoolean[i]);
             dataProccessor.setInt("loopSound"+i,loopSound[i]);
             Log.i("trace0","Yes_0"+   dataProccessor.getBool("soundsBoolean"+i));
         }
-        this.startService(new Intent(this , WordWidget.UpdateService.class));
+
+        Intent intent = new Intent(ListAzcarActivity.this, SettingsActivity.class);
+        startActivityForResult(intent , REQUEST_CODE);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            this.startService(new Intent(this , WordWidget.UpdateService.class));
+            if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+                String requiredValue = data.getStringExtra("key");
+                appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+                //Retrieve the App Widget ID from the Intent that launched the Activity//
+                Intent intent = getIntent();
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+                    // If the intent doesn’t have a widget ID, then call finish()
+                    if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+                        finish();
+                    }
+                    Intent resultValue = new Intent();
+                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                    setResult(RESULT_OK, resultValue);
+                    finish();
+                }
+                Toast.makeText(ListAzcarActivity.this, "" + requiredValue.toString(), Toast.LENGTH_SHORT).show();
+            }
+        } catch(Exception ex){
+           // Toast.makeText(ListAzcarActivity.this, ex.toString(), Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
-
-
-
-
-
-// retriveSharedValue(shared,arrPackage);
-        /*
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("pre", "Ahmed");
-        editor.apply();
-        */
-// Log.i("trec_x0_ ", "" + ksp_bool.GetAll().get(0));
-// Log.i("trec_x0_ ", "" + ksp_int.GetAll().get(0));
-        /*
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(KEY_BUTTON_TEXT + appWidgetId, buttonText);
-        editor.apply();
-        */
-//intent.putExtra("soundsBoolean", soundsBoolean);
-//intent.putExtra("loopSound", loopSound);
-// resultValue.putExtra("soundsBoolean" , soundsBoolean);
-//resultValue.putExtra("loopSound" , loopSound);
-        /*
-        Intent intent2 = new Intent(WordWidget.ACTION_TEXT_CHANGED);
-        intent.putExtra("soundsBoolean",soundsBoolean);
-        intent.putExtra("loopSound",loopSound);
-        getApplicationContext().sendBroadcast(intent);
-        */
-         /*
-        Intent intent = new Intent(ListAzcarActivity.this , AzcarActivity.class);
-        intent.putExtra("soundsBoolean", soundsBoolean);
-        intent.putExtra("loopSound", loopSound);
-        startActivity(intent);
-        */
-
-             // http://thetechnocafe.com/how-to-create-widget-for-your-android-app/
-            /*
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-            int[] widgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, WidgetAzcar_.class));
-            for (int appWidgetId : widgetIds) {
-                WidgetAzcar_.updateAppWidget(getApplicationContext() , appWidgetManager, appWidgetId);
-            }
-           */
-
-
-   /*
-         Intent intn = new Intent (this, WidgetAzcar.class);
-         intn.setFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
-         this.startActivity (intn);
-         */
-
-          /*
-         Intent intent = new Intent(WidgetAzcar_.ACTION_TEXT_CHANGED);
-         intent.putExtra("soundsBoolean", soundsBoolean);
-         intent.putExtra("loopSound", loopSound);
-         getApplicationContext().sendBroadcast(intent);
-         */

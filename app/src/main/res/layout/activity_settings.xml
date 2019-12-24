@@ -332,7 +332,6 @@
                         android:layout_gravity="center"
                         android:layout_weight="5"
                         android:textColor="#e38305"
-
                         android:gravity="center"
                         android:background="@drawable/rounded_edittext"
                         android:paddingRight="20dp"
