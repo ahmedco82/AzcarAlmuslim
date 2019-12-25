@@ -15,7 +15,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.ahmedco.tasbeh_5.R;
 import com.ahmedco.tasbeh_5.utils.DataSharedPreferences;
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class ListAzcarActivity extends AppCompatActivity {
         private String[] textListAzcar;
         private boolean[] selectedSound;
         private int lengthListSounds;
-        private MediaPlayer soundAzcar0 ,soundAzcar1,soundAzcar2, soundAzcar3,soundAzcar4,soundAzcar5;
+        private MediaPlayer currentPlyStopBtn;
         public static DataSharedPreferences soundsSharedPref;
         private int  oneTime;
         private boolean noSelectedSound;
@@ -52,12 +51,13 @@ public class ListAzcarActivity extends AppCompatActivity {
           putCountRepeatSound();
           selectNewSound();
           setPlayStopBtns();
-       }
+}
 
     private void initiItems(){
         lengthListSounds = 6;
-        oneTime =0;
+        oneTime=0;
         noSelectedSound =false;
+        currentPlyStopBtn = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a1);
         int[] soundsAzcarId = new int[]{ R.id.r1,R.id.r2,R.id.r3,R.id.r4,R.id.r5,R.id.r6 };
         listBtnCheck   = new ToggleButton[lengthListSounds];
         listBtnPlyStop = new ToggleButton[lengthListSounds];
@@ -131,69 +131,68 @@ public class ListAzcarActivity extends AppCompatActivity {
                     if (checked){
                         int a = R.drawable.btnpause;
                         if(playStopBtns.getTag().equals(0)){
-                            if(soundAzcar0.isPlaying()){
-                                soundAzcar0.stop();
+                            if(currentPlyStopBtn.isPlaying()){
+                                currentPlyStopBtn.stop();
                             }
                             closeBtns((Integer) playStopBtns.getTag());
-                            soundAzcar0 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a1);
-                            soundAzcar0.start();
+                            currentPlyStopBtn = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a1);
+                            currentPlyStopBtn.start();
                             // Log.i("isPlay_2","No");
                         }if(playStopBtns.getTag().equals(1)){
-                            if(soundAzcar0.isPlaying()){
-                                soundAzcar0.stop();
+                            if(currentPlyStopBtn.isPlaying()){
+                                currentPlyStopBtn.stop();
                             }
                             closeBtns((Integer)playStopBtns.getTag());
-                            soundAzcar0 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a2);
-                            soundAzcar0.start();
+                            currentPlyStopBtn = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a2);
+                            currentPlyStopBtn.start();
                         }if(playStopBtns.getTag().equals(2)){
-                            if(soundAzcar0.isPlaying()){
-                                soundAzcar0.stop();
+                            if(currentPlyStopBtn.isPlaying()){
+                                currentPlyStopBtn.stop();
                             }
                             closeBtns((Integer) playStopBtns.getTag());
-                            soundAzcar0 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a3);
-                            //btns.add(btn2);
-                            soundAzcar0.start();
+                            currentPlyStopBtn = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a3);
+                            currentPlyStopBtn.start();
                         }
                         if(playStopBtns.getTag().equals(3)){
-                            if(soundAzcar0.isPlaying()){
-                                soundAzcar0.stop();
+                            if(currentPlyStopBtn.isPlaying()){
+                                currentPlyStopBtn.stop();
                             }
-                            soundAzcar0 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a4);
+                            currentPlyStopBtn = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a4);
                             closeBtns((Integer) playStopBtns.getTag());
-                            soundAzcar0.start();
+                            currentPlyStopBtn.start();
                         }
                         if(playStopBtns.getTag().equals(4)){
-                            if(soundAzcar0.isPlaying()){
-                                soundAzcar0.stop();
+                            if(currentPlyStopBtn.isPlaying()){
+                                currentPlyStopBtn.stop();
                             }
-                            soundAzcar0 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a5);
+                            currentPlyStopBtn = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a5);
                             closeBtns((Integer)playStopBtns.getTag());
-                            soundAzcar0.start();
+                            currentPlyStopBtn.start();
                         }
                         if(playStopBtns.getTag().equals(5)){
-                            if(soundAzcar0.isPlaying()){
-                                soundAzcar0.stop();
+                            if(currentPlyStopBtn.isPlaying()){
+                                currentPlyStopBtn.stop();
                             }
-                            soundAzcar0 = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a6);
+                            currentPlyStopBtn = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this,R.raw.a6);
                             closeBtns((Integer)playStopBtns.getTag());
-                            soundAzcar0.start();
+                            currentPlyStopBtn.start();
                         }
                     } else {
-                        int b = R.drawable.btnplay;
-                        playStopBtns.setBackgroundDrawable(getDrawable(b));
+                        int btnplay = R.drawable.btnplay;
+                        playStopBtns.setBackgroundDrawable(getDrawable(btnplay));
                         //Toast.makeText(ListAzcarActivity.this, "You have clicked Btn", Toast.LENGTH_LONG).show();
                     }
                 }
             });
-       }
+         }
     private void closeBtns(int i){
         for(int j = 0; j<listBtnPlyStop.length; j++){
-            int b = R.drawable.btnplay;
-            int a = R.drawable.btnpause;
+            int btnplay = R.drawable.btnplay;
+            int btnpause = R.drawable.btnpause;
             if(j !=i ){
-                listBtnPlyStop[j].setBackgroundDrawable(getDrawable(b));
+                listBtnPlyStop[j].setBackgroundDrawable(getDrawable(btnplay));
             }else {
-                listBtnPlyStop[j].setBackgroundDrawable(getDrawable(a));
+                listBtnPlyStop[j].setBackgroundDrawable(getDrawable(btnpause));
             }
         }
      }
