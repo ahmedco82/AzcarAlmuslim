@@ -7,13 +7,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
-import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -31,8 +29,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.ahmedco.tasbeh_5.adapters.AdapterDialogTimer;
-import com.ahmedco.tasbeh_5.utils.DataProccessor;
-import com.ahmedco.tasbeh_5.utils.KSP;
+import com.ahmedco.tasbeh_5.utils.DataSharedPreferences;
 import com.ahmedco.tasbeh_5.R;
 import com.mcsoft.timerangepickerdialog.RangeTimePickerDialog;
 
@@ -41,7 +38,7 @@ import java.util.Calendar;
 import static com.ahmedco.tasbeh_5.activities.ListAzcarActivity.REQUEST_CODE;
 
 //https://github.com/PuffoCyano/Range-Time-Picker-Dialog
-public class SettingsActivity extends AppCompatActivity implements View.OnClickListener,  RangeTimePickerDialog.ISelectedTime {
+public class TimeSettingsActivity extends AppCompatActivity implements View.OnClickListener,  RangeTimePickerDialog.ISelectedTime {
 
     private ToggleButton checkBtn;
     private static int hourStart_;
@@ -55,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     public static EditText fromTime,toTime;
     //public static KSP ksp1;
     private Button startRemember_btn;
-    public static DataProccessor dataTimes;
+    public static DataSharedPreferences dataTimes;
     private static String AM_PM;
     private static int start_AM_PM,end_AM_PM;
 
@@ -65,7 +62,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         hourStart_=0;  minuteStart_=0; hourEnd_ =0; minuteEnd_=0;start_AM_PM = 0; start_AM_PM = 2;;
-        dataTimes = new DataProccessor(this);
+        dataTimes = new DataSharedPreferences(this);
         startRemember_btn = (Button) findViewById(R.id.btn_start_remember_me2);
         startRemember_btn.setText(R.string.stop_remeber);
         checkBtn = (ToggleButton)findViewById(R.id.bt_check2);
@@ -78,7 +75,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         // btn_start_remember_me2
         fromTime.setText("");
         toTime.setText("");
-        // ksp1 = new KSP(SettingsActivity.this,"ksp");
+        // ksp1 = new KSP(TimeSettingsActivity.this,"ksp");
         everyTimeString = "15 دقيقة";
         // RelativeLayout relativeclic1 =(RelativeLayout)findViewById(R.id.r_container_6);
         RelativeLayout layout2 = (RelativeLayout)findViewById(R.id.row_one);
@@ -87,12 +84,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         layout2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-             Intent i = new Intent(SettingsActivity.this , ListAzcarActivity.class);
+             Intent i = new Intent(TimeSettingsActivity.this , ListAzcarActivity.class);
              // startActivity(i);
              // do something
              Log.i("trace01_","Bom");
              //Log.i("trace0","Bom");
-             //Toast.makeText(SettingsActivity.this, "You have clicked tittle", Toast.LENGTH_LONG).show();
+             //Toast.makeText(TimeSettingsActivity.this, "You have clicked tittle", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -120,7 +117,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
              // do something
              // Log.i("trace01_","Bom");
              // Log.i("trace0","Bom");
-            //  Toast.makeText(SettingsActivity.this, "You have clicked tittle", Toast.LENGTH_LONG).show();
+            //  Toast.makeText(TimeSettingsActivity.this, "You have clicked tittle", Toast.LENGTH_LONG).show();
              showDialogTimerSelected();
              // showTruitonTimePickerDialog(v);
             }
@@ -139,7 +136,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     // toTime.setEnabled(true);
                     startRemember_btn.setText(R.string.start_remeber);
                     stopTimer=1;
-                    Toast.makeText(SettingsActivity.this, "Clicked", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TimeSettingsActivity.this, "Clicked", Toast.LENGTH_LONG).show();
                     checkBtn.setBackgroundDrawable(getDrawable(d));
                     fromTime.setEnabled(true);
                     toTime.setEnabled(true);
@@ -155,7 +152,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     startRemember_btn.setText(R.string.stop_remeber);
                     fromTime.setText("");
                     toTime.setText("");
-                    Toast.makeText(SettingsActivity.this, "UnClicked", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TimeSettingsActivity.this, "UnClicked", Toast.LENGTH_LONG).show();
                     checkBtn.setBackgroundDrawable(getDrawable(f));
                 }
             }
@@ -237,7 +234,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     public void Click_start_remember_me2(View V){
 
-        Intent intent = new Intent(SettingsActivity.this , DialogRememberInfoActivity.class);
+        Intent intent = new Intent(TimeSettingsActivity.this , DialogRememberInfoActivity.class);
         intent.putExtra("e_time", everyTimeString);
         intent.putExtra("hour_star",hourStart_);
         intent.putExtra("hour_end",hourEnd_);
@@ -263,7 +260,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
        }
         startActivityForResult(intent, REQUEST_CODE);
     }
-
 
        /*
        intent = getIntent();
@@ -299,7 +295,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
               txt_v.setText(item);
                everyTimeString=""+item;
                 everyTimeNum = position;
-                Toast.makeText(SettingsActivity.this, ""+position, Toast.LENGTH_LONG).show();
+                Toast.makeText(TimeSettingsActivity.this, ""+position, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -308,7 +304,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
          btnCancel.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                //Intent k = new Intent(SecondActivity.this ,SettingsActivity.class);
+                //Intent k = new Intent(SecondActivity.this ,TimeSettingsActivity.class);
                 //startActivity(k);
                 dialogTimerSelected.dismiss();
             }
@@ -317,7 +313,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         dialogTimerSelected.show();
   }
 
-    //  Toast.makeText(SettingsActivity.this, ""+item.getName(), Toast.LENGTH_LONG).show();
+    //  Toast.makeText(TimeSettingsActivity.this, ""+item.getName(), Toast.LENGTH_LONG).show();
     private void ActionBarSetting(){
       this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
        getSupportActionBar().setDisplayShowCustomEnabled(true);
@@ -344,7 +340,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onActivityResult(int requestCode , int resultCode , Intent data) {
         try{
             super.onActivityResult(requestCode, resultCode, data);
-            this.startService(new Intent(this , WordWidget.UpdateService.class));
+            this.startService(new Intent(this , AzcarWidget.UpdateService.class));
             if(requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
                 data = getIntent();
                 setResult(RESULT_OK , data);
@@ -353,7 +349,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
           }catch(Exception ex){
 
      }
- }
+  }
 
     @Override
     public void onSelectedTime(int hourStart , int minuteStart , int hourEnd , int minuteEnd){

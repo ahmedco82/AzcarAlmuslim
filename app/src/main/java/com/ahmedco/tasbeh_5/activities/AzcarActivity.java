@@ -68,8 +68,8 @@ public class AzcarActivity extends AppCompatActivity {
         arrSelectSound2 = new ArrayList<MediaPlayer>();
         arrSelectLoopSounds = new ArrayList<Integer>();
         long[] itemTimers = {i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11};
-        // String currentEvertTime = String.valueOf(SettingsActivity.ksp1.GetAll().get(0));
-        // Log.i("fiveActivity000", "" + SettingsActivity.ksp1.GetAll().get(0));
+        // String currentEvertTime = String.valueOf(TimeSettingsActivity.ksp1.GetAll().get(0));
+        // Log.i("fiveActivity000", "" + TimeSettingsActivity.ksp1.GetAll().get(0));
         String oop = "0";
         switch (oop) {
             case "0":

@@ -50,7 +50,7 @@ public class HomeActivity extends AppCompatActivity {
           // Intent k = new Intent(HomeActivity.this , DialogRememberInfoActivity.class);
            // Intent k = new Intent(HomeActivity.this , ListAzcarActivity.class);
            // startActivity(k);
-           Intent intent = new Intent(HomeActivity.this , SettingsActivity.class);
+           Intent intent = new Intent(HomeActivity.this , TimeSettingsActivity.class);
            startActivity(intent);
           }
         });

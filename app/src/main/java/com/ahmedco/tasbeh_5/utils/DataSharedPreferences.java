@@ -3,11 +3,11 @@ package com.ahmedco.tasbeh_5.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class DataProccessor {
+public class DataSharedPreferences {
 
     private static Context context;
 
-    public DataProccessor(Context context){
+    public DataSharedPreferences(Context context){
 
         this.context = context;
     }

@@ -7,34 +7,21 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ahmedco.tasbeh_5.R;
-import com.ahmedco.tasbeh_5.utils.DataProccessor;
-import com.ahmedco.tasbeh_5.utils.KSP;
-import com.ahmedco.tasbeh_5.utils.S_pref;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
-import static android.content.Context.MODE_PRIVATE;
-import static android.media.MediaExtractor.MetricsConstants.FORMAT;
-import static com.ahmedco.tasbeh_5.activities.ListAzcarActivity.dataProccessor;
-import static com.ahmedco.tasbeh_5.activities.SettingsActivity.dataTimes;
+
+import static com.ahmedco.tasbeh_5.activities.ListAzcarActivity.soundsSharedPref;
+import static com.ahmedco.tasbeh_5.activities.TimeSettingsActivity.dataTimes;
 
 /**
  * Define a simple widget that shows the Wiktionary "Word of the day." To build
@@ -42,14 +29,15 @@ import static com.ahmedco.tasbeh_5.activities.SettingsActivity.dataTimes;
  */
 // https://android-developers.googleblog.com/2009/04/introducing-home-screen-widgets-and.html
 
-public class WordWidget extends AppWidgetProvider {
+public class AzcarWidget extends AppWidgetProvider {
 
     //KSP ksp_bool2;
     public static final String ACTION_TEXT_CHANGED = "com.ahmedco.tasbeh_5.activities.TEXT_CHANGED";
 
+
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-     // DataProccessor  dataProccessor1 = new DataProccessor(context);
+     // DataSharedPreferences  dataProccessor1 = new DataSharedPreferences(context);
        /*
        for(int i=0; i<6; i++) {
 
@@ -57,18 +45,17 @@ public class WordWidget extends AppWidgetProvider {
       */
     }
 
-
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        Log.i("Server","onEnabled");
+       // Log.i("Server","onEnabled");
         // context.startService(new Intent(context.getApplicationContext() , UpdateService.class));
     }
 
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
-        Log.i("Server","onDisabled");
+       // Log.i("Server","onDisabled");
         //Log.i("Server","onDisabled");
         context.stopService(new Intent(context.getApplicationContext() , UpdateService.class));
     }
@@ -102,10 +89,10 @@ public class WordWidget extends AppWidgetProvider {
             int[] arrayLoopSound = new int[6];
             for(int i=0; i<6; i++){
               // d.setBool("soundsBoolean"+i,soundsBoolean[i]);
-               Log.i("trace3","Yes_2"+ dataProccessor.getInt("loopSound"+i));
+               Log.i("trace3","Yes_2"+ soundsSharedPref.getInt("loopSound"+i));
                 // Log.v("trace3","Yes_2"+ dataProccessor.getBool("soundsBoolean"+i));
-                arrayLoopSound[i] =  dataProccessor.getInt("loopSound"+i);
-                if(dataProccessor.getBool("soundsBoolean"+i) == true){
+                arrayLoopSound[i] =  soundsSharedPref.getInt("loopSound"+i);
+                if(soundsSharedPref.getBool("soundsBoolean"+i) == true){
                   arrSelectSound2.add(arrSelectSound[i]);
                     arrSelectLoopSounds.add(arrayLoopSound[i]);
                 }else{
@@ -244,7 +231,7 @@ public class WordWidget extends AppWidgetProvider {
                     RemoteViews updateViews = buildUpdate(context,hours,minutes,seconds);
                     // mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
                     // Push update for this widget to the home screen
-                    ComponentName thisWidget = new ComponentName(context, WordWidget.class);
+                    ComponentName thisWidget = new ComponentName(context, AzcarWidget.class);
                     AppWidgetManager manager = AppWidgetManager.getInstance(context);
                     manager.updateAppWidget(thisWidget, updateViews);
                 }

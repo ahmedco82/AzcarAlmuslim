@@ -128,8 +128,8 @@ public class WidgetAzcar_ extends AppWidgetProvider {
         private void putVarTimer(){
           long[] itemTimers = {i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11};
           START_TIME_IN_MILLIS = 500 * equ;
-          // String currentEvertTime = String.valueOf(SettingsActivity.ksp1.GetAll().get(0));
-            // Log.i("fiveActivity000", "" + SettingsActivity.ksp1.GetAll().get(0));
+          // String currentEvertTime = String.valueOf(TimeSettingsActivity.ksp1.GetAll().get(0));
+            // Log.i("fiveActivity000", "" + TimeSettingsActivity.ksp1.GetAll().get(0));
 
      }
 

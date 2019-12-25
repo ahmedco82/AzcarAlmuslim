@@ -7,8 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import com.ahmedco.tasbeh_5.activities.WordWidget;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;

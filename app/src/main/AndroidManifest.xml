@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <receiver android:name=".activities.WordWidget">
+        <receiver android:name=".activities.AzcarWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.ahmedco.tasbeh_5.TEXT_CHANGED" />
@@ -22,10 +22,10 @@
         </receiver>
 
         <!-- Service to perform web API queries -->
-        <service android:name=".activities.WordWidget$UpdateService" />
+        <service android:name=".activities.AzcarWidget$UpdateService" />
 
         <activity android:name=".activities.AzcarActivity" />
-        <activity android:name=".activities.SettingsActivity" />
+        <activity android:name=".activities.TimeSettingsActivity" />
 
         <activity
             android:name=".activities.DialogRememberInfoActivity"
