@@ -126,7 +126,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <RelativeLayout
-                android:id="@+id/cont_click"
+                android:id="@+id/row_three"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -259,7 +259,7 @@
                     android:layout_centerVertical="true"
                     android:orientation="horizontal">
                     <EditText
-                        android:id="@+id/text_select_time_azcar7"
+                        android:id="@+id/text_select_time_from"
                         android:layout_width="120dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -326,7 +326,7 @@
                     android:layout_centerVertical="true"
                     android:orientation="horizontal">
                     <EditText
-                        android:id="@+id/text_select_time_azcar8"
+                        android:id="@+id/text_select_time_to"
                         android:layout_width="120dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -383,7 +383,7 @@
             android:layout_width="160dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:onClick="Click_start_remember_me2"
+            android:onClick="gotoWidgetMode"
             android:background="@drawable/btn_rounded_corner"
             android:text="@string/text_btn_start_remember"
             android:fontFamily="@font/coor"

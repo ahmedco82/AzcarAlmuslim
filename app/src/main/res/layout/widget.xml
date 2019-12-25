@@ -15,12 +15,12 @@
         android:textColor="#0554F3"
         android:text="الوقت المتبقى للذكر" />
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tV_timeElapsed"
         android:layout_gravity="center"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="25dp"
-        android:textColor="#F30505"
+        android:textColor="#FFEB3B"
         android:text="StartTimer0" />
 </LinearLayout>

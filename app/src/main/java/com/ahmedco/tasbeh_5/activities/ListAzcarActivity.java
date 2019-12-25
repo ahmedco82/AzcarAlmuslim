@@ -20,7 +20,6 @@ import com.ahmedco.tasbeh_5.utils.DataSharedPreferences;
 import java.util.ArrayList;
 import java.util.List;
 
-
 //https://stackoverflow.com/questions/5914234/how-to-share-data-between-activity-and-widget
 public class ListAzcarActivity extends AppCompatActivity {
 
@@ -84,9 +83,7 @@ public class ListAzcarActivity extends AppCompatActivity {
             }
         }
     }
-
-
-    private void selectNewSound() {
+    private void selectNewSound(){
         for(ToggleButton selectedBtn:listBtnCheck)
             selectedBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
                 @Override
@@ -105,7 +102,8 @@ public class ListAzcarActivity extends AppCompatActivity {
                 }
             });
         }
-    private void putCountRepeatSound(){
+
+      private void putCountRepeatSound(){
         for(RadioGroup rowOneTowThree:radioGroup)
             rowOneTowThree.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
@@ -185,7 +183,9 @@ public class ListAzcarActivity extends AppCompatActivity {
                 }
             });
          }
-    private void closeBtns(int i){
+
+
+     private void closeBtns(int i){
         for(int j = 0; j<listBtnPlyStop.length; j++){
             int btnplay = R.drawable.btnplay;
             int btnpause = R.drawable.btnpause;
@@ -224,11 +224,12 @@ public class ListAzcarActivity extends AppCompatActivity {
        for(int i=0; i<selectedSound.length; i++){
          soundsSharedPref.setBool("soundsBoolean"+i,selectedSound[i]);
            soundsSharedPref.setInt("loopSound"+i,repeatEachSound[i]);
-             Log.i("trace0","Yes_0"+   soundsSharedPref.getBool("soundsBoolean"+i));
+               Log.i("trace0","Yes_0"+   soundsSharedPref.getBool("soundsBoolean"+i));
            }
          Intent intent = new Intent(ListAzcarActivity.this, TimeSettingsActivity.class);
-        startActivityForResult(intent , REQUEST_CODE);
+       startActivityForResult(intent , REQUEST_CODE);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -254,7 +255,8 @@ public class ListAzcarActivity extends AppCompatActivity {
                 }
                 //Toast.makeText(ListAzcarActivity.this, "" + requiredValue.toString(), Toast.LENGTH_SHORT).show();
             }
-        } catch(Exception ex){
+        }catch(Exception ex){
+
            // Toast.makeText(ListAzcarActivity.this, ex.toString(), Toast.LENGTH_SHORT).show();
         }
     }

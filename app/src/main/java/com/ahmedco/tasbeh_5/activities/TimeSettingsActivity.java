@@ -13,7 +13,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -38,7 +37,7 @@ import java.util.Calendar;
 import static com.ahmedco.tasbeh_5.activities.ListAzcarActivity.REQUEST_CODE;
 
 //https://github.com/PuffoCyano/Range-Time-Picker-Dialog
-public class TimeSettingsActivity extends AppCompatActivity implements View.OnClickListener,  RangeTimePickerDialog.ISelectedTime {
+public class TimeSettingsActivity extends AppCompatActivity implements RangeTimePickerDialog.ISelectedTime {
 
     private ToggleButton checkBtn;
     private static int hourStart_;
@@ -52,92 +51,45 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
     public static EditText fromTime,toTime;
     //public static KSP ksp1;
     private Button startRemember_btn;
-    public static DataSharedPreferences dataTimes;
+    public static DataSharedPreferences timesSharedPreferences;
     private static String AM_PM;
     private static int start_AM_PM,end_AM_PM;
-
+    RelativeLayout rowOne ,rowTow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        hourStart_=0;  minuteStart_=0; hourEnd_ =0; minuteEnd_=0;start_AM_PM = 0; start_AM_PM = 2;;
-        dataTimes = new DataSharedPreferences(this);
-        startRemember_btn = (Button) findViewById(R.id.btn_start_remember_me2);
-        startRemember_btn.setText(R.string.stop_remeber);
-        checkBtn = (ToggleButton)findViewById(R.id.bt_check2);
-        fromTime =  (EditText)findViewById(R.id.text_select_time_azcar7);
-        toTime =  (EditText)findViewById(R.id.text_select_time_azcar8);
-        fromTime.setEnabled(false);
-        toTime.setEnabled(false);
-        // fromTime.setEnabled(false);
-        // toTime.setEnabled(false);
-        // btn_start_remember_me2
-        fromTime.setText("");
-        toTime.setText("");
-        // ksp1 = new KSP(TimeSettingsActivity.this,"ksp");
-        everyTimeString = "15 دقيقة";
-        // RelativeLayout relativeclic1 =(RelativeLayout)findViewById(R.id.r_container_6);
-        RelativeLayout layout2 = (RelativeLayout)findViewById(R.id.row_one);
-        RelativeLayout layout = (RelativeLayout)findViewById(R.id.cont_click);
-        // layout1.setOnClickListener(this);
-        layout2.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-             Intent i = new Intent(TimeSettingsActivity.this , ListAzcarActivity.class);
-             // startActivity(i);
-             // do something
-             Log.i("trace01_","Bom");
-             //Log.i("trace0","Bom");
-             //Toast.makeText(TimeSettingsActivity.this, "You have clicked tittle", Toast.LENGTH_LONG).show();
-            }
-        });
-
-
+        initiItems();
         fromTime.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-               showTruitonTimePickerDialog(v,1);
+             showTruitonTimePickerDialog(v,1);
             }
         });
-
-
         toTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 showTruitonTimePickerDialog(v,2);
             }
         });
 
-
-        layout.setOnClickListener(new View.OnClickListener(){
+        rowTow.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-             // do something
-             // Log.i("trace01_","Bom");
-             // Log.i("trace0","Bom");
-            //  Toast.makeText(TimeSettingsActivity.this, "You have clicked tittle", Toast.LENGTH_LONG).show();
              showDialogTimerSelected();
-             // showTruitonTimePickerDialog(v);
             }
          });
-           // btn.setOnClickListener(btnListener);
         checkBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked){
-                // Change testLinearLayout direction based on toggle button checked status.
-                // Intent k = new Intent(ListAzcarActivity.this , DialogRememberInfoActivity.class);
-                // startActivity(k);
+            public void onCheckedChanged(CompoundButton compoundButton , boolean checked){
                 checkBtn.setText(null);
                 if(checked){
-                    int d = R.drawable.chk;
-                    // fromTime.setEnabled(true);
-                    // toTime.setEnabled(true);
+                    int idBackground = R.drawable.chk;
                     startRemember_btn.setText(R.string.start_remeber);
                     stopTimer=1;
-                    Toast.makeText(TimeSettingsActivity.this, "Clicked", Toast.LENGTH_LONG).show();
-                    checkBtn.setBackgroundDrawable(getDrawable(d));
+                    //Toast.makeText(TimeSettingsActivity.this, "Clicked", Toast.LENGTH_LONG).show();
+                    checkBtn.setBackgroundDrawable(getDrawable(idBackground));
                     fromTime.setEnabled(true);
                     toTime.setEnabled(true);
                 }else{
@@ -157,8 +109,26 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
                 }
             }
         });
-        ActionBarSetting();
+        actionBarSetting();
     }
+
+    private void initiItems(){
+        hourStart_=0;  minuteStart_=0; hourEnd_ =0; minuteEnd_=0;start_AM_PM = 0; start_AM_PM = 2;;
+        timesSharedPreferences = new DataSharedPreferences(this);
+        startRemember_btn = (Button) findViewById(R.id.btn_start_remember_me2);
+        startRemember_btn.setText(R.string.stop_remeber);
+        checkBtn=(ToggleButton)findViewById(R.id.bt_check2);
+        fromTime=(EditText)findViewById(R.id.text_select_time_from);
+        toTime=(EditText)findViewById(R.id.text_select_time_to);
+        fromTime.setEnabled(false);
+        toTime.setEnabled(false);
+        fromTime.setText("");
+        toTime.setText("");
+        everyTimeString = "15 دقيقة";
+        rowOne = (RelativeLayout)findViewById(R.id.row_one);
+        rowTow = (RelativeLayout)findViewById(R.id.row_three);
+    }
+
 
     private void showTruitonTimePickerDialog(View v , int editTextId) {
        DialogFragment newFragment = new TimePickerFragment(editTextId);
@@ -167,106 +137,103 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
 
 
     public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
-          int currentEditText = 0 ;
-
-         boolean TimerOkyOrNot = true;
+        int currentEditText = 0 ;
 
         public TimePickerFragment(int id) {
-            currentEditText=id;
+            currentEditText = id;
         }
-
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
-            // Log.i("trace_time-00000____: ",""+AmPm);
             return new TimePickerDialog(getActivity(), this , hour , minute, DateFormat.is24HourFormat(getActivity()));
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay , int minute){
-            // Do something with the time chosen by the user
             String LastAM_PM = AM_PM;
-            // start_AM_PM,end_AM_PM
-            if(hourOfDay<12) {
-             AM_PM = "AM";
-            }else {
-              AM_PM = "PM";
-           }
+            setAM_PM(hourOfDay);
           if(currentEditText==1){
-             fromTime.setText("");
-             if(AM_PM =="AM")start_AM_PM = 1;
-             if(AM_PM =="PM")start_AM_PM = 2;
-             fromTime.setText(""+hourOfDay+" : "+minute+" "+AM_PM);
-             hourStart_= hourOfDay;
-             minuteStart_= minute;
-             fromTime.setEnabled(false);
-
+             putTimefrom(hourOfDay,minute);
          }else if(currentEditText==2){
-          if(AM_PM == LastAM_PM ){
-              if(hourOfDay ==hourStart_ && minute<=minuteStart_) {
-                  Toast.makeText(getActivity(), "ادخلتك قيمه خطأ", Toast.LENGTH_LONG).show();
-                  return;
-              }
-              else if(hourOfDay<hourStart_) {
-                  Toast.makeText(getActivity(), "ادخلتك قيمه خطأ", Toast.LENGTH_LONG).show();
-                  return;
-              }
-             }
-              if(AM_PM =="AM")end_AM_PM = 1;
-              if(AM_PM =="PM")end_AM_PM = 2;
-              toTime.setText("");
-              toTime.setText(""+hourOfDay+" : "+minute+" "+AM_PM);
-              hourEnd_=hourOfDay;
-              minuteEnd_=minute;
-              toTime.setEnabled(false);
+              checkTime(hourOfDay,minute,LastAM_PM);
            }
        }
+        private void checkTime(int  hourOfDay,int minute,String LastAM_PM){
+            if(AM_PM == LastAM_PM ){
+                if(hourOfDay ==hourStart_ && minute<=minuteStart_) {
+                    Toast.makeText(getActivity(), "ادخلت قيمه خطأ", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else if(hourOfDay<hourStart_) {
+                    Toast.makeText(getActivity(), "ادخلت قيمه خطأ", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                putTimeTo(hourOfDay,minute);
+            }
+        }
+        private void putTimeTo(int hourOfDay,int minute){
+            if(AM_PM =="AM")end_AM_PM = 1;
+            if(AM_PM =="PM")end_AM_PM = 2;
+            toTime.setText("");
+            toTime.setText(""+hourOfDay+" : "+minute+" "+AM_PM);
+            hourEnd_=hourOfDay;
+            minuteEnd_=minute;
+            toTime.setEnabled(false);
+        }
+        private void putTimefrom(int hourOfDay,int minute){
+            fromTime.setText("");
+            if(AM_PM =="AM")start_AM_PM = 1;
+            if(AM_PM =="PM")start_AM_PM = 2;
+            fromTime.setText(""+hourOfDay+" : "+minute+" "+AM_PM);
+            hourStart_= hourOfDay;
+            minuteStart_= minute;
+            fromTime.setEnabled(false);
+        }
+        private String setAM_PM(int hourOfDay){
+            if(hourOfDay<12){
+                AM_PM = "AM";
+            }else {
+                AM_PM = "PM";
+            }
+            return AM_PM;
+        }
     }
-    //putEndTime
 
-    public void  onRelativeLayoutClicked(View V){
-
-        //  Log.i("trace0","Bom");
-
-    }
-
-    public void Click_start_remember_me2(View V){
-
+    public void gotoWidgetMode(View V){
         Intent intent = new Intent(TimeSettingsActivity.this , DialogRememberInfoActivity.class);
         intent.putExtra("e_time", everyTimeString);
         intent.putExtra("hour_star",hourStart_);
         intent.putExtra("hour_end",hourEnd_);
         intent.putExtra("minute_start",minuteStart_);
         intent.putExtra("minute_end",minuteEnd_);
-
-        String[] NamseOfItems = {"everyTime","stopTimer","hour_start","hour_end","start_AM_PM","minute_start","minute_end","end_AM_PM"} ;
-        int[] ValuesOfItems = {everyTimeNum,stopTimer , hourStart_, hourEnd_, start_AM_PM,minuteStart_, minuteEnd_, end_AM_PM};
-
-        //start_AM_PM = 0; start_AM_PM
-        for(int i=0; i<NamseOfItems.length; i++){
-             dataTimes.setInt(NamseOfItems[i],ValuesOfItems[i]);
-        }
-
-       String BoxText_1 = fromTime.getText().toString();
-       String BoxText_2 = toTime.getText().toString();
-
+        storingTimes();
        if(stopTimer==1) {
-           if (BoxText_1.matches("") || BoxText_2.matches("")) {
-               Toast.makeText(this, "يوجد اماكن فارغة", Toast.LENGTH_LONG).show();
-               return;
-           }
+           checkEditBoxTime(intent);
+        }else{
+           startActivityForResult(intent , REQUEST_CODE);
        }
-        startActivityForResult(intent, REQUEST_CODE);
     }
 
-       /*
-       intent = getIntent();
-       //intent.putExtra("key", "value");
-       setResult(RESULT_OK , intent);
-       finish();
-       */
+    private void storingTimes(){
+        String[] NamseOfItems = {"everyTime","stopTimer","hour_start","hour_end","start_AM_PM","minute_start","minute_end","end_AM_PM"} ;
+        int[] ValuesOfItems = {everyTimeNum,stopTimer , hourStart_, hourEnd_, start_AM_PM,minuteStart_, minuteEnd_, end_AM_PM};
+        for(int i=0; i<NamseOfItems.length; i++){
+            timesSharedPreferences.setInt(NamseOfItems[i],ValuesOfItems[i]);
+        }
+    }
+
+    private void checkEditBoxTime(Intent intent){
+        String BoxText_1 = fromTime.getText().toString();
+        String BoxText_2 = toTime.getText().toString();
+        if (BoxText_1.matches("") || BoxText_2.matches("")) {
+            Toast.makeText(this, "يوجد اماكن فارغة", Toast.LENGTH_LONG).show();
+            return;
+        }
+        startActivityForResult(intent , REQUEST_CODE);
+    }
+
 
     private void showDialogTimerSelected(){
         final Dialog dialogTimerSelected = new Dialog(this);
@@ -298,7 +265,6 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
                 Toast.makeText(TimeSettingsActivity.this, ""+position, Toast.LENGTH_LONG).show();
             }
         });
-
          RV_dialogTimerSelected.setLayoutManager(new LinearLayoutManager(this));
          RV_dialogTimerSelected.setAdapter(adapterDialogTimer);
          btnCancel.setOnClickListener(new View.OnClickListener(){
@@ -314,7 +280,7 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
   }
 
     //  Toast.makeText(TimeSettingsActivity.this, ""+item.getName(), Toast.LENGTH_LONG).show();
-    private void ActionBarSetting(){
+    private void actionBarSetting(){
       this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
        getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.toolbar);
@@ -329,12 +295,7 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
                 view.findViewById(R.id.l_container).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
                  textTitle.setText(R.string.select_azkar);
                   textTitle.setGravity(Gravity.CENTER | Gravity.BOTTOM);
-     }
-
-    @Override
-    public void onClick(View v){
-
-    }
+   }
 
     @Override
     protected void onActivityResult(int requestCode , int resultCode , Intent data) {
@@ -346,10 +307,11 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
                 setResult(RESULT_OK , data);
                 finish();
             }
-          }catch(Exception ex){
+          }catch(Exception ex) {
 
-     }
-  }
+      }
+   }
+
 
     @Override
     public void onSelectedTime(int hourStart , int minuteStart , int hourEnd , int minuteEnd){
@@ -361,20 +323,3 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
         minuteEnd_=minuteEnd;
     }
 }
-
-
-
-     /*
-        String e1 , e2;
-        e1 = fromTime.getText().toString();
-        e2 = toTime.getText().toString();
-        String [] items = {everyTime,stopTimer,e1,e2};
-        */
-
-
-        /*
-        for(int i=0; i<10; i++){
-           String[] Timers= {" 15 دقيقة"," 20 دقيقة"," 30 دقيقة"," 45 دقيقة","1 ساعه"," 2 ساعه"," 3 ساعه"," 4 ساعه"," 5 ساعه"," 10 ساعه"};
-           lsitTimes.add(new ModelDialogTimer(""+Timers[i]));
-        }
-   */

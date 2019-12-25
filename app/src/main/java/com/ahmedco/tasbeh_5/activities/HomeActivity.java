@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ahmedco.tasbeh_5.adapters.gridViewHomeActivity;
+import com.ahmedco.tasbeh_5.adapters.GridViewHomeActivity;
 import com.ahmedco.tasbeh_5.R;
 
 
@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
       setContentView(R.layout.activity_main);
        // Toast.makeText(HomeActivity.this, "Started 00" , Toast.LENGTH_LONG).show();
         ActionBarSetting();
-        gridViewHomeActivity adapterViewAndroid = new gridViewHomeActivity(HomeActivity.this, gridViewTitles, gridViewImageId);
+        GridViewHomeActivity adapterViewAndroid = new GridViewHomeActivity(HomeActivity.this, gridViewTitles, gridViewImageId);
          gridViewItems=(GridView)findViewById(R.id.grid_view_image_text);
          gridViewItems.setAdapter(adapterViewAndroid);
          gridViewItems.setOnItemClickListener(new AdapterView.OnItemClickListener(){

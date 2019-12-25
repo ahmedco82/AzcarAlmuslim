@@ -10,13 +10,13 @@ import android.widget.TextView;
 
 import com.ahmedco.tasbeh_5.R;
 
-public class gridViewHomeActivity extends BaseAdapter {
+public class GridViewHomeActivity extends BaseAdapter {
 
     private Context mContext;
     private final String[] gridViewString;
     private final int[] gridViewImageId;
 
-    public gridViewHomeActivity(Context context, String[] gridViewString, int[] gridViewImageId) {
+    public GridViewHomeActivity(Context context, String[] gridViewString, int[] gridViewImageId) {
         mContext = context;
         this.gridViewImageId = gridViewImageId;
         this.gridViewString = gridViewString;

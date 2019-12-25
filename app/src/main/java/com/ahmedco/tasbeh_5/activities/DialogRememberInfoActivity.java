@@ -11,21 +11,17 @@ import android.widget.TextView;
 
 import com.ahmedco.tasbeh_5.R;
 
-//RememberInfo
 public class DialogRememberInfoActivity extends Activity {
 
-    EditText fromTime , toTime;
+    EditText fromTime,toTime;
     TextView everyTime;
-    // Button btn , btn2;
-    // ToggleButton bt1;
-    // Drawable d1,d2,buttonBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog_remember_info);
-        fromTime =  (EditText)findViewById(R.id.text_select_time_azcar7);
-        toTime =  (EditText)findViewById(R.id.text_select_time_azcar8);
+        fromTime =  (EditText)findViewById(R.id.text_select_time_from);
+        toTime =  (EditText)findViewById(R.id.text_select_time_to);
         everyTime = (TextView)findViewById(R.id.text_minute_5);
         // text_minute_5
         fromTime.setEnabled(false);
@@ -52,24 +48,9 @@ public class DialogRememberInfoActivity extends Activity {
             everyTime.setText(e_time);
         }
     }
-
     public void Click_start_remember_me3(View V){
-          // Intent k = new Intent(DialogRememberInfoActivity.this , ListAzcarActivity.class);
-          // startActivity(k);
-         // startRemember_btn.setText("إيقاف التذكير");
          Intent intent = getIntent();
          setResult(RESULT_OK ,intent);
          finish();
-
-        /*
-         Bundle extras = getIntent().getExtras();
-
-        if(extras != null) {
-          String value = extras.getString("key");
-           finish();
-            // Toast.makeText(getApplicationContext(),""+value,Toast.LENGTH_SHORT).show();
-            //The key argument here must match that used in the other activity
-        }
-        */
     }
  }

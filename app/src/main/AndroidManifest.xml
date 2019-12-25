@@ -24,7 +24,6 @@
         <!-- Service to perform web API queries -->
         <service android:name=".activities.AzcarWidget$UpdateService" />
 
-        <activity android:name=".activities.AzcarActivity" />
         <activity android:name=".activities.TimeSettingsActivity" />
 
         <activity
