@@ -5,45 +5,49 @@
     android:background="#ffffff"
     tools:context="com.ahmedco.tasbeh_5.activities.ListAzcarActivity">
 
-
     <Button
-        android:layout_gravity="center"
         android:id="@+id/button_row_listazcar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="confirmConfiguration"
-        android:text="Confirm"
-        />
-
-
+        android:onClick="btnConfirmConfiguration"
+        android:layout_centerHorizontal="true"
+        android:text="أنتقل"
+      />
 
     <ScrollView
-        android:paddingTop="50dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:paddingTop="50dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <include
-            android:id="@+id/r1" layout="@layout/row_list_azcar"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <include layout="@layout/row_list_azcar" android:id="@+id/r2"/>
+            <include
+                android:id="@+id/r1"
+                layout="@layout/row_list_azcar" />
 
-        <include
-            layout="@layout/row_list_azcar" android:id="@+id/r3"/>
+            <include
+                android:id="@+id/r2"
+                layout="@layout/row_list_azcar" />
 
-        <include
-            layout="@layout/row_list_azcar" android:id="@+id/r4"/>
+            <include
+                android:id="@+id/r3"
+                layout="@layout/row_list_azcar" />
 
-        <include
-            layout="@layout/row_list_azcar" android:id="@+id/r5"/>
+            <include
+                android:id="@+id/r4"
+                layout="@layout/row_list_azcar" />
 
-        <include
-            layout="@layout/row_list_azcar" android:id="@+id/r6"/>
+            <include
+                android:id="@+id/r5"
+                layout="@layout/row_list_azcar" />
 
-    </LinearLayout>
+            <include
+                android:id="@+id/r6"
+                layout="@layout/row_list_azcar" />
+        </LinearLayout>
     </ScrollView>
 </RelativeLayout>

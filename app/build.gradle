@@ -39,4 +39,5 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.github.PuffoCyano:Range-Time-Picker-Dialog:v1.8'
     implementation 'com.github.fabriciorod:material-buttons:1.2'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 }

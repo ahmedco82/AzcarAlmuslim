@@ -15,17 +15,20 @@ public class DataSharedPreferences {
     public final static String PREFS_NAME = "appname_prefs";
 
     public static void setInt(String key, int value) {
+
         SharedPreferences sharedPref = context.getSharedPreferences(PREFS_NAME ,0);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(key, value);
         editor.apply();
+
     }
 
 
     public static int getInt(String key) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
         return prefs.getInt(key , 0);
     }
+
 
     public static void setStr(String key, String value) {
         SharedPreferences sharedPref = context.getSharedPreferences(PREFS_NAME,0);

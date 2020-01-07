@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -17,10 +18,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.ahmedco.tasbeh_5.R;
 import com.ahmedco.tasbeh_5.utils.DataSharedPreferences;
+
 import java.util.ArrayList;
 import java.util.List;
 
 //https://stackoverflow.com/questions/5914234/how-to-share-data-between-activity-and-widget
+
 public class ListAzcarActivity extends AppCompatActivity {
 
         public static final int REQUEST_CODE = 1;
@@ -33,10 +36,11 @@ public class ListAzcarActivity extends AppCompatActivity {
         private boolean[] selectedSound;
         private int lengthListSounds;
         private MediaPlayer currentPlyStopBtn;
-        public static DataSharedPreferences soundsSharedPref;
+        private DataSharedPreferences soundsSharedPref;
         private int  oneTime;
         private boolean noSelectedSound;
         private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+
         // whatever code is needed for initialization goes here
 
         @Override
@@ -50,7 +54,7 @@ public class ListAzcarActivity extends AppCompatActivity {
           putCountRepeatSound();
           selectNewSound();
           setPlayStopBtns();
-}
+  }
 
     private void initiItems(){
         lengthListSounds = 6;
@@ -113,13 +117,14 @@ public class ListAzcarActivity extends AppCompatActivity {
                     int indexRadioButn = radioGroup.indexOfChild(radioButtonGetName);
                     int oppositeNum = 0;
                     if(indexRadioButn==0)oppositeNum=2;
-                    if(indexRadioButn==2)oppositeNum= 0;
-                    if(indexRadioButn==1)oppositeNum= 1;
+                    if(indexRadioButn==2)oppositeNum=0;
+                    if(indexRadioButn==1)oppositeNum=1;
                     repeatEachSound[(int)rowOneTowThree.getTag()]=oppositeNum;
                 }
             });
          }
-    private void setPlayStopBtns() {
+
+      private void setPlayStopBtns(){
         for(ToggleButton playStopBtns:listBtnPlyStop)
             playStopBtns.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -127,7 +132,6 @@ public class ListAzcarActivity extends AppCompatActivity {
                     List<ToggleButton> btns = new ArrayList<>();
                     compoundButton.setText(null);
                     if (checked){
-                        int a = R.drawable.btnpause;
                         if(playStopBtns.getTag().equals(0)){
                             if(currentPlyStopBtn.isPlaying()){
                                 currentPlyStopBtn.stop();
@@ -182,9 +186,9 @@ public class ListAzcarActivity extends AppCompatActivity {
                     }
                 }
             });
+
+
          }
-
-
      private void closeBtns(int i){
         for(int j = 0; j<listBtnPlyStop.length; j++){
             int btnplay = R.drawable.btnplay;
@@ -196,7 +200,8 @@ public class ListAzcarActivity extends AppCompatActivity {
             }
         }
      }
-        private void actionBarSetting() {
+
+        private void actionBarSetting(){
          this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
           getSupportActionBar().setDisplayShowCustomEnabled(true);
            getSupportActionBar().setCustomView(R.layout.toolbar);
@@ -213,29 +218,63 @@ public class ListAzcarActivity extends AppCompatActivity {
                      imageButton.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
-                    Toast.makeText(ListAzcarActivity.this, "You have clicked Back", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(ListAzcarActivity.this, "You have clicked Back", Toast.LENGTH_SHORT).show();
                      // onBackPressed();
                     //  handleSetupWidget();
                 }
             });
          }
-         
-    public void confirmConfiguration(View V){
-       for(int i=0; i<selectedSound.length; i++){
-         soundsSharedPref.setBool("soundsBoolean"+i,selectedSound[i]);
-           soundsSharedPref.setInt("loopSound"+i,repeatEachSound[i]);
-               Log.i("trace0","Yes_0"+   soundsSharedPref.getBool("soundsBoolean"+i));
-           }
-         Intent intent = new Intent(ListAzcarActivity.this, TimeSettingsActivity.class);
-       startActivityForResult(intent , REQUEST_CODE);
-    }
 
+    public void btnConfirmConfiguration(View view){
+     savDatainSharedPref();
+      boolean LengthOfListCheckedSound =  lengthSelectedSound();
+       if(ensureTransportData() && LengthOfListCheckedSound){
+        Intent intent = new Intent(ListAzcarActivity.this, TimeSettingsActivity.class);
+          startActivityForResult(intent , REQUEST_CODE);
+         }
+          if(!LengthOfListCheckedSound){
+            Toast.makeText(ListAzcarActivity.this, " أختر عنصر واحد أو أثنين فقط" , Toast.LENGTH_SHORT).show();
+          }
+           if(!ensureTransportData()){
+           Toast.makeText(ListAzcarActivity.this, "لا تترك الاختيارات فارغه " , Toast.LENGTH_SHORT).show();
+        }
+     }
+
+    private void savDatainSharedPref(){
+        for(int i=0; i<selectedSound.length; i++){
+            soundsSharedPref.setBool("soundsBoolean"+i,selectedSound[i]);
+            soundsSharedPref.setInt("loopSound"+i,repeatEachSound[i]);
+        }
+    }
+    private boolean ensureTransportData(){
+      boolean checkArray = false;
+        for(int i=0; i<selectedSound.length; i++){
+          boolean getboolArrey = soundsSharedPref.getBool("soundsBoolean"+i);
+         if(getboolArrey==true){
+             checkArray =  true;
+          }
+        }
+       return checkArray;
+    }
+    private boolean lengthSelectedSound(){
+        int count =0;
+        for(int i=0; i<selectedSound.length; i++){
+            if(selectedSound[i]){
+                count =count+1;
+            }
+        }
+        if(count>2){
+            return false;
+        }else{
+            return true;
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
-            super.onActivityResult(requestCode, resultCode, data);
-            this.startService(new Intent(this , AzcarWidget.UpdateService.class));
+            super.onActivityResult(requestCode , resultCode , data);
+            this.startService(new Intent(this , UpdateService.class));
             if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
                 String requiredValue = data.getStringExtra("key");
                 appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;

@@ -46,15 +46,17 @@ public class TimeSettingsActivity extends AppCompatActivity implements RangeTime
     private static int minuteEnd_;
     // text_select_time_azcar7 ---
     private String everyTimeString ;
-    private int everyTimeNum=0;
-    private int stopTimer = 0;
+    private int everyTimeNum;
+    private int stopTimer ;
     public static EditText fromTime,toTime;
     //public static KSP ksp1;
     private Button startRemember_btn;
-    public static DataSharedPreferences timesSharedPreferences;
+    public  DataSharedPreferences timesSharedPreferences;
     private static String AM_PM;
     private static int start_AM_PM,end_AM_PM;
     RelativeLayout rowOne ,rowTow;
+    private String[] namseOfItems;
+    private int[] valuesOfItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +116,10 @@ public class TimeSettingsActivity extends AppCompatActivity implements RangeTime
 
     private void initiItems(){
         hourStart_=0;  minuteStart_=0; hourEnd_ =0; minuteEnd_=0;start_AM_PM = 0; start_AM_PM = 2;;
+        everyTimeNum=0;
+        stopTimer = 0;
+        namseOfItems = new String[8];
+        valuesOfItems = new int[8];
         timesSharedPreferences = new DataSharedPreferences(this);
         startRemember_btn = (Button) findViewById(R.id.btn_start_remember_me2);
         startRemember_btn.setText(R.string.stop_remeber);
@@ -124,7 +130,7 @@ public class TimeSettingsActivity extends AppCompatActivity implements RangeTime
         toTime.setEnabled(false);
         fromTime.setText("");
         toTime.setText("");
-        everyTimeString = "15 دقيقة";
+        everyTimeString = "1 دقيقة";
         rowOne = (RelativeLayout)findViewById(R.id.row_one);
         rowTow = (RelativeLayout)findViewById(R.id.row_three);
     }
@@ -201,27 +207,42 @@ public class TimeSettingsActivity extends AppCompatActivity implements RangeTime
         }
     }
 
-    public void gotoWidgetMode(View V){
-        Intent intent = new Intent(TimeSettingsActivity.this , DialogRememberInfoActivity.class);
-        intent.putExtra("e_time", everyTimeString);
-        intent.putExtra("hour_star",hourStart_);
-        intent.putExtra("hour_end",hourEnd_);
-        intent.putExtra("minute_start",minuteStart_);
-        intent.putExtra("minute_end",minuteEnd_);
+    public void gotoWidgetMode(View V) {
+      Intent intent = new Intent(TimeSettingsActivity.this , DialogRememberInfoActivity.class);
+         intent.putExtra("e_time" , everyTimeString);
+          intent.putExtra("hour_star", hourStart_);
+           intent.putExtra("hour_end" , hourEnd_);
+         intent.putExtra("minute_start", minuteStart_);
+        intent.putExtra("minute_end", minuteEnd_);
         storingTimes();
-       if(stopTimer==1) {
+       if(stopTimer==1){
            checkEditBoxTime(intent);
         }else{
            startActivityForResult(intent , REQUEST_CODE);
        }
+       //startActivityForResult(intent , REQUEST_CODE);
     }
 
     private void storingTimes(){
-        String[] NamseOfItems = {"everyTime","stopTimer","hour_start","hour_end","start_AM_PM","minute_start","minute_end","end_AM_PM"} ;
-        int[] ValuesOfItems = {everyTimeNum,stopTimer , hourStart_, hourEnd_, start_AM_PM,minuteStart_, minuteEnd_, end_AM_PM};
-        for(int i=0; i<NamseOfItems.length; i++){
-            timesSharedPreferences.setInt(NamseOfItems[i],ValuesOfItems[i]);
-        }
+        namseOfItems[0]="everyTime";
+        namseOfItems[1]="stopTimer";
+        namseOfItems[2]="hour_start";
+        namseOfItems[3]="hour_end";
+        namseOfItems[4]="start_AM_PM";
+        namseOfItems[5]="minute_start";
+        namseOfItems[6]="minute_end";
+        namseOfItems[7]="end_AM_PM";
+        valuesOfItems[0] = everyTimeNum;
+        valuesOfItems[1]=stopTimer;
+        valuesOfItems[2]=hourStart_;
+        valuesOfItems[3]=hourEnd_;
+        valuesOfItems[4]= start_AM_PM;
+        valuesOfItems[5]=minuteStart_;
+        valuesOfItems[6]= minuteEnd_;
+        valuesOfItems[7]= end_AM_PM;
+        for(int i = 0; i< namseOfItems.length; i++){
+            timesSharedPreferences.setInt(namseOfItems[i], valuesOfItems[i]);
+       }
     }
 
     private void checkEditBoxTime(Intent intent){
@@ -254,7 +275,7 @@ public class TimeSettingsActivity extends AppCompatActivity implements RangeTime
         // setting TRANSPARENT Background to myDialog to display myDialog with rounded corner
         dialogTimerSelected.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
          // adding data in to arrayList
-        String[] Timers= {" 15 دقيقة"," 20 دقيقة"," 30 دقيقة"," 45 دقيقة","1 ساعه"," 2 ساعه"," 3 ساعه"," 4 ساعه"," 5 ساعه"," 10 ساعه"};
+        String[] Timers= {" 1 دقيقة"," 2 دقيقة"," 3 دقيقة"," 4 دقيقة","5 دقيقة"," 10 دقيقة"," 15 دقيقة","30 دقيقة"," 1 ساعه"," 2 ساعه"};
         adapterDialogTimer = new AdapterDialogTimer(this, Timers, new AdapterDialogTimer.OnItemClickListener() {
             @Override
             public void onItemClick(String item, int position) {
@@ -301,7 +322,7 @@ public class TimeSettingsActivity extends AppCompatActivity implements RangeTime
     protected void onActivityResult(int requestCode , int resultCode , Intent data) {
         try{
             super.onActivityResult(requestCode, resultCode, data);
-            this.startService(new Intent(this , AzcarWidget.UpdateService.class));
+            this.startService(new Intent(this , UpdateService.class));
             if(requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
                 data = getIntent();
                 setResult(RESULT_OK , data);
@@ -310,8 +331,7 @@ public class TimeSettingsActivity extends AppCompatActivity implements RangeTime
           }catch(Exception ex) {
 
       }
-   }
-
+    }
 
     @Override
     public void onSelectedTime(int hourStart , int minuteStart , int hourEnd , int minuteEnd){

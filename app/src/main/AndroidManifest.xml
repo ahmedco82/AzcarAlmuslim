@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ahmedco.tasbeh_5">
-
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/azcar_icon"
         android:label="@string/app_name"
         android:layoutDirection="rtl"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/azcar_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".activities.HomeActivity">
+        </activity>
         <receiver android:name=".activities.AzcarWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -19,32 +19,24 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_azcar__info" />
-        </receiver>
-
-        <!-- Service to perform web API queries -->
-        <service android:name=".activities.AzcarWidget$UpdateService" />
-
+        </receiver> <!-- Service to perform web API queries -->
+        <service android:name=".activities.UpdateService" />
         <activity android:name=".activities.TimeSettingsActivity" />
-
         <activity
             android:name=".activities.DialogRememberInfoActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
-
         <activity android:name=".activities.ListAzcarActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activities.HomeActivity"
+        <activity
+            android:name=".activities.DefaultActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
     </application>
-
 </manifest>
