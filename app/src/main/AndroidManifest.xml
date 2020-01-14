@@ -9,8 +9,6 @@
         android:roundIcon="@mipmap/azcar_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.HomeActivity">
-        </activity>
         <receiver android:name=".activities.AzcarWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -21,18 +19,23 @@
                 android:resource="@xml/widget_azcar__info" />
         </receiver> <!-- Service to perform web API queries -->
         <service android:name=".activities.UpdateService" />
-        <activity android:name=".activities.TimeSettingsActivity" />
+        <activity android:name=".activities.TimeSettingsActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".activities.DialogRememberInfoActivity"
-            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
-        <activity android:name=".activities.ListAzcarActivity">
+            android:name=".activities.RememberInfoActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.ListAzcarActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.DefaultActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

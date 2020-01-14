@@ -25,6 +25,7 @@ public class AdapterDialogTimer extends RecyclerView.Adapter<AdapterDialogTimer.
         this.arrayList = arrayList;
         this.listener = listener;
     }
+
     @NonNull
     @Override
     public AdapterDialogTimer.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

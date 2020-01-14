@@ -3,6 +3,14 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
     defaultConfig {
         applicationId "com.ahmedco.tasbeh_5"
         minSdkVersion 21
@@ -15,6 +23,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            debuggable false
         }
     }
 
@@ -40,4 +52,5 @@ dependencies {
     implementation 'com.github.PuffoCyano:Range-Time-Picker-Dialog:v1.8'
     implementation 'com.github.fabriciorod:material-buttons:1.2'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    implementation 'com.github.navasmdc:MaterialDesign:1.5@aar'
 }

@@ -22,50 +22,7 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:id="@+id/row_one"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp">
-
-                <ImageView
-                    android:id="@+id/icon_row"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="6dp"
-                    android:src="@drawable/arrow_left" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/text_select_azcar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="4"
-                        android:fontFamily="@font/coor"
-                        android:gravity="center"
-                        android:text="@string/select_azkar"
-                        android:textSize="22sp" />
-
-                    <ImageView
-                        android:id="@+id/icon_selected_azar"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:src="@drawable/player9" />
-                </LinearLayout>
-            </RelativeLayout>
-        </LinearLayout>
+            android:orientation="horizontal"/>
     </RelativeLayout>
     <TextView
         android:id="@+id/line2"
@@ -126,7 +83,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <RelativeLayout
-                android:id="@+id/row_three"
+                android:id="@+id/row_everytime"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -258,8 +215,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:orientation="horizontal">
-                    <EditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/text_select_time_from"
+                        android:focusable="false"
                         android:layout_width="120dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -325,8 +283,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:orientation="horizontal">
-                    <EditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/text_select_time_to"
+                        android:focusable="false"
                         android:layout_width="120dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -379,11 +338,10 @@
         android:layout_gravity="center"
         android:padding="8dp">
         <Button
-            android:id="@+id/btn_start_remember_me2"
+            android:id="@+id/startRemember_btn_"
             android:layout_width="160dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:onClick="gotoWidgetMode"
             android:background="@drawable/btn_rounded_corner"
             android:text="@string/text_btn_start_remember"
             android:fontFamily="@font/coor"
