@@ -47,6 +47,7 @@ public class ListAzcarActivity extends AppCompatActivity  {
 
     // whatever code is needed for initialization goes here
     ButtonRectangle  buttonSelectColor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,7 +146,7 @@ public class ListAzcarActivity extends AppCompatActivity  {
                     compoundButton.setText(null);
                     int[] soundsRowsId = new int[]{R.raw.a1, R.raw.a2, R.raw.a3, R.raw.a4, R.raw.a5, R.raw.a6};
                     if (checked) {
-                        for (int i = 0; i < 6; i++) {
+                        for (int i = 0; i <soundsRowsId.length; i++) {
                             if (playStopBtns.getTag().equals(i)) {
                                 if (currentPlyStopBtn.isPlaying()) {
                                     currentPlyStopBtn.stop();
@@ -158,7 +159,6 @@ public class ListAzcarActivity extends AppCompatActivity  {
                     } else {
                         int btnplay = R.drawable.btnplay;
                         playStopBtns.setBackgroundDrawable(getDrawable(btnplay));
-                        //Toast.makeText(ListAzcarActivity.this, "You have clicked Btn", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -192,7 +192,7 @@ public class ListAzcarActivity extends AppCompatActivity  {
     }
     private void savDatainSharedPref() {
         for (int i = 0; i < selectedSound.length; i++) {
-            soundsSharedPref.setBool("soundsBoolean" + i, selectedSound[i]);
+            soundsSharedPref.setBool("btnsSoundChecked"+i, selectedSound[i]);
             soundsSharedPref.setInt("loopSound" + i, repeatEachSound[i]);
         }
     }
@@ -200,7 +200,7 @@ public class ListAzcarActivity extends AppCompatActivity  {
     private boolean ensureTransportData() {
         boolean checkArray = false;
         for (int i = 0; i < selectedSound.length; i++) {
-            boolean getboolArrey = soundsSharedPref.getBool("soundsBoolean" + i);
+            boolean getboolArrey = soundsSharedPref.getBool("btnsSoundChecked" + i);
             if (getboolArrey == true) {
                 checkArray = true;
             }

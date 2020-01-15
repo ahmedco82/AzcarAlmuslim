@@ -13,7 +13,7 @@ public class CompareTwoTime {
     public static String mStrToday = "";
     public static String mStrTomorrow = "";
 
-    public static String getCurrentDateUsingCalendar(){
+    public static String getCurrentDateUsingCalendar() {
         Date mDate = new Date();  // to get the date
         @SuppressLint("SimpleDateFormat") SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("dd-MM-yyyy"); // getting date in this format
         return mSimpleDateFormat.format(mDate.getTime());
@@ -25,18 +25,16 @@ public class CompareTwoTime {
         Date mStrTomorrow = mCalendar.getTime();
         @SuppressLint("SimpleDateFormat") DateFormat mDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         return mDateFormat.format(mStrTomorrow);
-
     }
 
-    public static String compareTwoTimeAMPM(String mStrStartTime, String mStrEndTime){
-
+    public static String compareTwoTimeAMPM(String mStrStartTime, String mStrEndTime) {
         String mStrCompareStartTime[] = mStrStartTime.split(" ");
         String mStrCompareEndTime[] = mStrEndTime.split(" ");
 
         int mIStartTime = Integer.parseInt(mStrCompareStartTime[0].replace(":", ""));
         int mIEndTime = Integer.parseInt(mStrCompareEndTime[0].replace(":", ""));
 
-        if (mIStartTime<mIEndTime && mStrCompareStartTime[1].equals("PM") && mStrCompareEndTime[1].equals("PM")) {
+        if (mIStartTime < mIEndTime && mStrCompareStartTime[1].equals("PM") && mStrCompareEndTime[1].equals("PM")) {
 
             mStrToday = getCurrentDateUsingCalendar();
             mStrTomorrow = getCurrentDateUsingCalendar();
@@ -72,7 +70,6 @@ public class CompareTwoTime {
             mStrToday = getCurrentDateUsingCalendar();
             mStrTomorrow = getCurrentDateUsingCalendar();
         }
-
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
         String mStrDifference = "";
         try {
@@ -85,9 +82,6 @@ public class CompareTwoTime {
         return mStrDifference;
     }
 
-
-
-
     public static String differenceDatesAndTime(Date mDateStart, Date mDateEnd) {
         long different = mDateEnd.getTime() - mDateStart.getTime();
         long secondsInMilli = 1000;
@@ -99,9 +93,9 @@ public class CompareTwoTime {
         long elapsedHours = different / hoursInMilli;
         different = different % hoursInMilli;
         long elapsedMinutes = different / minutesInMilli;
-        long minutes=elapsedHours * 60 + elapsedMinutes;
-        long result=elapsedDays * 24 * 60 + minutes;
-        if (0>result){
+        long minutes = elapsedHours * 60 + elapsedMinutes;
+        long result = elapsedDays * 24 * 60 + minutes;
+        if (0 > result) {
             result = result + 720;  //result is minus then add 12*60 minutes
         }
         return result + "";
