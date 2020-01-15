@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ahmedco.tasbeh_5.R;
@@ -19,11 +20,12 @@ public class ActionBarView extends AppCompatActivity {
     public ActionBarView(Context context, String textTitle) {
         this.context = context;
         this.textTitle = textTitle;
-        ((AppCompatActivity) context).getSupportActionBar().setDisplayOptions(androidx.appcompat.app.ActionBar.DISPLAY_SHOW_CUSTOM);
-        ((AppCompatActivity) context).getSupportActionBar().setDisplayShowCustomEnabled(true);
-        ((AppCompatActivity) context).getSupportActionBar().setCustomView(R.layout.toolbar);
-        ((AppCompatActivity) context).getSupportActionBar().setElevation(1);
-        View view = ((AppCompatActivity) context).getSupportActionBar().getCustomView();
+        ActionBar actionBar = ((AppCompatActivity) context).getSupportActionBar();
+        actionBar.setDisplayOptions(androidx.appcompat.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(R.layout.toolbar);
+        actionBar.setElevation(1);
+        View view = actionBar.getCustomView();
         // getSupportActionBar().setIcon(R.drawable.dot1);
         imageIconBar = (ImageView) view.findViewById(R.id.Icon);
         imageIconBar.setImageResource(R.drawable.arrow_left_black);

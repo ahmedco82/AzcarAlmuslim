@@ -2,6 +2,7 @@ package com.ahmedco.tasbeh_5.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import com.ahmedco.tasbeh_5.R;
+import com.ahmedco.tasbeh_5.models.Times;
 import com.ahmedco.tasbeh_5.utils.DataSharedPreferences;
 
 import java.util.HashMap;
@@ -27,23 +29,16 @@ import static com.ahmedco.tasbeh_5.activities.ListAzcarActivity.REQUEST_CODE;
 //https://github.com/PuffoCyano/Range-Time-Picker-Dialog
 public class TimeSettingsActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
+    Times times;
     public HashMap<String , Integer> hmapTimes;
-
     private ToggleButton checkBtn;
-    // private static int hourStart_;
-    // private static int minuteStart_;
-    //private static int hourEnd_;
-    //private static int minuteEnd_;
     private String everyTimeString;
-    // private int everyTimeNum;
     private int stopTimer;
-
     public EditText fromTime, toTime;
     private Button startRemember_btn;
     public DataSharedPreferences timesSharedPreferences;
     private static String AM_PM;
     private final int maxStopTime = 360;
-    //private static int start_AM_PM, end_AM_PM;
     RelativeLayout rowTow;
     TextView txtRememberMeEvery;
     private DialogeRepeatTime dialogeRepeatTime;
@@ -67,6 +62,7 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
 
     private void initiItems(){
         hmapTimes = new HashMap<String,Integer>();
+       times = new Times();
         dialogeRepeatTime = null;
         timesSharedPreferences = new DataSharedPreferences(this);
         startRemember_btn = (Button) findViewById(R.id.startRemember_btn_);
@@ -126,6 +122,7 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+
     public void gotoWidgetMode(int Way){
         if (Way == 0) {
             Intent intent = getIntent();
@@ -137,6 +134,7 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
         storingTimesInSharedPreferences();
     }
 
+
     private void showDialogRememberInfo(){
         Intent intent = new Intent(TimeSettingsActivity.this , RememberInfoActivity.class);
         String fromTimeFormatting =(String)getTimeWithFormatting((TimePickerDialog)timeFromPickerDialog);
@@ -147,7 +145,7 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
         startActivityForResult(intent, REQUEST_CODE);
     }
 
-    private void initValuesOfTimes(){
+    private void initValuesOfTimes() {
         if (dialogeRepeatTime == null)dialogeRepeatTime = new DialogeRepeatTime(this, txtRememberMeEvery);
         if (timeFromPickerDialog == null) timeFromPickerDialog = new TimePickerDialog(1, fromTime);
         if (timeToPickerDialog == null) timeToPickerDialog = new TimePickerDialog(2, toTime);
@@ -159,28 +157,44 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
         String endAM_PM2 = ((TimePickerDialog) timeToPickerDialog).AM_PM;
         int end_ampm = 0;
         int start_ampm = 0;
+
         if(endAM_PM2 == "AM")end_ampm =1;
         if(endAM_PM2 == "PM")end_ampm =2;
         if(startAM_PM == "AM")start_ampm =1;
         if(startAM_PM == "PM")start_ampm =2;
+
         everyTimeString = String.valueOf(dialogeRepeatTime.everyTime+1)+" دقيقه ";
+
         if(stopTimer==0){
-            hmapTimes.put("stopTimer",stopTimer);
-            hmapTimes.put("everyTime",dialogeRepeatTime.everyTime);
-        }else {
-            hmapTimes.put("hour_start",hourStartTime);
-            hmapTimes.put("hour_end",hourEndTime);
-            hmapTimes.put("minute_start",minuteStartTime);
-            hmapTimes.put("minute_end",minuteEndTimer);
-            hmapTimes.put("start_AM_PM",start_ampm);
-            hmapTimes.put("end_AM_PM",end_ampm);
-            hmapTimes.put("stopTimer",stopTimer);
-            hmapTimes.put("everyTime",dialogeRepeatTime.everyTime);
+            times.setEveryTime(dialogeRepeatTime.everyTime);
+            times.setStopTimer(stopTimer);
+            // hmapTimes.put("stopTimer",stopTimer);
+            // hmapTimes.put("everyTime",dialogeRepeatTime.everyTime);
+        }else{
+            times.setEveryTime(dialogeRepeatTime.everyTime);
+            times.setStopTimer(stopTimer);
+            times.setEnd_AM_PM(end_ampm);
+            times.setStart_AM_PM(start_ampm);
+            times.setHour_start(hourStartTime);
+            times.setHour_end(hourEndTime);
+            times.setMinute_start(minuteStartTime);
+            times.setMinute_end(minuteEndTimer);
+          //  hmapTimes.put("hour_start",hourStartTime);
+           // hmapTimes.put("hour_end",hourEndTime);
+           // hmapTimes.put("minute_start",minuteStartTime);
+           // hmapTimes.put("minute_end",minuteEndTimer);
+           // hmapTimes.put("start_AM_PM",start_ampm);
+           // hmapTimes.put("end_AM_PM",end_ampm);
+          //  hmapTimes.put("stopTimer",stopTimer);
+           // hmapTimes.put("everyTime",dialogeRepeatTime.everyTime);
         }
     }
 
+
     private void storingTimesInSharedPreferences(){
-        timesSharedPreferences.saveMap(hmapTimes);
+        timesSharedPreferences.saveOject(times);
+        //Log.i("trace_Times0",""+timesSharedPreferences.getfromOject().getHour_start());
+        // timesSharedPreferences.saveMap(hmapTimes);
     }
 
     private String getTimeWithFormatting(TimePickerDialog currentTimePickerDialog) {

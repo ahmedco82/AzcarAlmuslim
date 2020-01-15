@@ -162,10 +162,10 @@ public class ListAzcarActivity extends AppCompatActivity  {
                     }
                 }
             });
-    }
+       }
 
-    private void closeBtns(int i) {
-        for (int j = 0; j < listBtnPlyStop.length; j++) {
+    private void closeBtns(int i){
+        for (int j = 0; j < listBtnPlyStop.length; j++){
             int btnplay = R.drawable.btnplay;
             int btnpause = R.drawable.btnpause;
             if (j != i) {
@@ -210,7 +210,7 @@ public class ListAzcarActivity extends AppCompatActivity  {
 
     private boolean lengthSelectedSound() {
         int count = 0;
-        for(int i = 0; i < selectedSound.length; i++) {
+        for(int i = 0; i<selectedSound.length; i++) {
            if(selectedSound[i]) {
                count = count + 1;
             }
