@@ -40,6 +40,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
+                        android:textColor="@color/black"
                         android:text="kind_of_azkar"
                         android:textSize="18sp" />
                     <ToggleButton
@@ -98,6 +99,7 @@
                 android:layout_weight="2"
                 android:fontFamily="@font/coor"
                 android:paddingRight="16dp"
+                android:textColor="@color/black"
                 android:text="@string/num_time"
                 android:textSize="18sp"/>
         </LinearLayout>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    tools:context="com.ahmedco.tasbeh_5.activities.ListAzcarActivity">
+    tools:context="com.ahmedcom.tasbeh55.activities.ListAzcarActivity">
 
     <Button
        android:layout_marginTop="10dp"
@@ -18,38 +18,30 @@
         android:onClick="confirmConfiguration"
         android:layout_centerHorizontal="true"
         android:text="أنتقل"/>
-
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:paddingTop="50dp">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <include
                 android:id="@+id/r1"
                 layout="@layout/row_list_azcar" />
-
             <include
                 android:id="@+id/r2"
                 layout="@layout/row_list_azcar" />
-
             <include
                 android:id="@+id/r3"
                 layout="@layout/row_list_azcar" />
-
             <include
                 android:id="@+id/r4"
                 layout="@layout/row_list_azcar" />
-
             <include
                 android:id="@+id/r5"
                 layout="@layout/row_list_azcar" />
-
             <include
                 android:id="@+id/r6"
                 layout="@layout/row_list_azcar" />
