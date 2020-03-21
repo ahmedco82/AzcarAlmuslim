@@ -1,4 +1,4 @@
-package com.ahmedcom.tasbeh55.activities;
+package com.ahmedcom.tasbeh55.ui.activities;
 
 import android.app.Activity;
 import android.graphics.Color;

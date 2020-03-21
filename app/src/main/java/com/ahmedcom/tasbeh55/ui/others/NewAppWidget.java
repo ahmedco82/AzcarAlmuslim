@@ -1,4 +1,4 @@
-package com.ahmedcom.tasbeh55.activities;
+package com.ahmedcom.tasbeh55.ui.others;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -14,8 +14,8 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.ahmedcom.tasbeh55.R;
-import com.ahmedcom.tasbeh55.utils.DataSharedPreferences;
-import com.ahmedcom.tasbeh55.utils.TimeOptions;
+import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
+import com.ahmedcom.tasbeh55.utils.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import static android.content.Context.ALARM_SERVICE;
@@ -35,13 +35,13 @@ public class NewAppWidget extends AppWidgetProvider {
     private static List<MediaPlayer> selectedSound;
     private static List<Integer> repeatEachSound;
     private static int stop_timer;
-    private static DataSharedPreferences globalSharedPreferences = DataSharedPreferences.getInstance();
+    private static SharedPreferencesUtils globalSharedPreferences = SharedPreferencesUtils.getInstance();
+    private static boolean betweenTowTime =false;
     public int getSeconds;
     public int Length;
     public MediaPlayer[] allSounds;
     private AlarmManager alarmManager;
     private int lengtListSound;
-    private static boolean betweenTowTime =false;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int imgRes, int appWidgetId) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
@@ -55,7 +55,61 @@ public class NewAppWidget extends AppWidgetProvider {
         }
     }
 
+    private static void checkCurreTime(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+      stop_timer = globalSharedPreferences.getfromOject().getStopTimer();
+       boolean currenTime = TimeUtils.compareBetweenTwoTime(globalSharedPreferences.getfromOject().getHour_start(), globalSharedPreferences.getfromOject().getMinute_start(), globalSharedPreferences.getfromOject().getHour_end(), globalSharedPreferences.getfromOject().getMinute_end());
+         if(stop_timer == 1){
+           if(currenTime == betweenTowTime) {
+              PlayOrMsg(context, appWidgetManager, step, appWidgetIds);
+             }
+        } else {
+            PlayOrMsg(context, appWidgetManager, step, appWidgetIds);
+        }
+    }
 
+    private static void PlayOrMsg(Context context, AppWidgetManager appWidgetManager, int step, int[] appWidgetIds) {
+         if(selectedSound.size()>0){
+           if(selectedSound.get(currentSound) != null) {
+               NewAppWidget.updateUIWidgets(context, appWidgetManager, step, appWidgetIds);
+                playSounds(selectedSound.get(currentSound));
+            }
+         } else{
+            Toast.makeText(context, "لم تقم باختيار بعض العناصر", Toast.LENGTH_LONG).show();
+         }
+      }
+
+    private static void playSounds(MediaPlayer key) {
+      selectedSound.get(currentSound).start();
+        selectedSound.get(currentSound).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+          @Override
+           public void onCompletion(MediaPlayer mp) {
+             if (repeatEachSound.get(currentSound) != 0) {
+                if (quiteSound != 0) {
+                    counterSound += 1;
+                      if (counterSound == repeatEachSound.get(currentSound)) {
+                         counterSound = 0;
+                            quiteSound = 0;
+                        }
+                        playSounds(selectedSound.get(currentSound));
+                    } else {
+                        currentSound += 1;
+                        if (currentSound < selectedSound.size())
+                            playSounds(selectedSound.get(currentSound));
+                        else
+                            currentSound = 0;
+                        quiteSound = 1;
+                    }
+                } else {
+                    currentSound += 1;
+                    if (currentSound<selectedSound.size())
+                        playSounds(selectedSound.get(currentSound));
+                    else
+                        currentSound = 0;
+                    quiteSound = 1;
+                }
+            }
+        });
+    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -64,7 +118,7 @@ public class NewAppWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onEnabled(Context context) {
+    public void onEnabled(Context context){
         startAlarm(context);
     }
 
@@ -76,7 +130,7 @@ public class NewAppWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onDisabled(Context context) {
+    public void onDisabled(Context context){
         stopAlarm(context);
     }
 
@@ -86,7 +140,6 @@ public class NewAppWidget extends AppWidgetProvider {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }
-
 
     private void initiSounds(Context context) {
         currentSound = 0;
@@ -125,70 +178,13 @@ public class NewAppWidget extends AppWidgetProvider {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, NewAppWidget.class));
              loop += 1;
-             endCount = TimeOptions.getTimeInMinutes();
+             endCount = TimeUtils.getTimeInMinutes();
              if(loop == endCount) {
               step += 1;
                loop = 0;
                 checkCurreTime(context, appWidgetManager, appWidgetIds);
             }
         }
-    }
-
-
-    private static void checkCurreTime(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-      stop_timer = globalSharedPreferences.getfromOject().getStopTimer();
-       boolean currenTime = TimeOptions.compareBetweenTwoTime(globalSharedPreferences.getfromOject().getHour_start(), globalSharedPreferences.getfromOject().getMinute_start(), globalSharedPreferences.getfromOject().getHour_end(), globalSharedPreferences.getfromOject().getMinute_end());
-         if(stop_timer == 1){
-           if(currenTime == betweenTowTime) {
-              PlayOrMsg(context, appWidgetManager, step, appWidgetIds);
-             }
-        } else {
-            PlayOrMsg(context, appWidgetManager, step, appWidgetIds);
-        }
-    }
-
-    private static void PlayOrMsg(Context context, AppWidgetManager appWidgetManager, int step, int[] appWidgetIds) {
-         if(selectedSound.size()>0){
-           if(selectedSound.get(currentSound) != null) {
-               NewAppWidget.updateUIWidgets(context, appWidgetManager, step, appWidgetIds);
-                playSounds(selectedSound.get(currentSound));
-            }
-         } else {
-                Toast.makeText(context, "لم تقم باختيار بعض العناصر", Toast.LENGTH_LONG).show();
-          }
-      }
-
-    private static void playSounds(MediaPlayer key) {
-      selectedSound.get(currentSound).start();
-        selectedSound.get(currentSound).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-          @Override
-           public void onCompletion(MediaPlayer mp) {
-             if (repeatEachSound.get(currentSound) != 0) {
-                if (quiteSound != 0) {
-                    counterSound += 1;
-                      if (counterSound == repeatEachSound.get(currentSound)) {
-                         counterSound = 0;
-                            quiteSound = 0;
-                        }
-                        playSounds(selectedSound.get(currentSound));
-                    } else {
-                        currentSound += 1;
-                        if (currentSound < selectedSound.size())
-                            playSounds(selectedSound.get(currentSound));
-                        else
-                            currentSound = 0;
-                        quiteSound = 1;
-                    }
-                } else {
-                    currentSound += 1;
-                    if (currentSound<selectedSound.size())
-                        playSounds(selectedSound.get(currentSound));
-                    else
-                        currentSound = 0;
-                    quiteSound = 1;
-                }
-            }
-        });
     }
 }
 

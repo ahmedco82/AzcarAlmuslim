@@ -3,8 +3,8 @@ package com.ahmedcom;
 import android.app.Activity;
 import android.view.View;
 
-import com.ahmedcom.tasbeh55.activities.ListAzcarActivity;
-import com.ahmedcom.tasbeh55.activities.TimeSettingsActivity;
+import com.ahmedcom.tasbeh55.ui.activities.ListAzcarActivity;
+import com.ahmedcom.tasbeh55.ui.activities.TimeSettingsActivity;
 import com.ahmedcom.tasbeh55.interfaces.CallingBack;
 
 public class BackPressedCallingBack implements CallingBack{

@@ -1,4 +1,4 @@
-package com.ahmedcom.tasbeh55.activities;
+package com.ahmedcom.tasbeh55.ui.dialoges;
 
 import android.app.Dialog;
 import android.content.Context;

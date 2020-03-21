@@ -1,4 +1,4 @@
-package com.ahmedcom.tasbeh55.activities;
+package com.ahmedcom.tasbeh55.ui.others;
 
 import android.content.Context;
 import android.graphics.Bitmap;

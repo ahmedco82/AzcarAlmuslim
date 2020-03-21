@@ -1,4 +1,4 @@
-package com.ahmedcom.tasbeh55.activities;
+package com.ahmedcom.tasbeh55.ui.activities;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -16,7 +16,8 @@ import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ahmedcom.BackPressedCallingBack;
-import com.ahmedcom.tasbeh55.utils.DataSharedPreferences;
+import com.ahmedcom.tasbeh55.ui.others.ActionBarView;
+import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
 import com.ahmedcom.tasbeh55.R;
 
 import java.util.ArrayList;
@@ -38,23 +39,20 @@ public class ListAzcarActivity extends AppCompatActivity {
     private MediaPlayer currentPlyStopBtn;
     private int oneTime;
     private boolean noSelectedSound;
-    private DataSharedPreferences globalSharedPreferences = DataSharedPreferences.getInstance();
+    private SharedPreferencesUtils globalSharedPreferences = SharedPreferencesUtils.getInstance();
     private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_azcar);
-        //globalSharedPreferences = new DataSharedPreferences(this);
-        //new ActionBarView(this,"أذكار مع التكرار" ,R.drawable.left_arrow);
-        setResult(RESULT_CANCELED);
         initiViewItems();
         putCountRepeatSound();
         selectNewSound();
         setPlayStopBtns();
     }
 
-    private void initiViewItems() {
+    private void initiViewItems(){
         // Put title and icon inside the action bar
         bitmap = BitmapFactory.decodeResource(ListAzcarActivity.this.getResources(), R.drawable.left_arrow);
         // new ActionBarView(this, "أذكار مع التكرار" , bitmap  , this);
@@ -170,22 +168,22 @@ public class ListAzcarActivity extends AppCompatActivity {
         }
     }
     public void confirmConfiguration(View view) {
-        savDatainSharedPref();
-        boolean LengthOfListCheckedSound = lengthSelectedSound();
-        if(ensureTransportData() && LengthOfListCheckedSound) {
-           Intent intent = new Intent(ListAzcarActivity.this, TimeSettingsActivity.class);
+     savDatainSharedPref();
+      boolean LengthOfListCheckedSound = lengthSelectedSound();
+       if(ensureTransportData() && LengthOfListCheckedSound) {
+         Intent intent = new Intent(ListAzcarActivity.this, TimeSettingsActivity.class);
           startActivity(intent);
         }
-        if (!LengthOfListCheckedSound) {
-            Toast.makeText(ListAzcarActivity.this, " أختر عنصر واحد أو أثنين فقط", Toast.LENGTH_SHORT).show();
+        if(!LengthOfListCheckedSound) {
+           Toast.makeText(ListAzcarActivity.this, " أختر عنصر واحد أو أثنين فقط", Toast.LENGTH_SHORT).show();
         }
-        if (!ensureTransportData()) {
+        if(!ensureTransportData()){
             Toast.makeText(ListAzcarActivity.this, "لا تترك الاختيارات فارغه ", Toast.LENGTH_SHORT).show();
         }
       }
 
     private void savDatainSharedPref(){
-        for (int i = 0; i<selectedSound.length; i++) {
+        for(int i = 0; i<selectedSound.length; i++) {
             globalSharedPreferences.setBool("btnsSoundChecked"+i, selectedSound[i]);
             globalSharedPreferences.setInt("loopSound" + i, repeatEachSound[i]);
         }
@@ -200,6 +198,7 @@ public class ListAzcarActivity extends AppCompatActivity {
         }
         return checkArray;
     }
+
     private boolean lengthSelectedSound(){
         int count = 0;
         for (int i = 0; i < selectedSound.length; i++) {
@@ -207,16 +206,26 @@ public class ListAzcarActivity extends AppCompatActivity {
                 count = count + 1;
             }
         }
-        if (count > 2) {
+        return count>2 ? true:false;
+ }
+
+
+
+
+
+
+
+
+
+
+     /*
+        if (count>2) {
             return false;
         } else {
             return true;
         }
 
- }
-
-
-
+         */
 
 /*
     @Override

@@ -19,26 +19,20 @@ import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class DataSharedPreferences {
+public class SharedPreferencesUtils {
 
-    private static DataSharedPreferences instance;
+    private static SharedPreferencesUtils instance;
     static final String mapKey = "map";
 
-    /*
-    public DataSharedPreferences_(Context context){
-        this.context = context;
-     }
-    */
 
     public final static String PREFS_NAME = "appname_prefs";
 
-    public static synchronized DataSharedPreferences getInstance(){
+    public static synchronized SharedPreferencesUtils getInstance(){
         if(instance==null){
-            instance=new DataSharedPreferences();
+            instance=new SharedPreferencesUtils();
         }
         return instance;
     }
-
 
     public static void setInt(String key, int value) {
         SharedPreferences sharedPref = App.getAppContext().getSharedPreferences(PREFS_NAME ,0);

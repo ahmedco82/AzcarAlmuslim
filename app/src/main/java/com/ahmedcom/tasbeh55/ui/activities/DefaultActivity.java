@@ -1,4 +1,4 @@
-package com.ahmedcom.tasbeh55.activities;
+package com.ahmedcom.tasbeh55.ui.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +15,7 @@ import com.ahmedcom.BackPressedCallingBack;
 import com.ahmedcom.tasbeh55.R;
 import com.ahmedcom.tasbeh55.adapters.GridViewAdapter;
 import com.ahmedcom.tasbeh55.models.Images;
+import com.ahmedcom.tasbeh55.ui.others.ActionBarView;
 
 
 import java.util.ArrayList;
@@ -30,8 +31,7 @@ public class DefaultActivity extends AppCompatActivity {
     private ArrayList<String> computer = new ArrayList<>();
     private ArrayList<String> food = new ArrayList<>();
     private ArrayList<String> clothes = new ArrayList<>();
-
- //   private OptionsPickerView pvNoLinkOptions;
+    //   private OptionsPickerView pvNoLinkOptions;
 
 
     private int[] imageList = new int[]{
@@ -65,18 +65,12 @@ public class DefaultActivity extends AppCompatActivity {
            @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
              if(position==2){
-            //  initNoLinkOptionsPicker();
-             //  pvNoLinkOptions.show();
-               //Intent k = new Intent(DefaultActivity.this, ListAzcarActivity.class);
                Intent k = new Intent(DefaultActivity.this, TimeSettingsActivity.class);
                startActivity(k);
               }
-             // Toast.makeText(DefaultActivity.this, "" + position, Toast.LENGTH_SHORT).show();
            }
         });
      }
-
-
 
     private ArrayList<Images> getList() {
         ArrayList<Images> list = new ArrayList<>();

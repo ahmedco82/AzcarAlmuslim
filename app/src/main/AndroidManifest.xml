@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <receiver android:name="com.ahmedcom.tasbeh55.activities.NewAppWidget">
+        <receiver android:name="com.ahmedcom.tasbeh55.ui.others.NewAppWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -21,13 +21,13 @@
                 android:resource="@xml/new_app_widget_info" />
         </receiver>
 
-        <activity android:name="com.ahmedcom.tasbeh55.activities.TimeSettingsActivity" />
+        <activity android:name="com.ahmedcom.tasbeh55.ui.activities.TimeSettingsActivity" />
         <activity
-            android:name="com.ahmedcom.tasbeh55.activities.RememberInfoActivity"
+            android:name="com.ahmedcom.tasbeh55.ui.activities.RememberInfoActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
-        <activity android:name="com.ahmedcom.tasbeh55.activities.ListAzcarActivity"></activity>
+        <activity android:name="com.ahmedcom.tasbeh55.ui.activities.ListAzcarActivity"></activity>
         <activity
-            android:name="com.ahmedcom.tasbeh55.activities.DefaultActivity"
+            android:name="com.ahmedcom.tasbeh55.ui.activities.DefaultActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.ahmedcom.tasbeh55.activities.NewAppWidget$AlarmReceiver"
+        <receiver android:name="com.ahmedcom.tasbeh55.ui.others.NewAppWidget$AlarmReceiver"
             android:enabled="true"/>
 
     </application>
