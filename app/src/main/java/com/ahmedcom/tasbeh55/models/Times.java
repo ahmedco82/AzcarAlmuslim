@@ -13,15 +13,15 @@ public class Times implements Serializable{
     int stopTimer;
     int everyTime;
 
+    /*
     private static Times instance;
-
     public static synchronized Times getInstance(){
         if(instance==null){
             instance=new Times();
         }
         return instance;
     }
-
+    */
     public void setHour_start(int hour_start){
         this.hour_start = hour_start;
     }
@@ -40,10 +40,10 @@ public class Times implements Serializable{
     public void setEnd_AM_PM(int end_AM_PM){
         this.end_AM_PM = end_AM_PM;
     }
-    public void setStopTimer(int stopTimer){
+    public  void setStopTimer(int stopTimer){
         this.stopTimer = stopTimer;
     }
-    public void setEveryTime(int everyTime){
+    public  void setEveryTime(int everyTime){
         this.everyTime = everyTime;
     }
     public int getHour_start(){

@@ -56,12 +56,14 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
     private Button startRemember_btn;
     private DialogeRepeatTime dialogeRepeatTime;
     private Context context;
-   // private int everyTimeMenu;
+    // private int everyTimeMenu;
     private ArrayList<String> times;
     private ArrayList<String> food;
     private ArrayList<String> clothes;
     private OptionsPickerView optionsPickerTimes;
-    private SharedPreferencesUtils globalSharedPreferences= SharedPreferencesUtils.getInstance();
+    private Times time;
+    private String fromTimeFormatting;
+    private String toTimeFormatting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +78,10 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
         // new ActionBarView(this, this.getResources().getString(R.string.select_azkar));
     }
 
-    private void initiItems(){
-        if(timeFromPickerDialog == null) timeFromPickerDialog = new TimePickerDialog(1, fromTime);
-        if(timeToPickerDialog == null) timeToPickerDialog = new TimePickerDialog(2, toTime);
+    private void initiItems() {
+        if(timeFromPickerDialog == null)
+        timeFromPickerDialog = new TimePickerDialog(time, 1, fromTime);
+        if (timeToPickerDialog == null) timeToPickerDialog = new TimePickerDialog(time, 2, toTime);
         everyTime = 0;
         everyTimeTxt = "1 دقيقة";
         pramEveryTime = "1 دقيقة";
@@ -86,15 +89,15 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
         food = new ArrayList<>();
         clothes = new ArrayList<>();
         titleRow = (TextView) findViewById(R.id.text_minute);
-         String[] Times = {" 1 دقيقة", " 2 دقيقة", " 3 دقيقة", " 4 دقيقة", "5 دقيقة", " 10 دقيقة", " 15 دقيقة", "30 دقيقة", " 1 ساعه", " 2 ساعه"};
-         for(int i=0; i<Times.length; i++){
+        String[] Times = {" 1 دقيقة", " 2 دقيقة", " 3 دقيقة", " 4 دقيقة", "5 دقيقة", " 10 دقيقة", " 15 دقيقة", "30 دقيقة", " 1 ساعه", " 2 ساعه"};
+        for (int i = 0; i < Times.length; i++) {
             times.add(Times[i]);
-         }
+        }
         optionsPicker();
         Bitmap bitmap = BitmapFactory.decodeResource(TimeSettingsActivity.this.getResources(), R.drawable.left_arrow);
-        new ActionBarView(TimeSettingsActivity.this, "تحديد الأذكار", bitmap, new BackPressedCallingBack(TimeSettingsActivity.this));
+        new ActionBarView(TimeSettingsActivity.this, "أوقات الاذكار", bitmap, new BackPressedCallingBack(TimeSettingsActivity.this));
         hmapTimes = new HashMap<String, Integer>();
-       // times = new Times();
+        time = new Times();
         dialogeRepeatTime = null;
         startRemember_btn = (Button) findViewById(R.id.startRemember_btn_);
         checkBtn = (ToggleButton) findViewById(R.id.bt_check2);
@@ -110,72 +113,84 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void optionsPicker(){
-      optionsPickerTimes = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-        @Override
-         public void onOptionsSelect(int index, View v) {
+       optionsPickerTimes = new OptionsPickerBuilder(this , new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int index, View v) {
                 everyTimeTxt = times.get(index);
-               everyTime=index;
-                 everyTimeString = times.get(index);
-               titleRow.setText(everyTimeTxt);
-           }
-        }).setItemVisibleCount(5).setSelectOptions(0, 1 , 1).build();
+                everyTime = index;
+                everyTimeString = times.get(index);
+                titleRow.setText(everyTimeTxt);
+             }
+           }).setItemVisibleCount(5).setSelectOptions(0, 0, 0).build();
          optionsPickerTimes.setNPicker(times);
-        optionsPickerTimes.setSelectOptions(0,1,1);
+       optionsPickerTimes.setSelectOptions(0, 0, 0);
     }
 
     @Override
-    public void onClick(View v){
+    public void onClick(View v) {
         switch (v.getId()) {
             case R.id.text_select_time_from:
-              showTimePickerDialog(v, 1);
-              break;
+                showTimePickerDialog(v, 1);
+                break;
             case R.id.row_selectAzcar:
-              break;
+                break;
             case R.id.text_select_time_to:
-               showTimePickerDialog(v, 2);
-              break;
+                showTimePickerDialog(v, 2);
+                break;
             case R.id.row_everytime:
-             optionsPickerTimes.show();
-               break;
+                optionsPickerTimes.show();
+                break;
             case R.id.startRemember_btn_:
-              //test0();
-              checkTimFromTo();
-           break;
+                //test0();
+                checkTimFromTo();
+                break;
         }
-      }
+    }
 
-    public void clickRowSelectAzcar(View view){
+    public void clickRowSelectAzcar(View view) {
         Intent intent = new Intent(TimeSettingsActivity.this, ListAzcarActivity.class);
         startActivity(intent);
     }
 
-    private void checkTimFromTo(){
-      boolean boxesTimeIsEmpty = TextUtils.isEmpty(fromTime , toTime);
-        if(boxesTimeIsEmpty){
-          String fromTimeFormatting = TextUtils.getTimeFromFormatting();//
-          String toTimeFormatting= TextUtils.getTimeToFormatting() ;
-          int getTimeBetweenTwoTimes = Integer.parseInt(TimeUtils.compareTwoTime(fromTimeFormatting, toTimeFormatting));
-          if(getTimeBetweenTwoTimes>maxStopTime){
-               Toast.makeText(this, "لايجب ان يزيد وقت التوقف عن 6 ساعات", Toast.LENGTH_LONG).show();
-            }else{
-              showDialogRememberInfo();
+    private void checkTimFromTo() {
+        boolean boxesTimeIsEmpty = TextUtils.isEmpty(fromTime, toTime);
+        if (boxesTimeIsEmpty) {
+            saveItems();
+            fromTimeFormatting = TextUtils.getTimeFromFormatting(TimeSettingsActivity.this);
+            toTimeFormatting = TextUtils.getTimeToFormatting(TimeSettingsActivity.this);
+            int getTimeBetweenTwoTimes = Integer.parseInt(TimeUtils.compareTwoTime(fromTimeFormatting, toTimeFormatting));
+            if (getTimeBetweenTwoTimes > maxStopTime) {
+                Toast.makeText(this, "لايجب ان يزيد وقت التوقف عن 6 ساعات", Toast.LENGTH_LONG).show();
+            } else {
+                showDialogRememberInfo();
             }
-           }else{
-            if(stopTimer==0){
-             showDialogRememberInfo();
-            } else{
-            Toast.makeText(this, "يوجد اماكن فارغة", Toast.LENGTH_LONG).show();
-           }
+        } else {
+            if (stopTimer == 0) {
+                showDialogRememberInfo();
+            } else {
+                Toast.makeText(this, "يوجد اماكن فارغة", Toast.LENGTH_LONG).show();
+            }
         }
-      }
-
-    private void showDialogRememberInfo(){
-      Times.getInstance().setEveryTime(everyTime);
-       Times.getInstance().setStopTimer(stopTimer);
-         globalSharedPreferences.saveOject(Times.getInstance());
-         Toast.makeText(this,getString(R.string.text_btn_stop_remember), Toast.LENGTH_LONG).show();
     }
 
+    private void saveItems() {
+        time.setEveryTime(everyTime);
+        time.setStopTimer(stopTimer);
+        SharedPreferencesUtils.saveTimes(TimeSettingsActivity.this, time);
+    }
+
+    private void showDialogRememberInfo() {
+        Intent intent = new Intent(TimeSettingsActivity.this, RememberInfoActivity.class);
+        intent.putExtra("every_time", everyTimeString);
+        intent.putExtra("starttime", fromTimeFormatting);
+        intent.putExtra("endtime", toTimeFormatting);
+        startActivity(intent);
+        //finish();
+        //startActivityForResult(intent , 1);
+        //finish();
+        //Toast.makeText(this,getString(R.string.text_btn_stop_remember), Toast.LENGTH_LONG).show();
+        //closeApp();
+    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -186,7 +201,6 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
             closeStopTime();
         }
     }
-
 
     private void closeStopTime() {
         int f = R.drawable.unchk;
@@ -212,15 +226,20 @@ public class TimeSettingsActivity extends AppCompatActivity implements View.OnCl
         toTime.setEnabled(true);
     }
 
-    private void showTimePickerDialog(View v , int editTextId) {
-        if (editTextId == 1){
-            timeFromPickerDialog = new TimePickerDialog(editTextId , fromTime);
+    private void showTimePickerDialog(View v, int editTextId) {
+        if (editTextId == 1) {
+            timeFromPickerDialog = new TimePickerDialog(time, editTextId, fromTime);
             timeFromPickerDialog.show(getSupportFragmentManager(), "timeFromPickerDialog");
         } else if (editTextId == 2) {
-            timeToPickerDialog = new TimePickerDialog(editTextId, toTime);
+            timeToPickerDialog = new TimePickerDialog(time, editTextId, toTime);
             timeToPickerDialog.show(getSupportFragmentManager(), "timeToPickerDialog");
         }
     }
+
+    private void closeApp() {
+        //  this.finishAffinity();
+    }
+
 }
 
 

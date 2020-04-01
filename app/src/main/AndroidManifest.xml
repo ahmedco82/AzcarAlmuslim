@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ahmedcom.tasbeh55">
-
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <application
+        android:name=".utils.App"
         android:allowBackup="true"
-        android:name="com.ahmedcom.tasbeh55.utils.App"
         android:icon="@mipmap/azcar_icon"
         android:label="@string/app_name"
         android:layoutDirection="rtl"
@@ -12,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <receiver android:name="com.ahmedcom.tasbeh55.ui.others.NewAppWidget">
+        <receiver android:name=".ui.others.NewAppWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -21,24 +22,31 @@
                 android:resource="@xml/new_app_widget_info" />
         </receiver>
 
-        <activity android:name="com.ahmedcom.tasbeh55.ui.activities.TimeSettingsActivity" />
+        <service
+            android:name=".services.Alarm2"
+            android:exported="true"/>
+
+        <service
+            android:name=".services.Alarm"
+            android:exported="true"
+            tools:node="replace"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <activity android:name=".ui.activities.TimeSettingsActivity" />
         <activity
-            android:name="com.ahmedcom.tasbeh55.ui.activities.RememberInfoActivity"
+            android:name=".ui.activities.RememberInfoActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
-        <activity android:name="com.ahmedcom.tasbeh55.ui.activities.ListAzcarActivity"></activity>
+
+        <activity android:name=".ui.activities.ListAzcarActivity" />
+
         <activity
-            android:name="com.ahmedcom.tasbeh55.ui.activities.DefaultActivity"
+            android:name=".ui.activities.DefaultActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver android:name="com.ahmedcom.tasbeh55.ui.others.NewAppWidget$AlarmReceiver"
-            android:enabled="true"/>
-
     </application>
-
+<!--    android:name=".ui.others.NewAppWidget$AlarmReceiver" -->
 </manifest>

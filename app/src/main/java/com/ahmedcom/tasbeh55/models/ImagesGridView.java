@@ -3,7 +3,7 @@ package com.ahmedcom.tasbeh55.models;
 /**
  * Created by Parsania Hardik on 03-Jan-17.
  */
-public class Images {
+public class ImagesGridView {
 
     private String name;
     private int image_drawable;

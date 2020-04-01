@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 
 import com.ahmedcom.tasbeh55.R;
-import com.ahmedcom.tasbeh55.models.Images;
+import com.ahmedcom.tasbeh55.models.ImagesGridView;
 
 import java.util.ArrayList;
 
@@ -18,11 +18,11 @@ public class GridViewAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private Context ctx;
-    private ArrayList<Images> imageModelArrayList;
+    private ArrayList<ImagesGridView> imageModelArrayList;
     private ImageView ivGallery;
     private TextView textView;
 
-    public GridViewAdapter(Context ctx, ArrayList<Images> imageModelArrayList) {
+    public GridViewAdapter(Context ctx, ArrayList<ImagesGridView> imageModelArrayList) {
 
         this.ctx = ctx;
         this.imageModelArrayList = imageModelArrayList;

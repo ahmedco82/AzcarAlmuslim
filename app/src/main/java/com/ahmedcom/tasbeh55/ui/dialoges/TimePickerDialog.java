@@ -22,10 +22,12 @@ public class TimePickerDialog extends DialogFragment implements android.app.Time
     public int hourOfDay = 0;
     public int minute = 0;
     private EditText currentEditTixt;
+    private Times times;
 
-    public TimePickerDialog(int id, EditText fromTime_) {
-        currentEditTixt = fromTime_;
-        currentEditText = id;
+    public TimePickerDialog(Times times,int id, EditText fromTime) {
+        this.times=times;
+        this.currentEditTixt = fromTime;
+        this.currentEditText = id;
     }
 
     @Override
@@ -39,9 +41,9 @@ public class TimePickerDialog extends DialogFragment implements android.app.Time
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay_, int minute_) {
-        if (hourOfDay_ > 12) {
+        if (hourOfDay_ >12) {
             AM_PM = "PM";
-            AM_PM_Num = 2;
+            AM_PM_Num =2;
             hourOfDay_ = hourOfDay_ - 12;
         } else {
             AM_PM = "AM";
@@ -52,33 +54,15 @@ public class TimePickerDialog extends DialogFragment implements android.app.Time
         currentEditTixt.setText("" + hourOfDay + ":" + minute + " " + AM_PM);
         putTimes();
     }
-
   private void putTimes(){
-     if(currentEditText==1){
-       Times.getInstance().setStart_AM_PM(AM_PM_Num);
-        Times.getInstance().setHour_start(hourOfDay);
-         Times.getInstance().setMinute_start(minute);
+      if(currentEditText==1){
+         times.setStart_AM_PM(AM_PM_Num);
+         times.setHour_start(hourOfDay);
+         times.setMinute_start(minute);
         }else{
-          Times.getInstance().setEnd_AM_PM(AM_PM_Num);
-          Times.getInstance().setHour_end(hourOfDay);
-          Times.getInstance().setMinute_end(minute);
+         times.setEnd_AM_PM(AM_PM_Num);
+         times.setHour_end(hourOfDay);
+         times.setMinute_end(minute);
         }
     }
 }
-
-      /*
-        if (stopTimer == 0) {
-            times.setEveryTime(everyTime);
-            times.setStopTimer(stopTimer);
-        } else {
-            times.setEveryTime(everyTime);
-            times.setStopTimer(stopTimer);
-            times.setEnd_AM_PM(end_ampm);
-            times.setStart_AM_PM(start_ampm);
-            times.setHour_start(hourStartTime);
-            times.setHour_end(hourEndTime);
-            times.setMinute_start(minuteStartTime);
-            times.setMinute_end(minuteEndTimer);
-         }
-    }
-    */

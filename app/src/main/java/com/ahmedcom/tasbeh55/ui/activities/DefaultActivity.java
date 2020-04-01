@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ahmedcom.BackPressedCallingBack;
 import com.ahmedcom.tasbeh55.R;
 import com.ahmedcom.tasbeh55.adapters.GridViewAdapter;
-import com.ahmedcom.tasbeh55.models.Images;
+import com.ahmedcom.tasbeh55.models.ImagesGridView;
 import com.ahmedcom.tasbeh55.ui.others.ActionBarView;
 
 
@@ -26,13 +26,7 @@ public class DefaultActivity extends AppCompatActivity {
 
     private GridView gvIcons;
     private GridViewAdapter gridBaseAdapter;
-    private ArrayList<Images> imageModelArrayList;
-
-    private ArrayList<String> computer = new ArrayList<>();
-    private ArrayList<String> food = new ArrayList<>();
-    private ArrayList<String> clothes = new ArrayList<>();
-    //   private OptionsPickerView pvNoLinkOptions;
-
+    private ArrayList<ImagesGridView> imageModelArrayList;
 
     private int[] imageList = new int[]{
             R.drawable.zeker, R.drawable.icon_radio,
@@ -51,12 +45,9 @@ public class DefaultActivity extends AppCompatActivity {
        protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_default);
-
           //btnClose = (Button) findViewById(R.id.button_close_app);
            Bitmap bitmap= BitmapFactory.decodeResource(DefaultActivity.this.getResources(), R.drawable.like_);
            new ActionBarView(this, "تسبيح المسلم", bitmap ,  new BackPressedCallingBack(this));
-          // Bitmap bitmap= BitmapFactory.decodeResource(DefaultActivity.this.getResources(), R.drawable.like_);
-          // new ActionBarView(this, "أذكار المسلم",bitmap);
            gvIcons = findViewById(R.id.gridview);
            imageModelArrayList = getList();
            gridBaseAdapter = new GridViewAdapter(getApplicationContext(), imageModelArrayList);
@@ -72,10 +63,11 @@ public class DefaultActivity extends AppCompatActivity {
         });
      }
 
-    private ArrayList<Images> getList() {
-        ArrayList<Images> list = new ArrayList<>();
+
+    private ArrayList<ImagesGridView> getList() {
+        ArrayList<ImagesGridView> list = new ArrayList<>();
         for(int i = 0; i<9; i++) {
-            Images imageModel = new Images();
+            ImagesGridView imageModel = new ImagesGridView();
             imageModel.setName(textList[i]);
             imageModel.setImage_drawable(imageList[i]);
             list.add(imageModel);

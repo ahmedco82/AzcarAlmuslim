@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.ahmedcom.tasbeh55"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -24,10 +24,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-
         debug {
-            debuggable false
-        }
+            debuggable true
+      }
     }
 
     compileOptions {
@@ -56,5 +55,7 @@ dependencies {
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation 'com.github.navasmdc:MaterialDesign:1.5@aar'
     implementation 'com.alex-zaitsev:meternumberpicker:1.0.2'
+
+    implementation 'com.google.code.gson:gson:2.8.6'
     //implementation 'com.contrarywind:Android-PickerView:4.1.9'
 }

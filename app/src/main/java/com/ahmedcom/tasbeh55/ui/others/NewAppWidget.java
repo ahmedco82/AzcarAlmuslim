@@ -35,7 +35,7 @@ public class NewAppWidget extends AppWidgetProvider {
     private static List<MediaPlayer> selectedSound;
     private static List<Integer> repeatEachSound;
     private static int stop_timer;
-    private static SharedPreferencesUtils globalSharedPreferences = SharedPreferencesUtils.getInstance();
+    //private static SharedPreferencesUtils globalSharedPreferences = SharedPreferencesUtils.getInstance();
     private static boolean betweenTowTime =false;
     public int getSeconds;
     public int Length;
@@ -56,7 +56,8 @@ public class NewAppWidget extends AppWidgetProvider {
     }
 
     private static void checkCurreTime(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-      stop_timer = globalSharedPreferences.getfromOject().getStopTimer();
+      /*
+        stop_timer = globalSharedPreferences.getfromOject().getStopTimer();
        boolean currenTime = TimeUtils.compareBetweenTwoTime(globalSharedPreferences.getfromOject().getHour_start(), globalSharedPreferences.getfromOject().getMinute_start(), globalSharedPreferences.getfromOject().getHour_end(), globalSharedPreferences.getfromOject().getMinute_end());
          if(stop_timer == 1){
            if(currenTime == betweenTowTime) {
@@ -65,6 +66,7 @@ public class NewAppWidget extends AppWidgetProvider {
         } else {
             PlayOrMsg(context, appWidgetManager, step, appWidgetIds);
         }
+        */
     }
 
     private static void PlayOrMsg(Context context, AppWidgetManager appWidgetManager, int step, int[] appWidgetIds) {
@@ -160,7 +162,8 @@ public class NewAppWidget extends AppWidgetProvider {
     }
 
     private void copySoundsFromSharedPrefToArraies(MediaPlayer[] allSounds) {
-     int[] repeatingEverySound;
+     /*
+        int[] repeatingEverySound;
        repeatingEverySound = new int[Length];
         for(int i = 0; i<Length; i++) {
             repeatingEverySound[i] = globalSharedPreferences.getInt("loopSound"+i);
@@ -171,14 +174,16 @@ public class NewAppWidget extends AppWidgetProvider {
                 }
             }
         }
+        */
     }
 
-    public static class AlarmReceiver extends BroadcastReceiver {
-        public void onReceive(Context context, Intent intent) {
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, NewAppWidget.class));
-             loop += 1;
-             endCount = TimeUtils.getTimeInMinutes();
+    public class AlarmReceiver extends BroadcastReceiver {
+
+      public void onReceive(Context context, Intent intent) {
+       AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, NewAppWidget.class));
+          loop += 1;
+           //  endCount = TimeUtils.getTimeInMinutes();
              if(loop == endCount) {
               step += 1;
                loop = 0;

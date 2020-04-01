@@ -1,277 +1,332 @@
 package com.ahmedcom.tasbeh55.ui.activities;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.ActivityManager;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.ahmedcom.BackPressedCallingBack;
+import com.ahmedcom.tasbeh55.R;
+import com.ahmedcom.tasbeh55.adapters.AzcarListAdapter;
+import com.ahmedcom.tasbeh55.interfaces.RecyclerViewClickListener;
+import com.ahmedcom.tasbeh55.models.AudioItem;
+import com.ahmedcom.tasbeh55.services.Alarm;
+import com.ahmedcom.tasbeh55.services.Alarm2;
 import com.ahmedcom.tasbeh55.ui.others.ActionBarView;
 import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
-import com.ahmedcom.tasbeh55.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
-//https://stackoverflow.com/questions/5914234/how-to-share-data-between-activity-and-widget
+public class ListAzcarActivity extends AppCompatActivity implements RecyclerViewClickListener {
 
-public class ListAzcarActivity extends AppCompatActivity {
-
-    public static final int REQUEST_CODE = 1;
-    private ToggleButton[] listBtnCheck;
-    private ToggleButton[] listBtnPlyStop;
-    private RadioGroup[] radioGroup;
-    private TextView[] listOfTextAzcar;
-    private int[] repeatEachSound;
-    private String[] textListAzcar;
-    private boolean[] selectedSound;
-    private int lengthListSounds;
-    private MediaPlayer currentPlyStopBtn;
-    private int oneTime;
-    private boolean noSelectedSound;
-    private SharedPreferencesUtils globalSharedPreferences = SharedPreferencesUtils.getInstance();
-    private Bitmap bitmap;
+    AzcarListAdapter adapter;
+    MediaPlayer currentSound = null;
+    RecyclerView recyclerView;
+    Intent serviceIntent2 = null;
+    ArrayList<AudioItem> audioItems = new ArrayList<>();
+    private ArrayList<Boolean> selectedSound = new ArrayList<Boolean>();
+    private ArrayList<Integer> repeatEachSound = new ArrayList<Integer>();
+    private ArrayList<String> listText = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_azcar);
-        initiViewItems();
-        putCountRepeatSound();
-        selectNewSound();
-        setPlayStopBtns();
-    }
-
-    private void initiViewItems(){
-        // Put title and icon inside the action bar
-        bitmap = BitmapFactory.decodeResource(ListAzcarActivity.this.getResources(), R.drawable.left_arrow);
-        // new ActionBarView(this, "أذكار مع التكرار" , bitmap  , this);
+        setContentView(R.layout.activity_main);
+        // repeatEachSound =  new int[lengthListSounds];
+        Bitmap bitmap = BitmapFactory.decodeResource(ListAzcarActivity.this.getResources(), R.drawable.left_arrow);
         new ActionBarView(this, "أذكار مع التكرار", bitmap, new BackPressedCallingBack(this));
-        lengthListSounds = 6;
-        oneTime = 0;
-        noSelectedSound = false;
-        currentPlyStopBtn = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this, R.raw.a1);
-        int[] rowView = new int[]{R.id.r1, R.id.r2, R.id.r3, R.id.r4, R.id.r5, R.id.r6};
-        listBtnCheck = new ToggleButton[lengthListSounds];
-        listBtnPlyStop = new ToggleButton[lengthListSounds];
-        View[] viewContainer = new View[lengthListSounds];
-        listOfTextAzcar = new TextView[lengthListSounds];
-        selectedSound = new boolean[lengthListSounds];
-        radioGroup = new RadioGroup[lengthListSounds];
-        repeatEachSound = new int[lengthListSounds];
-        Resources resArrayString = getResources();
-        textListAzcar = resArrayString.getStringArray(R.array.kind_of_azkar);
-        for (int i = 0; i < listBtnCheck.length; i++) {
-            for (int j = 0; j < lengthListSounds; j++) {
-                viewContainer[j] = (View) findViewById(rowView[j]);
-                listBtnCheck[j] = (ToggleButton) viewContainer[j].findViewById(R.id.bt_check2);
-                listBtnPlyStop[j] = (ToggleButton) viewContainer[j].findViewById(R.id.bt_play);
-                radioGroup[j] = (RadioGroup) viewContainer[j].findViewById(R.id.segmentedGroup);
-                listBtnCheck[j].setTag(j);
-                listBtnPlyStop[j].setTag(j);
-                radioGroup[j].setTag(j);
-                selectedSound[j] = noSelectedSound;
-                repeatEachSound[j] = oneTime;
-                listOfTextAzcar[j] = (TextView) viewContainer[j].findViewById(R.id._txt_kind_of_azkar);
-                listOfTextAzcar[j].setText(textListAzcar[j]);
-            }
+        currentSound = (MediaPlayer) MediaPlayer.create(this, R.raw.a1);
+        int[] soundsRowsId = new int[]{R.raw.a1, R.raw.a2, R.raw.a3, R.raw.a4, R.raw.a5, R.raw.a6};
+        String[] soundsRowsText = new String[]{"الله اكبر", "الحمد لله", "سبحان الله وبحمده", "لا اله الا الله", "استغفر الله", "الحمد لله الذي احيانا بعد مماتنا"};
+        initiArraies(soundsRowsId,soundsRowsText);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        adapter = new AzcarListAdapter(this, listText, audioItems);
+        recyclerView.setHasFixedSize(true);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), new LinearLayoutManager(this).getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        isServiceTowRunning();
+    }
+    private void isServiceTowRunning() {
+        if (SharedPreferencesUtils.getServiceOnOff(getApplicationContext())) {
+            SharedPreferencesUtils.setServiceOnOff(this, false);
+            serviceIntent2 = new Intent(getBaseContext(), Alarm.class);
+            Alarm.enqueueWork(this, serviceIntent2);
         }
     }
-    private void selectNewSound(){
-        for (ToggleButton selectedBtn : listBtnCheck)
-            selectedBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                    selectedBtn.setText(null);
-                    if (checked) {
-                        setBground(selectedBtn, true);
-                    } else {
-                        setBground(selectedBtn, false);
-                    }
-                }
-         });
-     }
+    private void initiArraies(int[] soundsRowsId, String[] soundsRowsText) {
+        for (int i = 0; i < 6; i++) {
+            listText.add(soundsRowsText[i]);
+            audioItems.add(new AudioItem(soundsRowsId[i]));
+            repeatEachSound.add(0);
+            selectedSound.add(false);
+        }
+    }
 
-    private void setBground(ToggleButton selectedBtn_, boolean indexStatusBtn) {
-        int bG = 0;
-        selectedSound[(int) selectedBtn_.getTag()] = indexStatusBtn;
-        if (indexStatusBtn) {
-            bG = R.drawable.chk;
+    public void endOfSelection(View v) {
+        savDatainSharedPref();
+        boolean LengthOfListCheckedSound = lengthSelectedSound();
+        if (ensureOneORMoreSelected() && LengthOfListCheckedSound) {
+            showDialogInfo();
+        }
+        if (!LengthOfListCheckedSound) {
+            Toast.makeText(ListAzcarActivity.this, " أختر عنصر واحد أو أثنين فقط", Toast.LENGTH_SHORT).show();
+        }
+        if (!ensureOneORMoreSelected()) {
+            Toast.makeText(ListAzcarActivity.this, "يجب اختيار عنصر واحد على الاقل", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showDialogInfo() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ListAzcarActivity.this);
+        builder.setMessage("هل تريد اغلاق التطبيق ثم تعمل الاذكار في خلفية الجهاز ؟");
+        builder.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialoginterface, int i) {
+                chooseDevice();
+                builder.setCancelable(false);
+            }
+        });
+        builder.setNegativeButton("لا", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialoginterface, int i) {
+                builder.setCancelable(false);
+            }
+        });
+        builder.show();
+    }
+
+    private void chooseDevice() {
+        if (Build.VERSION.SDK_INT <= 22) {
+            OreoDeviceOrBigger();
         } else {
-            bG = R.drawable.unchk;
+            smallerThanOreoDevice();
         }
-        selectedBtn_.setBackgroundDrawable(getDrawable(bG));
+        closeApp();
     }
 
-    private void putCountRepeatSound() {
-        for (RadioGroup rowOneTowThree : radioGroup)
-            rowOneTowThree.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    // Log.i("radio_Tag0",""+rBtn.getTag());
-                    View radioButtonGetName = radioGroup.findViewById(i);
-                    int indexRadioButn = radioGroup.indexOfChild(radioButtonGetName);
-                    int oppositeNum = 0;
-                    if (indexRadioButn == 0) oppositeNum = 2;
-                    if (indexRadioButn == 2) oppositeNum = 0;
-                    if (indexRadioButn == 1) oppositeNum = 1;
-                    repeatEachSound[(int) rowOneTowThree.getTag()] = oppositeNum;
-                }
-            });
+    private void closeApp() {
+        this.finishAffinity();
     }
 
-    private void setPlayStopBtns() {
-        for (ToggleButton playStopBtns : listBtnPlyStop)
-            playStopBtns.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                    List<ToggleButton> btns = new ArrayList<>();
-                    compoundButton.setText(null);
-                    int[] soundsRowsId = new int[]{R.raw.a1, R.raw.a2, R.raw.a3, R.raw.a4, R.raw.a5, R.raw.a6};
-                    if (checked) {
-                        for (int i = 0; i < soundsRowsId.length; i++) {
-                            if (playStopBtns.getTag().equals(i)) {
-                                if (currentPlyStopBtn.isPlaying()) {
-                                    currentPlyStopBtn.stop();
-                                }
-                                closeBtns((Integer) playStopBtns.getTag());
-                                currentPlyStopBtn = (MediaPlayer) MediaPlayer.create(ListAzcarActivity.this, soundsRowsId[i]);
-                                currentPlyStopBtn.start();
-                            }
-                        }
-                    } else {
-                        int btnplay = R.drawable.btnplay;
-                        playStopBtns.setBackgroundDrawable(getDrawable(btnplay));
-                    }
-                }
-            });
+    private void smallerThanOreoDevice() {
+        SharedPreferencesUtils.setServiceOnOff(this, true);
+        serviceIntent2 = new Intent(getBaseContext(), Alarm.class);
+        Alarm.enqueueWork(this, serviceIntent2);
+    }
+
+    private void OreoDeviceOrBigger() {
+        Intent serviceIntent = new Intent(getBaseContext(), Alarm2.class);
+        if (isServiceOneRunning(serviceIntent.getClass())) {
+            stopService(serviceIntent);
+            startService(serviceIntent);
+        } else {
+            startService(serviceIntent);
         }
-    private void closeBtns(int i) {
-        for (int j = 0; j < listBtnPlyStop.length; j++) {
-            int btnplay = R.drawable.btnplay;
-            int btnpause = R.drawable.btnpause;
-            if (j != i) {
-                listBtnPlyStop[j].setBackgroundDrawable(getDrawable(btnplay));
-            } else {
-                listBtnPlyStop[j].setBackgroundDrawable(getDrawable(btnpause));
+    }
+
+    private void savDatainSharedPref() {
+        SharedPreferencesUtils.setArrayBooleanPrefs(selectedSound, ListAzcarActivity.this);
+        SharedPreferencesUtils.setArrayIntPrefs(repeatEachSound, ListAzcarActivity.this);
+    }
+
+    private boolean isServiceOneRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
             }
         }
-    }
-    public void confirmConfiguration(View view) {
-     savDatainSharedPref();
-      boolean LengthOfListCheckedSound = lengthSelectedSound();
-       if(ensureTransportData() && LengthOfListCheckedSound) {
-         Intent intent = new Intent(ListAzcarActivity.this, TimeSettingsActivity.class);
-          startActivity(intent);
-        }
-        if(!LengthOfListCheckedSound) {
-           Toast.makeText(ListAzcarActivity.this, " أختر عنصر واحد أو أثنين فقط", Toast.LENGTH_SHORT).show();
-        }
-        if(!ensureTransportData()){
-            Toast.makeText(ListAzcarActivity.this, "لا تترك الاختيارات فارغه ", Toast.LENGTH_SHORT).show();
-        }
-      }
+       return false;
+   }
 
-    private void savDatainSharedPref(){
-        for(int i = 0; i<selectedSound.length; i++) {
-            globalSharedPreferences.setBool("btnsSoundChecked"+i, selectedSound[i]);
-            globalSharedPreferences.setInt("loopSound" + i, repeatEachSound[i]);
-        }
-    }
-    private boolean ensureTransportData() {
-        boolean checkArray = false;
-        for (int i = 0; i < selectedSound.length; i++) {
-            boolean getboolArrey = globalSharedPreferences.getBool("btnsSoundChecked" + i);
-            if (getboolArrey == true) {
+    private boolean ensureOneORMoreSelected(){
+     boolean checkArray = false;
+       for(Boolean object:SharedPreferencesUtils.getArrayBooleanPrefs(ListAzcarActivity.this)) {
+            if (object) {
                 checkArray = true;
+                break;
+            } else {
+                checkArray = false;
             }
         }
         return checkArray;
     }
 
-    private boolean lengthSelectedSound(){
+    private boolean lengthSelectedSound() {
         int count = 0;
-        for (int i = 0; i < selectedSound.length; i++) {
-            if (selectedSound[i]) {
+        for (int i = 0; i < selectedSound.size(); i++) {
+            if (selectedSound.get(i)) {
                 count = count + 1;
             }
         }
-        return count>2 ? true:false;
- }
-
-
-
-
-
-
-
-
-
-
-     /*
-        if (count>2) {
-            return false;
-        } else {
-            return true;
-        }
-
-         */
-
-/*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-     super.onActivityResult(requestCode, resultCode, data);
-      this.startService(new Intent(this, UpdateService.class));
-       if(requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-         // String requiredValue = data.getStringExtra("key");
-          appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-           //Retrieve the App Widget ID from the Intent that launched the Activity//
-            Intent intent = getIntent();
-             Bundle extras = intent.getExtras();
-              if(extras != null) {
-               appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-                // If the intent doesn’t have a widget ID, then call finish()
-                 if(appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-                  finish();
-                }
-                Intent resultValue = new Intent();
-                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                setResult(RESULT_OK, resultValue);
-                finish();
-          }
-     }
-
- */
-
-
-
-
-
-
-
-/*
-    @Override
-    public void onClick(View v) {
-        //We using switch by ID
-        switch (v.getId()){
-            case R.id.Icon:
-                //Your Code
-                Log.i("PRINT0","Gon");
-                break;
-            default:
-                break;
-        }
+        return (count >= 3) ? false : true;
     }
 
- */
+
+    @Override
+    public void onClick(View view, int position) {
+        if (view.getTag().equals("toggleButton")) {
+            ToggleButton selectedBtn = (ToggleButton) view;
+            selectedSound.set(position, selectedBtn.isChecked());
+        } else if (view.getTag().equals("playBtn")) {
+        } else if (view.getTag().equals("radio_b")) {
+            repeatEachSound.set(position, 1);
+        } else if (view.getTag().equals("radio_c")) {
+            repeatEachSound.set(position, 0);
+        } else if (view.getTag().equals("radio_a")) {
+            repeatEachSound.set(position, 2);
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+    private void setBackgroundPlayButtons(View compoundButton , int id) {
+      ToggleButton selectedBtn = (ToggleButton) compoundButton;
+        // playStopButtonTemp.add(selectedBtn);
+         Log.i("printLength","Don"+playStopButtonTemp.size());
+          for(int j=0; j<StatusButtons.size();j++) {
+            if(j==id) {
+              if(!StatusButtons.get(id)){
+                 StatusButtons.set(id,true);
+                }else {
+                   StatusButtons.set(id,false);
+                }
+            }
+            else {
+                StatusButtons.set(j,true);
+            }
+        }
+     adapter.notifyDataSetChanged();
+    }
+  */
+
+
+        /*
+        for(int j=0; j<listdata.length;j++) {
+          if (j == id) {
+                if (!listdata[id].getBool()) {
+                    listdata[id].setBool(true);
+                } else {
+                    listdata[id].setBool(false);
+                }
+            } else {
+                listdata[j].setBool(true);
+            }
+        }
+*/
+
+
+/*
+private boolean ensureTransportData() {
+        boolean checkArray = false;
+        for (int i = 0; i<selectedSound.length; i++) {
+            boolean getboolArrey = globalSharedPreferences.getBool("btnsSoundChecked"+i);
+            checkArray =  (getboolArrey = true ) ? true : false;
+        }
+        return checkArray;
+    }
+
+ Log.i("TRACE00--",""+SharedPreferencesUtils.getArrayBooleanPrefs(MainActivity.this));
+        Log.i("TRACEInt--",""+SharedPreferencesUtils.getArrayIntPrefs(MainActivity.this));
+    private boolean lengthSelectedSound(){
+        int count = 0;
+        for (int i = 0; i<selectedSound.length; i++) {
+            if(selectedSound[i]){
+                count = count + 1;
+            }
+        }
+        return (count>2) ? true:false;
+    }
+
+     */
+/*
+ for(int j =0; j<repeatEachSound.length; j++){
+    Log.i("post",""+repeatEachSound[j]);
+  }
+ */
+/*
+new MyListData("a",true,soundsRowsId[0]),
+     new MyListData("b",true,soundsRowsId[1]),
+        new MyListData("c",true,soundsRowsId[2]),
+          new MyListData("d",true,soundsRowsId[3]),
+            new MyListData("f",true,soundsRowsId[4]),
+  new MyListData("e",true,soundsRowsId[5]),
+ */
+
+         /*
+                new MyListData("b",true),
+                new MyListData("c",true),
+                new MyListData("d",true),
+                new MyListData("f",true),
+                new MyListData("e",true),
+          */
+
+
+/*
+         MyListData[] myListData = new MyListData[] {
+         new MyListData("سبحان الله"),
+         new MyListData("الحمد لله"),
+         new MyListData("لا اله الا الله"),
+         new MyListData("الله اكبر"),
+         new MyListData("بسم الله"),
+        };
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+          MyListAdapter adapter = new MyListAdapter(myListData, new RecyclerViewClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+             //   Log.d("RecyclerView0", "onClick：" + position);
+            }
+        });
+        recyclerView.setHasFixedSize(true);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), new LinearLayoutManager(this).getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+ */
+
+
+ /*
+        if(Build.VERSION.SDK_INT>=16 && Build.VERSION.SDK_INT<21){
+           this.finishAffinity();
+        } else if(Build.VERSION.SDK_INT>=21){
+            this.finish();
+            System.exit(0);
+        }
+   /*
+     myListData = new MyListData[]{
+       new MyListData("A", true, soundsRowsId[0]),
+         new MyListData("B", true, soundsRowsId[1]),
+          new MyListData("C", true, soundsRowsId[2]),
+         new MyListData("D", true, soundsRowsId[3]),
+       new MyListData("F", true, soundsRowsId[4]),
+     new MyListData("E", true, soundsRowsId[5]),
+  };
+*/
+

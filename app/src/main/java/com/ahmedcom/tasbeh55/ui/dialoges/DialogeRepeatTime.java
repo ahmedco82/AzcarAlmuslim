@@ -35,7 +35,6 @@ public class DialogeRepeatTime extends Dialog {
         this.context_ = context;
         initiItems(context_);
         this.titleRow = txtRememberMeEvery;
-
         String[] Times = {" 1 دقيقة", " 2 دقيقة", " 3 دقيقة", " 4 دقيقة", "5 دقيقة", " 10 دقيقة", " 15 دقيقة", "30 دقيقة", " 1 ساعه", " 2 ساعه"};
 
         adapterDialogTimer = new AdapterDialogTimer(context, Times, new AdapterDialogTimer.OnItemClickListener() {
@@ -52,12 +51,12 @@ public class DialogeRepeatTime extends Dialog {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                titleRow.setText(everyTimeTxt);
-                everyTime = everyTimeMenu;
-                pramEveryTime = everyTimeTxt;
-                dismiss();
-            }
-        });
+              titleRow.setText(everyTimeTxt);
+               everyTime = everyTimeMenu;
+               pramEveryTime = everyTimeTxt;
+              dismiss();
+          }
+       });
 
         btnOk.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -65,9 +64,9 @@ public class DialogeRepeatTime extends Dialog {
                 //Log.i("trace_everyTimeString0",""+everyTimeString);
                 dismiss();
             }
-        });
+         });
         show();
-    }
+     }
 
     private void initiItems(Context cxt){
         everyTime = 0;

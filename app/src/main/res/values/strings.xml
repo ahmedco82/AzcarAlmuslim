@@ -2,7 +2,7 @@
     <string name="app_name">أذكار المسلم</string>
     <string name="action_settings">Settings</string>
     <string name="select_azkar">تحديد الاذكار</string>
-    <string name="select_time_azkar">تحديد أوقات الاذكار</string>
+    <string name="select_time_azkar">أوقات الاذكار</string>
     <string name="remember_me">ذكرني كل</string>
     <string name="remember_me2">التذكير كل</string>
     <string name="text_timer_selected0"> 1 دقيقة </string>
@@ -10,6 +10,7 @@
     <string name="text_end_put_times">تم أضافة القيم المطلوبه</string>
     <string name="text_btn_stop_remember">تم أضافة القيم المطلوبه</string>
     <string name="text_btn_OK">موافق</string>
+    <string name="text_btn_No">الغاء</string>
     <string name="stop_remeber">إيقاف التذكير</string>
     <string name="start_remeber">أبدأ التذكير</string>
     <string name="finish_choice">أنتهيت من الاختيار</string>
