@@ -1,10 +1,12 @@
 package com.ahmedcom.tasbeh55.models;
 
-public class ListAzcar {
+public class ListAzcar{
+
     private String description;
     private int imgId;
     private Boolean Bool;
     int soundsRowsId;
+
     public ListAzcar(String description, Boolean bool , int i) {
         this.description = description;
         this.Bool = bool;
@@ -23,10 +25,10 @@ public class ListAzcar {
     public void setSoundsRowsId(int soundsRowsId){
         this.soundsRowsId = soundsRowsId;
     }
-    public String getDescription() {
+    public String getDescription(){
         return description;
     }
-    public void setDescription(String description) {
+    public void setDescription(String description){
         this.description = description;
     }
     public int getImgId(){

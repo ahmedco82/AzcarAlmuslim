@@ -6,14 +6,36 @@ import android.media.MediaPlayer;
 import com.ahmedcom.tasbeh55.adapters.AzcarListAdapter;
 import com.ahmedcom.tasbeh55.interfaces.SoundAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerViewHandler {
 
     private MediaPlayer mediaPlayer;
-
+    private int currentSound = 0;
+    private int  quiteSound = 1;
+    public int counterSound = 0;
+    private List<Integer> repeatEachSound;
+    public ArrayList<MediaPlayer> selectedSound;
     SoundAdapter soundAdapter;
+
+    Context context;
+
+    public PlayerViewHandler(Context context) {
+        this.currentSound=0;
+        this.counterSound=0;
+        this.quiteSound= 1;
+        this.context = context;
+        selectedSound = new ArrayList<MediaPlayer>();
+        selectedSound.addAll(SharedPreferencesUtils.filterSelectedSound(context));
+        repeatEachSound = new ArrayList<Integer>();
+        repeatEachSound.addAll(SharedPreferencesUtils.filterRepeatingSound(context));
+    }
+
     public PlayerViewHandler(AzcarListAdapter soundAdapter){
         this.soundAdapter = soundAdapter;
     }
+
     public void startMediaPlayer(Context context, int audioResId) {
         mediaPlayer = MediaPlayer.create(context, audioResId);
            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -61,4 +83,72 @@ public class PlayerViewHandler {
       }
    }
 
+    public void playGrupSounds(MediaPlayer key) {
+        selectedSound.get(currentSound).start();
+        selectedSound.get(currentSound).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                if (repeatEachSound.get(currentSound) != 0) {
+                    if (quiteSound != 0) {
+                        counterSound += 1;
+                        if (counterSound == repeatEachSound.get(currentSound)) {
+                            counterSound = 0;
+                            quiteSound = 0;
+                        }
+                        playGrupSounds(selectedSound.get(currentSound));
+                    } else {
+                        currentSound += 1;
+                        if (currentSound < selectedSound.size())
+                            playGrupSounds(selectedSound.get(currentSound));
+                        else
+                            currentSound = 0;
+                        quiteSound = 1;
+                    }
+                }else{
+                    currentSound += 1;
+                    if(currentSound<selectedSound.size())
+                        playGrupSounds(selectedSound.get(currentSound));
+                    else
+                        currentSound = 0;
+                    quiteSound = 1;
+                }
+            }
+        });
+    }
+
+    /*
+   public void playGrupSounds(MediaPlayer mediaPlayer){
+    SharedPreferencesUtils.filterSelectedSound(context).get(currentSound).start();
+     SharedPreferencesUtils.filterSelectedSound(context).get(currentSound).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+       @Override
+         public void onCompletion(MediaPlayer mp) {
+               if (SharedPreferencesUtils.filterRepeatingSound(context).get(currentSound) != 0) {
+                   if (quiteSound != 0) {
+                       counterSound += 1;
+                       if (counterSound == SharedPreferencesUtils.filterRepeatingSound(context).get(currentSound)) {
+                           counterSound = 0;
+                           quiteSound = 0;
+                       }
+                       playGrupSounds(SharedPreferencesUtils.filterSelectedSound(context).get(currentSound));
+                   } else {
+                       currentSound += 1;
+                       if (currentSound<SharedPreferencesUtils.filterSelectedSound(context).size())
+                           playGrupSounds(SharedPreferencesUtils.filterSelectedSound(context).get(currentSound));
+                       else
+                         currentSound = 0;
+                       quiteSound = 1;
+                   }
+               }else{
+                   currentSound += 1;
+                   if(currentSound<SharedPreferencesUtils.filterSelectedSound(context).size())
+                       playGrupSounds(SharedPreferencesUtils.filterSelectedSound(context).get(currentSound));
+                   else
+                       currentSound = 0;
+                   quiteSound = 1;
+               }
+           }
+       });
+   }
+
+     */
 }

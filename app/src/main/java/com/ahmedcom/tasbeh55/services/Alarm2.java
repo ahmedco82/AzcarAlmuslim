@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.ahmedcom.tasbeh55.R;
+import com.ahmedcom.tasbeh55.utils.PlayerViewHandler;
 import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
 import com.ahmedcom.tasbeh55.utils.TimeUtils;
 
@@ -23,35 +24,31 @@ import java.util.TimerTask;
 public class Alarm2 extends Service {
     public int counter = 0;
     Context context;
-    ArrayList<MediaPlayer> selectedSound;
-
     public  int currentSound;
     public  int quiteSound;
     public  int counterSound;
     int endCount = 2;
     int loop = 0;
     int step = 0;
-    private  List<Integer> repeatEachSound;
     private  int stop_timer;
-    private  boolean betweenTowTime =false;
+    private  boolean betweenTowTime =true;
     public int getSeconds;
     public int Length;
     public MediaPlayer[] allSounds;
     private AlarmManager alarmManager;
     private int lengtListSound;
     SharedPreferencesUtils globalSharedPreferences;
-
+    PlayerViewHandler playerViewHandler;
+    MediaPlayer m = null;
     public Alarm2(Context context) {
         super();
         this.context = context;
-        Log.i("HERE", "here service created!");
+        //Log.i("HERE", "here service created!");
     }
-
     public Alarm2(){
 
     }
-//getBaseContext()
-
+     //getBaseContext()
     private void installation(){
         globalSharedPreferences = new SharedPreferencesUtils(this);
         currentSound = 0;
@@ -59,39 +56,16 @@ public class Alarm2 extends Service {
         counterSound = 0;
         Length = 6;
         lengtListSound = 7;
-        allSounds = new MediaPlayer[lengtListSound];
-        selectedSound = new ArrayList<MediaPlayer>();
-        repeatEachSound = new ArrayList<Integer>();
-        allSounds[0] = MediaPlayer.create(this, R.raw.a1);
-        allSounds[1] = MediaPlayer.create(this, R.raw.a2);
-        allSounds[2] = MediaPlayer.create(this, R.raw.a3);
-        allSounds[3] = MediaPlayer.create(this, R.raw.a4);
-        allSounds[4] = MediaPlayer.create(this, R.raw.a5);
-        allSounds[5] = MediaPlayer.create(this, R.raw.a6);
-        allSounds[6] = MediaPlayer.create(this, R.raw.a7);
     }
 
     @Override
     public void onCreate(){
         super.onCreate();
         installation();
-        copySoundsFromSharedPrefToArraies(allSounds);
+        playerViewHandler = new PlayerViewHandler(getApplicationContext());
+        //copySoundsFromSharedPrefToArraies(allSounds);
     }
 
-    private void copySoundsFromSharedPrefToArraies(MediaPlayer[] allSounds) {
-        ArrayList<Integer>repeatingEverySound= new ArrayList<Integer>(Length);
-        ArrayList<Boolean>btnsSoundChecked= new ArrayList<Boolean>(Length);
-        repeatingEverySound.addAll(SharedPreferencesUtils.getArrayIntPrefs(this));
-        btnsSoundChecked.addAll(SharedPreferencesUtils.getArrayBooleanPrefs(this));
-        for(int i = 0; i<Length; i++){
-            if(repeatingEverySound != null){
-                if(btnsSoundChecked.get(i) == true) {
-                    selectedSound.add(allSounds[i]);
-                    repeatEachSound.add(repeatingEverySound.get(i));
-                }
-            }
-        }
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags , int startId) {
@@ -103,18 +77,12 @@ public class Alarm2 extends Service {
         return START_STICKY;
     }
 
+
     @Override
     public void onDestroy(){
         super.onDestroy();
         stoptimertask();
     }
-    /*
-     Log.i("EXIT", "ondestroy!");
-     Intent broadcastIntent = new Intent("ac.in.ActivityRecognition.RestartSensor");
-     sendBroadcast(broadcastIntent);
-     stoptimertask();
-   */
-
 
     private Timer timer;
     private TimerTask timerTask;
@@ -143,26 +111,62 @@ public class Alarm2 extends Service {
      }
 
     public void excute(){
-        stop_timer = SharedPreferencesUtils.getTimes(getApplicationContext()).getStopTimer();
-        boolean currenTime = TimeUtils.compareBetweenTwoTime( SharedPreferencesUtils.getTimes(this).getHour_start(),
-                SharedPreferencesUtils.getTimes(this).getMinute_start(),
-                SharedPreferencesUtils.getTimes(this).getHour_end(),SharedPreferencesUtils.getTimes(this).getMinute_end());
-        if(stop_timer == 1){
-            if(currenTime == betweenTowTime){
 
+        stop_timer = SharedPreferencesUtils.getTimes(getApplicationContext()).getStopTimer();
+     //   boolean currenTime = TimeUtils.compareBetweenTwoTime( SharedPreferencesUtils.getTimes(this).getHour_start(), SharedPreferencesUtils.getTimes(this).getMinute_start(), SharedPreferencesUtils.getTimes(this).getHour_end(),SharedPreferencesUtils.getTimes(this).getMinute_end());
+        boolean currenTime= TimeUtils.isCurrentTimeBtween(TimeUtils.convert24HourTime(TimeUtils.getTimeStartWithAmPm(this)), TimeUtils.convert24HourTime(TimeUtils.getTimeEndWithAmPm(this)));
+
+        if(stop_timer == 1){
+            if(currenTime != betweenTowTime){
+
+                playerViewHandler.playGrupSounds(m);
             }
         }else{
-            if(selectedSound.size()>0){
-                if(selectedSound.get(currentSound) != null) {
-                    playSounds(selectedSound.get(currentSound));
-                }
-            } else{
-                Toast.makeText(context, "لم تقم باختيار بعض العناصر", Toast.LENGTH_LONG).show();
-            }
+            playerViewHandler.playGrupSounds(m);
         }
     }
 
-    private  void playSounds(MediaPlayer key) {
+    public void stoptimertask(){
+       if(timer != null) {
+         timer.cancel();
+          timer = null;
+         }
+        if(playerViewHandler.selectedSound.get(currentSound).isPlaying()) {
+            playerViewHandler.selectedSound.get(currentSound).stop();
+       }
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent){
+        return null;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     /*
+    private void playSounds(MediaPlayer key){
         selectedSound.get(currentSound).start();
         selectedSound.get(currentSound).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -194,20 +198,32 @@ public class Alarm2 extends Service {
              }
          });
      }
-
-    public void stoptimertask(){
-      if(timer != null) {
-            timer.cancel();
-            timer = null;
-         }
-        if(selectedSound.get(currentSound).isPlaying()) {
-         selectedSound.get(currentSound).pause();
-       }
+*/
+/*
+    // filter array
+    private void copySoundsFromSharedPrefToArraies(MediaPlayer[] allSounds) {
+        ArrayList<Integer>repeatingEverySound= new ArrayList<Integer>(Length);
+        ArrayList<Boolean>btnsSoundChecked= new ArrayList<Boolean>(Length);
+        repeatingEverySound.addAll(SharedPreferencesUtils.getArrayIntPrefs(this));
+        btnsSoundChecked.addAll(SharedPreferencesUtils.getArrayBooleanPrefs(this));
+        for(int i = 0; i<Length; i++){
+            if(repeatingEverySound != null){
+                if(btnsSoundChecked.get(i) == true) {
+                    selectedSound.add(allSounds[i]);
+                    repeatEachSound.add(repeatingEverySound.get(i));
+                }
+            }
+        }
     }
+*/
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent){
-        return null;
-    }
-}
+   /*
+        allSounds[0] = MediaPlayer.create(this, R.raw.a1);
+        allSounds[1] = MediaPlayer.create(this, R.raw.a2);
+        allSounds[2] = MediaPlayer.create(this, R.raw.a3);
+        allSounds[3] = MediaPlayer.create(this, R.raw.a4);
+        allSounds[4] = MediaPlayer.create(this, R.raw.a5);
+        allSounds[5] = MediaPlayer.create(this, R.raw.a6);
+        allSounds[6] = MediaPlayer.create(this, R.raw.a7);
+
+         */

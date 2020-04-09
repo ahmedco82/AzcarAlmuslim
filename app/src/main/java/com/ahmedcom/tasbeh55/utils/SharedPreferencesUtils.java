@@ -4,32 +4,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
-import android.util.Base64;
 
+import com.ahmedcom.tasbeh55.R;
 import com.ahmedcom.tasbeh55.models.Times;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class SharedPreferencesUtils {
 
     public final static String PREFS_NAME = "appname_prefs";
-    //private static SharedPreferencesUtils instance;
     static final String mapKey = "map";
      private Context context;
 
@@ -39,7 +28,6 @@ public class SharedPreferencesUtils {
 
     public static void setServiceOnOff(Context context,Boolean value){
        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        // Boolean statusLocked = prefs.edit().putBoolean("locked", value).commit();
        prefs.edit().putBoolean("locked", value).apply();
     }
 
@@ -93,6 +81,30 @@ public class SharedPreferencesUtils {
         prefs.edit().putString(var, stringUser).apply();
     }
 
+    public static ArrayList<MediaPlayer> filterSelectedSound (Context context) {
+      int[] soundsRowsId = new int[]{R.raw.a1, R.raw.a2, R.raw.a3, R.raw.a4, R.raw.a5, R.raw.a6};
+       MediaPlayer mPlayer;
+        ArrayList<Integer>repeatingEverySound= new ArrayList<Integer>();
+         ArrayList<MediaPlayer> selectedSound = new ArrayList<MediaPlayer>();
+           for(int i = 0; i <getArrayBooleanPrefs(context).size(); i++) {
+              if(getArrayBooleanPrefs(context).get(i) == true) {
+                  mPlayer = MediaPlayer.create(context, soundsRowsId[i]);
+                  selectedSound.add(mPlayer);
+                }
+         }
+       return new ArrayList<MediaPlayer>(selectedSound);
+    }
+
+    public static ArrayList<Integer> filterRepeatingSound (Context context) {
+        ArrayList<Integer>repeatingEverySound= new ArrayList<Integer>();
+        for(int i = 0; i < getArrayBooleanPrefs(context).size(); i++) {
+            if(getArrayBooleanPrefs(context).get(i) == true) {
+                repeatingEverySound.add(getArrayIntPrefs(context).get(i));
+            }
+        }
+        return new ArrayList<Integer>(repeatingEverySound);
+    }
+
     public static Times getTimes(Context con){
       Times times = new Times();
         String var ="variable";
@@ -124,6 +136,10 @@ public class SharedPreferencesUtils {
          }
         return times;
     }
+
+
+
+
 }
 
 

@@ -2,6 +2,7 @@ package com.ahmedcom.tasbeh55.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 
 import com.ahmedcom.tasbeh55.models.Times;
 
@@ -24,20 +25,104 @@ public class TimeUtils {
         return reuslt;
     }
 
-    public static String getCurrentDateUsingCalendar(){
-        Date mDate = new Date();
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("dd-MM-yyyy"); // getting date in this format
-        return mSimpleDateFormat.format(mDate.getTime());
+
+
+
+    public static String convert24HourTime(String val){
+        SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mm a");
+        Date date = null;
+        String result = null;
+        try {
+            date = parseFormat.parse(val);
+            Log.v("Print_Val", ""+displayFormat.format(date));
+            result =displayFormat.format(date);
+            //  boolean isafter = parsedDate.after(currentDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
-    public static String getNextDateUsingCalendar() {
-        Calendar mCalendar = Calendar.getInstance();
-        mCalendar.add(Calendar.DAY_OF_YEAR, 1);
-        Date mStrTomorrow = mCalendar.getTime();
-        @SuppressLint("SimpleDateFormat") DateFormat mDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        return mDateFormat.format(mStrTomorrow);
+    public static boolean isCurrentTimeBtween(String start_time, String end_time){
+        boolean isBetween = false;
+        String pattern = "HH:mm";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        Calendar cc = Calendar.getInstance();
+        int mHour = cc.get(Calendar.HOUR_OF_DAY);
+        int mMinute = cc.get(Calendar.MINUTE);
+        int ampm= cc.get(Calendar.AM_PM);
+        String currentampm = ampm==1 ? "PM": "AM";
+        // System.out.println("time_format" + String.format("%02d:%02d", mHour , mMinute));
+        String formatCurrnetTime=  mHour+":"+mMinute+" "+currentampm;
+        try {
+            Date s_time = sdf.parse(start_time);
+            Date e_time = sdf.parse(end_time);
+            Date c_time = sdf.parse(formatCurrnetTime);
+            if(s_time.before(c_time) && e_time.after(c_time)){
+                isBetween = true;
+            }else {
+                isBetween = false;
+            }
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+        return isBetween;
     }
 
+
+
+    public static boolean checktTowTime(String startTime, String endTime) {
+        String pattern = "HH:mm";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
+        try {
+           Date start_time = sdf.parse(startTime);
+            Date end_time = sdf.parse(endTime);
+            //Log.i("Date_1: ","-- "+start_time);
+           // Log.i("Date_2: ","-- "+end_time);
+             //Date date3 = sdf.parse(formatCurrnetTime);
+            /*
+            if (date1.before(date3) && date2.after(date3)) {
+
+                isBetween = true;
+            }
+              */
+            if(start_time.before(end_time)){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    public static String getTimeStartWithAmPm(Context context){
+        String ampm ="";
+        if(SharedPreferencesUtils.getTimes(context).getStart_AM_PM()==0)ampm="AM";
+        else
+            ampm="PM";
+        String result  ="" + SharedPreferencesUtils.getTimes(context).getHour_start()
+                + ":"  + SharedPreferencesUtils.getTimes(context).getMinute_start()
+                +" "+ ampm;
+        return result;
+    }
+
+    public static String getTimeEndWithAmPm(Context context){
+        String ampm ="";
+        if(SharedPreferencesUtils.getTimes(context).getEnd_AM_PM()==0)ampm="AM";
+        else
+            ampm="PM";
+        String result  ="" + SharedPreferencesUtils.getTimes(context).getHour_end()
+                +":" + SharedPreferencesUtils.getTimes(context).getMinute_end()
+                +" "+ampm;
+        return result;
+    }
+
+    /*
     public static String compareTwoTime(String mStrStartTime, String mStrEndTime) {
         Calendar startCalendar;
         Calendar endCalendar;
@@ -133,6 +218,7 @@ public class TimeUtils {
             return false;
         }
     }
+    */
 }
 
 

@@ -24,23 +24,29 @@
 
         <service
             android:name=".services.Alarm2"
+            android:enabled="true"
+            android:process=".Alarm2"
             android:exported="true"/>
 
         <service
             android:name=".services.Alarm"
             android:exported="true"
+            android:enabled="true"
+
             tools:node="replace"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity android:name=".ui.activities.TimeSettingsActivity" />
         <activity
             android:name=".ui.activities.RememberInfoActivity"
-            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            />
+           <!-- android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />-->
 
         <activity android:name=".ui.activities.ListAzcarActivity" />
 
         <activity
-            android:name=".ui.activities.DefaultActivity"
+            android:name=".ui.activities.HomeActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

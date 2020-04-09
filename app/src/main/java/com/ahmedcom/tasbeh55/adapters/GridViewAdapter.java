@@ -23,7 +23,6 @@ public class GridViewAdapter extends BaseAdapter {
     private TextView textView;
 
     public GridViewAdapter(Context ctx, ArrayList<ImagesGridView> imageModelArrayList) {
-
         this.ctx = ctx;
         this.imageModelArrayList = imageModelArrayList;
     }
@@ -45,17 +44,12 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         inflater=(LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         View itemView = inflater.inflate(R.layout.grid_item, parent, false);
-
         ivGallery = (ImageView) itemView.findViewById(R.id.ivGallery);
         textView = (TextView) itemView.findViewById(R.id.tv);
-
         ivGallery.setImageResource(imageModelArrayList.get(position).getImage_drawable());
         textView.setText(imageModelArrayList.get(position).getName());
-
         return itemView;
     }
 }

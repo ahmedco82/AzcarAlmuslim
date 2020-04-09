@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,29 +14,30 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.ahmedcom.BackPressedCallingBack;
 import com.ahmedcom.tasbeh55.R;
 import com.ahmedcom.tasbeh55.adapters.AzcarListAdapter;
+import com.ahmedcom.tasbeh55.interfaces.HasBack;
 import com.ahmedcom.tasbeh55.interfaces.RecyclerViewClickListener;
 import com.ahmedcom.tasbeh55.models.AudioItem;
 import com.ahmedcom.tasbeh55.services.Alarm;
 import com.ahmedcom.tasbeh55.services.Alarm2;
 import com.ahmedcom.tasbeh55.ui.others.ActionBarView;
 import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
-
 import java.util.ArrayList;
 
-public class ListAzcarActivity extends AppCompatActivity implements RecyclerViewClickListener {
+public class ListAzcarActivity extends AppCompatActivity implements HasBack , RecyclerViewClickListener {
 
     AzcarListAdapter adapter;
     MediaPlayer currentSound = null;
     RecyclerView recyclerView;
     Intent serviceIntent2 = null;
     ArrayList<AudioItem> audioItems = new ArrayList<>();
-    private ArrayList<Boolean> selectedSound = new ArrayList<Boolean>();
+    public ArrayList<Boolean> selectedSound = new ArrayList<Boolean>();
     private ArrayList<Integer> repeatEachSound = new ArrayList<Integer>();
     private ArrayList<String> listText = new ArrayList<String>();
 
@@ -51,17 +51,19 @@ public class ListAzcarActivity extends AppCompatActivity implements RecyclerView
         currentSound = (MediaPlayer) MediaPlayer.create(this, R.raw.a1);
         int[] soundsRowsId = new int[]{R.raw.a1, R.raw.a2, R.raw.a3, R.raw.a4, R.raw.a5, R.raw.a6};
         String[] soundsRowsText = new String[]{"الله اكبر", "الحمد لله", "سبحان الله وبحمده", "لا اله الا الله", "استغفر الله", "الحمد لله الذي احيانا بعد مماتنا"};
-        initiArraies(soundsRowsId,soundsRowsText);
+        initiArraies(soundsRowsId , soundsRowsText);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        adapter = new AzcarListAdapter(this, listText, audioItems);
+        adapter = new AzcarListAdapter(ListAzcarActivity.this, listText, audioItems);
         recyclerView.setHasFixedSize(true);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), new LinearLayoutManager(this).getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         isServiceTowRunning();
+        saveDataInSharedPref();
     }
-    private void isServiceTowRunning() {
+
+    private void isServiceTowRunning(){
         if (SharedPreferencesUtils.getServiceOnOff(getApplicationContext())) {
             SharedPreferencesUtils.setServiceOnOff(this, false);
             serviceIntent2 = new Intent(getBaseContext(), Alarm.class);
@@ -75,38 +77,7 @@ public class ListAzcarActivity extends AppCompatActivity implements RecyclerView
             repeatEachSound.add(0);
             selectedSound.add(false);
         }
-    }
-
-    public void endOfSelection(View v) {
-        savDatainSharedPref();
-        boolean LengthOfListCheckedSound = lengthSelectedSound();
-        if (ensureOneORMoreSelected() && LengthOfListCheckedSound) {
-            showDialogInfo();
-        }
-        if (!LengthOfListCheckedSound) {
-            Toast.makeText(ListAzcarActivity.this, " أختر عنصر واحد أو أثنين فقط", Toast.LENGTH_SHORT).show();
-        }
-        if (!ensureOneORMoreSelected()) {
-            Toast.makeText(ListAzcarActivity.this, "يجب اختيار عنصر واحد على الاقل", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void showDialogInfo() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ListAzcarActivity.this);
-        builder.setMessage("هل تريد اغلاق التطبيق ثم تعمل الاذكار في خلفية الجهاز ؟");
-        builder.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialoginterface, int i) {
-                chooseDevice();
-                builder.setCancelable(false);
-            }
-        });
-        builder.setNegativeButton("لا", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialoginterface, int i) {
-                builder.setCancelable(false);
-            }
-        });
-        builder.show();
-    }
+     }
 
     private void chooseDevice() {
         if (Build.VERSION.SDK_INT <= 22) {
@@ -117,14 +88,14 @@ public class ListAzcarActivity extends AppCompatActivity implements RecyclerView
         closeApp();
     }
 
-    private void closeApp() {
+    private void closeApp(){
         this.finishAffinity();
     }
 
-    private void smallerThanOreoDevice() {
-        SharedPreferencesUtils.setServiceOnOff(this, true);
+    private void smallerThanOreoDevice(){
+      SharedPreferencesUtils.setServiceOnOff(this, true);
         serviceIntent2 = new Intent(getBaseContext(), Alarm.class);
-        Alarm.enqueueWork(this, serviceIntent2);
+       Alarm.enqueueWork(this, serviceIntent2);
     }
 
     private void OreoDeviceOrBigger() {
@@ -137,7 +108,7 @@ public class ListAzcarActivity extends AppCompatActivity implements RecyclerView
         }
     }
 
-    private void savDatainSharedPref() {
+    private void saveDataInSharedPref(){
         SharedPreferencesUtils.setArrayBooleanPrefs(selectedSound, ListAzcarActivity.this);
         SharedPreferencesUtils.setArrayIntPrefs(repeatEachSound, ListAzcarActivity.this);
     }
@@ -151,8 +122,7 @@ public class ListAzcarActivity extends AppCompatActivity implements RecyclerView
         }
        return false;
    }
-
-    private boolean ensureOneORMoreSelected(){
+    public boolean ensureOneORMoreSelected(){
      boolean checkArray = false;
        for(Boolean object:SharedPreferencesUtils.getArrayBooleanPrefs(ListAzcarActivity.this)) {
             if (object) {
@@ -165,22 +135,23 @@ public class ListAzcarActivity extends AppCompatActivity implements RecyclerView
         return checkArray;
     }
 
-    private boolean lengthSelectedSound() {
-        int count = 0;
-        for (int i = 0; i < selectedSound.size(); i++) {
+    public boolean lengthSelectedSound() {
+       int count = 0;
+        for (int i = 0; i<selectedSound.size(); i++) {
             if (selectedSound.get(i)) {
                 count = count + 1;
             }
         }
-        return (count >= 3) ? false : true;
+        return (count >= 2) ? false : true;
     }
 
-
     @Override
-    public void onClick(View view, int position) {
+    public void onClick(View view , int position) {
+       // endOfSelection();
         if (view.getTag().equals("toggleButton")) {
-            ToggleButton selectedBtn = (ToggleButton) view;
-            selectedSound.set(position, selectedBtn.isChecked());
+         ToggleButton selectedBtn = (ToggleButton) view;
+         selectedSound.set(position, selectedBtn.isChecked());
+           //Log.i("getisChecked0 ",""+selectedSound.get(position));
         } else if (view.getTag().equals("playBtn")) {
         } else if (view.getTag().equals("radio_b")) {
             repeatEachSound.set(position, 1);
@@ -189,6 +160,7 @@ public class ListAzcarActivity extends AppCompatActivity implements RecyclerView
         } else if (view.getTag().equals("radio_a")) {
             repeatEachSound.set(position, 2);
         }
+       saveDataInSharedPref();
     }
 }
 
@@ -204,7 +176,41 @@ public class ListAzcarActivity extends AppCompatActivity implements RecyclerView
 
 
 
+/*
 
+    private void showDialogInfo(){
+      AlertDialog.Builder builder = new AlertDialog.Builder(ListAzcarActivity.this);
+       builder.setMessage("هل تريد اغلاق التطبيق ثم تعمل الاذكار في خلفية الجهاز ؟");
+        builder.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialoginterface, int i) {
+            chooseDevice();
+              builder.setCancelable(false);
+           }
+        });
+
+        builder.setNegativeButton("لا", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialoginterface, int i) {
+                builder.setCancelable(false);
+               // getFilterArries();
+            }
+        });
+        builder.show();
+    }
+ */
+/*
+
+    public void endOfSelection(View v){
+        saveDataInSharedPref();
+        boolean LengthOfListCheckedSound = lengthSelectedSound();
+        if(ensureOneORMoreSelected() && LengthOfListCheckedSound) {
+          //showDialogInfo();
+           Log.i("selection","Don");
+        }
+        if (!ensureOneORMoreSelected()) {
+            Toast.makeText(ListAzcarActivity.this, "يجب اختيار عنصر واحد على الاقل", Toast.LENGTH_SHORT).show();
+        }
+    }
+ */
 
 /*
     private void setBackgroundPlayButtons(View compoundButton , int id) {

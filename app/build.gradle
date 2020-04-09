@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'com.github.dcendents.android-maven'
 android {
+
+    dataBinding {
+        enabled true
+    }
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
 
