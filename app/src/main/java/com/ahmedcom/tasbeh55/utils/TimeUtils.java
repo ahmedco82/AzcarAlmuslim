@@ -104,12 +104,11 @@ public class TimeUtils {
         String ampm ="";
         if(SharedPreferencesUtils.getTimes(context).getStart_AM_PM()==0)ampm="AM";
         else
-            ampm="PM";
-        String result  ="" + SharedPreferencesUtils.getTimes(context).getHour_start()
-                + ":"  + SharedPreferencesUtils.getTimes(context).getMinute_start()
-                +" "+ ampm;
+         ampm="PM";
+        String result  ="" + SharedPreferencesUtils.getTimes(context).getHour_start() + ":"  + SharedPreferencesUtils.getTimes(context).getMinute_start() +" "+ ampm;
         return result;
     }
+
 
     public static String getTimeEndWithAmPm(Context context){
         String ampm ="";

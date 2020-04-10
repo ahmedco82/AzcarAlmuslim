@@ -108,37 +108,34 @@ public class SharedPreferencesUtils {
     public static Times getTimes(Context con){
       Times times = new Times();
         String var ="variable";
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(con);
-         String data = prefs.getString(var, "");
-          List<String> values = new ArrayList<String>();
-            try{
-             JSONObject obj = new JSONObject(data.toString());
+         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(con);
+          String data = prefs.getString(var, "");
+            List<String> values = new ArrayList<String>();
+             try{
+              JSONObject obj = new JSONObject(data.toString());
                JSONObject jsonObject = new JSONObject(data);
-                 Iterator<String> keysItr = jsonObject.keys();
+                Iterator<String> keysItr = jsonObject.keys();
                  for(Iterator<String> iter = jsonObject.keys(); iter.hasNext();) {
                   String key = iter.next();
                    values.add(key);
                  }
-                 if(obj != null){
-                     times.setStopTimer(Integer.parseInt(obj.getString("stopTimer")));
-                     times.setEveryTime(Integer.parseInt(obj.getString("everyTime")));
+          if(obj != null){
+             times.setStopTimer(Integer.parseInt(obj.getString("stopTimer")));
+              times.setEveryTime(Integer.parseInt(obj.getString("everyTime")));
                 if(times.getStopTimer()==1){
-                    times.setHour_start(Integer.parseInt(obj.getString("hour_start")));
-                    times.setHour_end(Integer.parseInt(obj.getString("hour_end")));
-                    times.setMinute_start(Integer.parseInt(obj.getString("minute_start")));
-                    times.setMinute_end(Integer.parseInt(obj.getString("minute_end")));
-                    times.setStart_AM_PM(Integer.parseInt(obj.getString("start_AM_PM")));
-                    times.setEnd_AM_PM(Integer.parseInt(obj.getString("end_AM_PM")));
-                 }
+                  times.setHour_start(Integer.parseInt(obj.getString("hour_start")));
+                   times.setHour_end(Integer.parseInt(obj.getString("hour_end")));
+                     times.setMinute_start(Integer.parseInt(obj.getString("minute_start")));
+                      times.setMinute_end(Integer.parseInt(obj.getString("minute_end")));
+                      times.setStart_AM_PM(Integer.parseInt(obj.getString("start_AM_PM")));
+                         times.setEnd_AM_PM(Integer.parseInt(obj.getString("end_AM_PM")));
+                    }
               }
             }catch (JSONException e) {
            e.printStackTrace();
          }
         return times;
     }
-
-
-
 
 }
 

@@ -119,23 +119,17 @@ public class TimeSettingsActivity extends AppCompatActivity implements HasBack, 
             case R.id.text_select_time_from:
                 showTimePickerDialog(v, 1);
                 break;
-
-
             case R.id.text_select_time_to:
                 showTimePickerDialog(v, 2);
                 break;
             case R.id.row_everytime:
                 optionsPickerTimes.show();
-                // Log.i("printDon ", " Yes");
-                //optionsPickerTime();
                 break;
-
             case R.id.three_row_everytime:
                 goToListAzcar();
                 break;
             case R.id.startRemember_btn_:
-                //test0();
-                checkTimFromTo();
+                 checkTimFromTo();
                 break;
         }
     }
@@ -143,13 +137,13 @@ public class TimeSettingsActivity extends AppCompatActivity implements HasBack, 
     private void checkTimFromTo() {
         boolean boxesTimeIsEmpty = TextUtils.isEmpty(binding.textSelectTimeFrom , binding.textSelectTimeTo);
         if (boxesTimeIsEmpty) {
-            saveItems();
+
             toTimeFormatting = TextUtils.getTimeFromFormatting(TimeSettingsActivity.this);
             fromTimeFormatting  = TextUtils.getTimeToFormatting(TimeSettingsActivity.this);
             // boolean compareTimes = TimeUtils.checktTowTime(TimeUtils.convert24HourTime(fromTimeFormatting),TimeUtils.convert24HourTime(toTimeFormatting));
             showDialogRememberInfo();
         } else {
-            if (stopTimer==0) {
+            if(stopTimer==0) {
               showDialogRememberInfo();
             } else{
                Toast.makeText(this,getString(R.string.empty_spaces), Toast.LENGTH_LONG).show();
@@ -159,24 +153,26 @@ public class TimeSettingsActivity extends AppCompatActivity implements HasBack, 
 
     private void saveItems(){
        time.setEveryTime(everyTime);
-       time.setStopTimer(stopTimer);
-        SharedPreferencesUtils.saveTimes(TimeSettingsActivity.this, time);
+        time.setStopTimer(stopTimer);
+         SharedPreferencesUtils.saveTimes(TimeSettingsActivity.this, time);
+          //Log.i("getEveryTime0_980 ",""+ SharedPreferencesUtils.getTimes(this).getEveryTime());
     }
-
-
 
     private void goToListAzcar(){
         Intent intent = new Intent(this, ListAzcarActivity.class);
         startActivity(intent);
     }
 
-    private void showDialogRememberInfo() {
+    private void showDialogRememberInfo(){
+        saveItems();
         Intent intent = new Intent(TimeSettingsActivity.this, RememberInfoActivity.class);
         intent.putExtra("every_time", everyTimeString);
         intent.putExtra("starttime",fromTimeFormatting);
         intent.putExtra("endtime",toTimeFormatting);
         startActivity(intent);
+        //Log.i("prints_getTimes1 ",""+SharedPreferencesUtils.getTimes(this).getEveryTime());
     }
+
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

@@ -59,17 +59,9 @@ public class ListAzcarActivity extends AppCompatActivity implements HasBack , Re
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        isServiceTowRunning();
         saveDataInSharedPref();
     }
 
-    private void isServiceTowRunning(){
-        if (SharedPreferencesUtils.getServiceOnOff(getApplicationContext())) {
-            SharedPreferencesUtils.setServiceOnOff(this, false);
-            serviceIntent2 = new Intent(getBaseContext(), Alarm.class);
-            Alarm.enqueueWork(this, serviceIntent2);
-        }
-    }
     private void initiArraies(int[] soundsRowsId, String[] soundsRowsText) {
         for (int i = 0; i < 6; i++) {
             listText.add(soundsRowsText[i]);
@@ -79,49 +71,11 @@ public class ListAzcarActivity extends AppCompatActivity implements HasBack , Re
         }
      }
 
-    private void chooseDevice() {
-        if (Build.VERSION.SDK_INT <= 22) {
-            OreoDeviceOrBigger();
-        } else {
-            smallerThanOreoDevice();
-        }
-        closeApp();
-    }
-
-    private void closeApp(){
-        this.finishAffinity();
-    }
-
-    private void smallerThanOreoDevice(){
-      SharedPreferencesUtils.setServiceOnOff(this, true);
-        serviceIntent2 = new Intent(getBaseContext(), Alarm.class);
-       Alarm.enqueueWork(this, serviceIntent2);
-    }
-
-    private void OreoDeviceOrBigger() {
-        Intent serviceIntent = new Intent(getBaseContext(), Alarm2.class);
-        if (isServiceOneRunning(serviceIntent.getClass())) {
-            stopService(serviceIntent);
-            startService(serviceIntent);
-        } else {
-            startService(serviceIntent);
-        }
-    }
-
     private void saveDataInSharedPref(){
         SharedPreferencesUtils.setArrayBooleanPrefs(selectedSound, ListAzcarActivity.this);
         SharedPreferencesUtils.setArrayIntPrefs(repeatEachSound, ListAzcarActivity.this);
     }
 
-    private boolean isServiceOneRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-       return false;
-   }
     public boolean ensureOneORMoreSelected(){
      boolean checkArray = false;
        for(Boolean object:SharedPreferencesUtils.getArrayBooleanPrefs(ListAzcarActivity.this)) {
@@ -177,7 +131,50 @@ public class ListAzcarActivity extends AppCompatActivity implements HasBack , Re
 
 
 /*
+   private void chooseDevice() {
+        if (Build.VERSION.SDK_INT <= 22) {
+            OreoDeviceOrBigger();
+        } else {
+            smallerThanOreoDevice();
+        }
+        closeApp();
+    }
 
+    private void closeApp(){
+        this.finishAffinity();
+    }
+
+    private void smallerThanOreoDevice(){
+      SharedPreferencesUtils.setServiceOnOff(this, true);
+        serviceIntent2 = new Intent(getBaseContext(), Alarm.class);
+       Alarm.enqueueWork(this, serviceIntent2);
+    }
+
+    private void OreoDeviceOrBigger() {
+        Intent serviceIntent = new Intent(getBaseContext(), Alarm2.class);
+        if (isServiceOneRunning(serviceIntent.getClass())) {
+            stopService(serviceIntent);
+            startService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
+    }
+    private boolean isServiceOneRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+       return false;
+   }
+    private void isServiceTowRunning(){
+        if (SharedPreferencesUtils.getServiceOnOff(getApplicationContext())) {
+            SharedPreferencesUtils.setServiceOnOff(this, false);
+            serviceIntent2 = new Intent(getBaseContext(), Alarm.class);
+            Alarm.enqueueWork(this, serviceIntent2);
+        }
+    }
     private void showDialogInfo(){
       AlertDialog.Builder builder = new AlertDialog.Builder(ListAzcarActivity.this);
        builder.setMessage("هل تريد اغلاق التطبيق ثم تعمل الاذكار في خلفية الجهاز ؟");

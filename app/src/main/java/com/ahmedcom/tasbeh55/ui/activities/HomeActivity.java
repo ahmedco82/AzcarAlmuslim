@@ -18,6 +18,7 @@ import com.ahmedcom.BackPressedCallingBack;
 import com.ahmedcom.tasbeh55.R;
 import com.ahmedcom.tasbeh55.adapters.GridViewAdapter;
 import com.ahmedcom.tasbeh55.models.ImagesGridView;
+import com.ahmedcom.tasbeh55.models.Times;
 import com.ahmedcom.tasbeh55.services.Alarm2;
 import com.ahmedcom.tasbeh55.ui.others.ActionBarView;
 import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
@@ -27,7 +28,6 @@ import java.util.ArrayList;
 public class HomeActivity extends AppCompatActivity {
 
     private Button btnClose;
-
     private GridView gvIcons;
     private GridViewAdapter gridBaseAdapter;
     private ArrayList<ImagesGridView> imageModelArrayList;
@@ -53,28 +53,31 @@ public class HomeActivity extends AppCompatActivity {
         imageModelArrayList = getList();
         gridBaseAdapter = new GridViewAdapter(getApplicationContext(), imageModelArrayList);
         gvIcons.setAdapter(gridBaseAdapter);
-        gvIcons.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                if (position == 2) {
-                    Intent intent = new Intent(HomeActivity.this, TimeSettingsActivity.class);
+       //Log.i("prints_getTimes0 ",""+SharedPreferencesUtils.getTimes(this).getEveryTime());
+         gvIcons.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+          @Override
+           public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+             Intent serviceIntent = new Intent(getBaseContext(), Alarm2.class);
+               if(position == 2){
+                 if(SharedPreferencesUtils.getServiceOnOff(getApplicationContext()) || isMyServiceRunning(Alarm2.class)){
+                    //Log.d("getServiceOnOff:  ","Don");
+                     Intent intent = new Intent(HomeActivity.this, RememberInfoActivity.class);
+                     startActivity(intent);
+                    }else{
+                     Intent intent = new Intent(HomeActivity.this, TimeSettingsActivity.class);
                     startActivity(intent);
-                    if (SharedPreferencesUtils.getServiceOnOff(getApplicationContext())){
-                        Log.i("getServiceOnOff00 ","Don");
-                    }
-                    Intent serviceIntent = new Intent(getBaseContext(), Alarm2.class);
-                    if (isServiceOneRunning(serviceIntent.getClass())){
-                        Log.i("isServiceOneRunning  ","Don");
-                    }
                 }
-            }
-        });
-     }
-/*
+             }
+         }
+     });
+  }
 
-                        Intent intent = new Intent(HomeActivity.this, RememberInfoActivity.class);
-                        startActivity(intent);
- */
+
+
+     /*
+      Intent intent = new Intent(HomeActivity.this, RememberInfoActivity.class);
+     startActivity(intent);
+     */
 
     private ArrayList<ImagesGridView> getList(){
         ArrayList<ImagesGridView> list = new ArrayList<>();
@@ -87,7 +90,7 @@ public class HomeActivity extends AppCompatActivity {
         return list;
     }
 
-    private boolean isServiceOneRunning(Class<?> serviceClass) {
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {

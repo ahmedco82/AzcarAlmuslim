@@ -22,7 +22,7 @@
     <string name="text_btn_stop_remember">تم أضافة القيم المطلوبه</string>
     <string name="text_btn_OK">تأكيد</string>
 
-    <string name="run_inbackground">سيعمل منبه الأذكار فى الخلفيه ويتم أغلاق التطبيق</string>
+    <string name="run_inbackground">سيعمل منبه الأذكار فى الخلفيه ويتم الانتقال الى الصفحه الرئيسية</string>
     <string name="text_btn_No">الغاء</string>
     <string name="stop_remeber">إيقاف التذكير</string>
     <string name="start_remeber">أبدأ التذكير</string>
