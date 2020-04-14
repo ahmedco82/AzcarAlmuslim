@@ -1,19 +1,20 @@
 package com.ahmedcom.tasbeh55.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
-import com.ahmedcom.tasbeh55.models.Times;
-
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class TimeUtils {
+
+
+
+
+
 
 
     public static int getTimeInMinutes(Context context) {
@@ -25,8 +26,14 @@ public class TimeUtils {
         return reuslt;
     }
 
-
-
+    public static ArrayList<String> getEverytime(){
+        ArrayList<String> times = new ArrayList<String>();
+        String[] Times = {" 1 دقيقة", " 2 دقيقة", " 3 دقيقة", " 4 دقيقة", "5 دقيقة", " 10 دقيقة", " 15 دقيقة", "30 دقيقة", " 1 ساعه", " 2 ساعه"};
+        for (int i = 0; i < Times.length; i++) {
+            times.add(Times[i]);
+        }
+        return  times;
+    }
 
     public static String convert24HourTime(String val){
         SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm");
@@ -99,27 +106,27 @@ public class TimeUtils {
         return false;
     }
 
-
     public static String getTimeStartWithAmPm(Context context){
         String ampm ="";
         if(SharedPreferencesUtils.getTimes(context).getStart_AM_PM()==0)ampm="AM";
         else
          ampm="PM";
-        String result  ="" + SharedPreferencesUtils.getTimes(context).getHour_start() + ":"  + SharedPreferencesUtils.getTimes(context).getMinute_start() +" "+ ampm;
+        String result  ="" + SharedPreferencesUtils.getTimes(context).getHour_start() + ":"+SharedPreferencesUtils.getTimes(context).getMinute_start() +" "+ ampm;
         return result;
     }
-
 
     public static String getTimeEndWithAmPm(Context context){
         String ampm ="";
         if(SharedPreferencesUtils.getTimes(context).getEnd_AM_PM()==0)ampm="AM";
         else
-            ampm="PM";
-        String result  ="" + SharedPreferencesUtils.getTimes(context).getHour_end()
-                +":" + SharedPreferencesUtils.getTimes(context).getMinute_end()
-                +" "+ampm;
+        ampm="PM";
+        String result  ="" + SharedPreferencesUtils.getTimes(context).getHour_end() +":"+SharedPreferencesUtils.getTimes(context).getMinute_end() +" "+ampm;
         return result;
     }
+}
+
+
+
 
     /*
     public static String compareTwoTime(String mStrStartTime, String mStrEndTime) {
@@ -218,12 +225,6 @@ public class TimeUtils {
         }
     }
     */
-}
-
-
-
-
-
 
 
 

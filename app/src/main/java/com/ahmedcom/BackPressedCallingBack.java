@@ -1,6 +1,7 @@
 package com.ahmedcom;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.ahmedcom.tasbeh55.interfaces.HasBack;
 import com.ahmedcom.tasbeh55.ui.activities.ListAzcarActivity;
 import com.ahmedcom.tasbeh55.ui.activities.TimeSettingsActivity;
 import com.ahmedcom.tasbeh55.interfaces.CallingBack;
+import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
 
 public class BackPressedCallingBack implements CallingBack{
 
@@ -28,11 +30,9 @@ public class BackPressedCallingBack implements CallingBack{
                 if (activity instanceof HasBack && !(activity instanceof ListAzcarActivity)){
                     activity.onBackPressed();
                 }else if(activity instanceof ListAzcarActivity){
-                    if(((ListAzcarActivity) activity).ensureOneORMoreSelected()) {
-                        //Log.i("selection0_0","Don");
+                    if(SharedPreferencesUtils.isOneORMoreSelected(activity)) {
                         activity.onBackPressed();
                     }else {
-                        //Log.i("selection0_1","NotDon");
                        Toast.makeText(activity, R.string.choosemore, Toast.LENGTH_SHORT).show();
                     }
                 }

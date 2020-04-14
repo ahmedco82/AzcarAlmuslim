@@ -6,18 +6,14 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 
-import com.ahmedcom.tasbeh55.R;
-import com.ahmedcom.tasbeh55.utils.PlayerViewHandler;
+import com.ahmedcom.tasbeh55.utils.PlayerViewHandlerUtils;
 import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
 import com.ahmedcom.tasbeh55.utils.TimeUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -43,7 +39,7 @@ public class Alarm  extends JobIntentService {
     private int lengtListSound;
     private Context context;
     SharedPreferencesUtils globalSharedPreferences;
-    PlayerViewHandler playerViewHandler;
+    PlayerViewHandlerUtils playerViewHandler;
     MediaPlayer m = null;
     private static final String TAG = "test1:";
      // sound0
@@ -56,7 +52,7 @@ public class Alarm  extends JobIntentService {
        public void onCreate() {
         super.onCreate();
           installation ();
-           playerViewHandler = new PlayerViewHandler(getApplicationContext());
+           playerViewHandler = new PlayerViewHandlerUtils(getApplicationContext());
            //copySoundsFromSharedPrefToArraies(allSounds);
            Log.e(TAG, "onCreate");
        }

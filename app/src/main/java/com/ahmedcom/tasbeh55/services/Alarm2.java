@@ -6,18 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.ahmedcom.tasbeh55.R;
-import com.ahmedcom.tasbeh55.utils.PlayerViewHandler;
+import com.ahmedcom.tasbeh55.utils.PlayerViewHandlerUtils;
 import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
 import com.ahmedcom.tasbeh55.utils.TimeUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,7 +33,7 @@ public class Alarm2 extends Service {
     private AlarmManager alarmManager;
     private int lengtListSound;
     SharedPreferencesUtils globalSharedPreferences;
-    PlayerViewHandler playerViewHandler;
+    PlayerViewHandlerUtils playerViewHandler;
     MediaPlayer m = null;
     public Alarm2(Context context) {
         super();
@@ -62,7 +57,7 @@ public class Alarm2 extends Service {
     public void onCreate(){
         super.onCreate();
         installation();
-        playerViewHandler = new PlayerViewHandler(getApplicationContext());
+        playerViewHandler = new PlayerViewHandlerUtils(getApplicationContext());
         //copySoundsFromSharedPrefToArraies(allSounds);
     }
 

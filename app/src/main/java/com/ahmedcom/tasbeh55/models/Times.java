@@ -13,15 +13,6 @@ public class Times implements Serializable{
     int stopTimer;
     int everyTime;
 
-    /*
-    private static Times instance;
-    public static synchronized Times getInstance(){
-        if(instance==null){
-            instance=new Times();
-        }
-        return instance;
-    }
-    */
     public void setHour_start(int hour_start){
         this.hour_start = hour_start;
     }

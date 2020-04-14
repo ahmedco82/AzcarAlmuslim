@@ -25,7 +25,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -40,8 +40,6 @@ android {
 }
 
 dependencies {
-
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':pickerview')
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -59,7 +57,9 @@ dependencies {
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation 'com.github.navasmdc:MaterialDesign:1.5@aar'
     implementation 'com.alex-zaitsev:meternumberpicker:1.0.2'
-
     implementation 'com.google.code.gson:gson:2.8.6'
-    //implementation 'com.contrarywind:Android-PickerView:4.1.9'
+    //--------  butterknife ------------
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+    // implementation 'com.contrarywind:Android-PickerView:4.1.9'
 }

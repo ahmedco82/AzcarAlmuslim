@@ -1,11 +1,8 @@
 package com.ahmedcom.tasbeh55.adapters;
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -19,8 +16,13 @@ import com.ahmedcom.tasbeh55.R;
 import com.ahmedcom.tasbeh55.interfaces.RecyclerViewClickListener;
 import com.ahmedcom.tasbeh55.interfaces.SoundAdapter;
 import com.ahmedcom.tasbeh55.models.AudioItem;
-import com.ahmedcom.tasbeh55.utils.PlayerViewHandler;
+import com.ahmedcom.tasbeh55.utils.PlayerViewHandlerUtils;
+import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
+
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class AzcarListAdapter extends RecyclerView.Adapter<AzcarListAdapter.ViewHolder> implements SoundAdapter {
@@ -31,7 +33,7 @@ public class AzcarListAdapter extends RecyclerView.Adapter<AzcarListAdapter.View
     public ArrayList<Boolean> tempCheckBoxes = new ArrayList<Boolean>();
     ToggleButton buttons[];
     ArrayList<AudioItem> audioItems;
-    PlayerViewHandler soundUtlis;
+    PlayerViewHandlerUtils soundUtlis;
     private ArrayList<String> listString;
     private ListAzcarActivity context;
 
@@ -42,7 +44,7 @@ public class AzcarListAdapter extends RecyclerView.Adapter<AzcarListAdapter.View
         this.sheckBoxesPosition = -1;
         this.audioItems = audioItems;
         this.mListener = context;
-        soundUtlis = new PlayerViewHandler(AzcarListAdapter.this);
+        soundUtlis = new PlayerViewHandlerUtils(AzcarListAdapter.this);
     }
 
     @Override
@@ -73,6 +75,7 @@ public class AzcarListAdapter extends RecyclerView.Adapter<AzcarListAdapter.View
                 mListener.onClick(radioButtonGetName, position);
             }
         });
+
         holder.playBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
           @Override
              public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -92,11 +95,12 @@ public class AzcarListAdapter extends RecyclerView.Adapter<AzcarListAdapter.View
     private void updateNonPlayingView(ViewHolder holder) {
         holder.playBtn.setBackground(ContextCompat.getDrawable(context, R.drawable.btnplay));
     }
-    // get the size of the list
+
     @Override
     public int getItemCount(){
         return listString == null ? 0 : listString.size();
     }
+
     @Override
     public void onViewRecycled(@NonNull ViewHolder holder) {
          super.onViewRecycled(holder);
@@ -128,7 +132,6 @@ public class AzcarListAdapter extends RecyclerView.Adapter<AzcarListAdapter.View
         } else {
             sheckBoxesHolder.toggleButton.setBackground(ContextCompat.getDrawable(context, R.drawable.unchk));
         }
-
     }
 
     @Override
@@ -142,25 +145,20 @@ public class AzcarListAdapter extends RecyclerView.Adapter<AzcarListAdapter.View
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        //public ImageView imageView;
-        public TextView textView;
-       // public LinearLayout linearLayout;
-        public ToggleButton toggleButton, playBtn;
-        public RadioButton radioButton1, radioButton2, radioButton3;
-        RadioGroup radiogroup;
+
+        @BindView(R.id.bt_check2)ToggleButton toggleButton;
+        @BindView(R.id.bt_play)ToggleButton playBtn;
+        @BindView(R.id.radio_btn1)RadioButton radioButton1;
+        @BindView(R.id.radio_btn2)RadioButton radioButton2;
+        @BindView(R.id.radio_btn3)RadioButton radioButton3;
+        @BindView(R.id.segmentedGroup)RadioGroup radiogroup;
+        @BindView(R.id._txt_kind_of_azkar)TextView textView;
        // private RecyclerViewClickListener mListener;
         // itemView is coming from inside onCreateViewHolder
         public ViewHolder(View itemView) {
-            super(itemView);
-            //this.itemView = itemView;
-            //linearLayout = (LinearLayout) itemView.findViewById(R.id.l_containe_row);
-            this.toggleButton = (ToggleButton) itemView.findViewById(R.id.bt_check2);
-            this.playBtn = (ToggleButton) itemView.findViewById(R.id.bt_play);
-            this.radioButton1 = (RadioButton) itemView.findViewById(R.id.radio_btn1);
-            this.radioButton2 = (RadioButton) itemView.findViewById(R.id.radio_btn2);
-            this.radioButton3 = (RadioButton) itemView.findViewById(R.id.radio_btn3);
-            this.radiogroup = (RadioGroup) itemView.findViewById(R.id.segmentedGroup);
-            this.textView = (TextView) itemView.findViewById(R.id._txt_kind_of_azkar);
+           super(itemView);
+            ButterKnife.bind(this, itemView);
+            //  this.textView = (TextView) itemView.findViewById(R.id._txt_kind_of_azkar);
             this.playBtn.setOnClickListener(this);
             this.toggleButton.setOnClickListener(this);
         }
@@ -171,15 +169,15 @@ public class AzcarListAdapter extends RecyclerView.Adapter<AzcarListAdapter.View
           if(v.getTag() == "playBtn"){
            clickedPlayStopButton();
             }else if (v.getTag() == "toggleButton"){
-              if(!context.lengthSelectedSound() && !context.selectedSound.get(getAdapterPosition())){
-                Toast.makeText(context ,R.string.chooseless, Toast.LENGTH_SHORT).show();
+              if(!SharedPreferencesUtils.getLengthSelectedSound(context) && !SharedPreferencesUtils.getArrayBooleanPrefs(context).get(getAdapterPosition())){
+               // if(!context.lengthSelectedSound() && !context.selectedSound.get(getAdapterPosition())){
+                 Toast.makeText(context ,R.string.chooseless, Toast.LENGTH_SHORT).show();
                 }else {
                    mListener.onClick(v , getAdapterPosition());
                    clickedCheckBoxesButton();
                 }
             }
         }
-
         private void clickedCheckBoxesButton() {
             sheckBoxesPosition = getAdapterPosition();
             setStatuesTempCheckBoxes();
@@ -194,6 +192,7 @@ public class AzcarListAdapter extends RecyclerView.Adapter<AzcarListAdapter.View
                 tempCheckBoxes.set(getAdapterPosition(), true);
             }
         }
+
         private void clickedPlayStopButton() {
             if (getAdapterPosition() == playingPosition) {
                 soundUtlis.checkIsPlaying();
@@ -211,6 +210,34 @@ public class AzcarListAdapter extends RecyclerView.Adapter<AzcarListAdapter.View
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//this.itemView = itemView;
+//--- linearLayout = (LinearLayout) itemView.findViewById(R.id.l_containe_row);
+// this.toggleButton = (ToggleButton) itemView.findViewById(R.id.bt_check2);
+// this.playBtn = (ToggleButton) itemView.findViewById(R.id.bt_play);
+// this.radioButton1 = (RadioButton) itemView.findViewById(R.id.radio_btn1);
+//this.radioButton2 = (RadioButton) itemView.findViewById(R.id.radio_btn2);
+//this.radioButton3 = (RadioButton) itemView.findViewById(R.id.radio_btn3);
+// this.radiogroup = (RadioGroup) itemView.findViewById(R.id.segmentedGroup);
 
     /*
       this function work when at the beginning
@@ -248,6 +275,12 @@ public class AzcarListAdapter extends RecyclerView.Adapter<AzcarListAdapter.View
 
 
 
+//public ImageView imageView;
+// public TextView textView;
+// public LinearLayout linearLayout;
+// public ToggleButton toggleButton, playBtn;
+//public RadioButton radioButton1, radioButton2, radioButton3;
+//RadioGroup radiogroup;
 
 
 //soundUtlis

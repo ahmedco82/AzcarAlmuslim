@@ -10,46 +10,51 @@ import android.widget.TextView;
 
 
 import com.ahmedcom.tasbeh55.R;
-import com.ahmedcom.tasbeh55.models.ImagesGridView;
+import com.ahmedcom.tasbeh55.models.IconsAndTitles;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class GridViewAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private Context ctx;
-    private ArrayList<ImagesGridView> imageModelArrayList;
-    private ImageView ivGallery;
-    private TextView textView;
+    private ArrayList<IconsAndTitles> iconsAndTitles;
+    @BindView(R.id.ivGallery) ImageView iconButton;
+    @BindView(R.id.tv)TextView titleIcon;
 
-    public GridViewAdapter(Context ctx, ArrayList<ImagesGridView> imageModelArrayList) {
+
+
+    public GridViewAdapter(Context ctx, ArrayList<IconsAndTitles> imageModelArrayList) {
         this.ctx = ctx;
-        this.imageModelArrayList = imageModelArrayList;
+        this.iconsAndTitles = imageModelArrayList;
     }
 
     @Override
-    public int getCount() {
-        return imageModelArrayList.size();
+    public int getCount(){
+        return iconsAndTitles.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        return imageModelArrayList.get(position);
+    public Object getItem(int position){
+        return iconsAndTitles.get(position);
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(int position){
         return 0;
     }
 
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        inflater=(LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView = inflater.inflate(R.layout.grid_item, parent, false);
-        ivGallery = (ImageView) itemView.findViewById(R.id.ivGallery);
-        textView = (TextView) itemView.findViewById(R.id.tv);
-        ivGallery.setImageResource(imageModelArrayList.get(position).getImage_drawable());
-        textView.setText(imageModelArrayList.get(position).getName());
+    public View getView(int position , View convertView , ViewGroup parent){
+         inflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+         View itemView = inflater.inflate(R.layout.grid_item, parent, false);
+         ButterKnife.bind(this, itemView);
+         iconButton.setImageResource(iconsAndTitles.get(position).getImage_drawable());
+         titleIcon.setText(iconsAndTitles.get(position).getName());
         return itemView;
     }
 }

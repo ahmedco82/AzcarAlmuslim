@@ -1,5 +1,6 @@
 package com.ahmedcom.tasbeh55.utils;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -7,6 +8,7 @@ import android.preference.PreferenceManager;
 
 import com.ahmedcom.tasbeh55.R;
 import com.ahmedcom.tasbeh55.models.Times;
+import com.ahmedcom.tasbeh55.ui.activities.ListAzcarActivity;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -18,8 +20,8 @@ import java.util.List;
 
 public class SharedPreferencesUtils {
 
-    public final static String PREFS_NAME = "appname_prefs";
-    static final String mapKey = "map";
+     public final static String PREFS_NAME = "appname_prefs";
+     static final String mapKey = "map";
      private Context context;
 
     public SharedPreferencesUtils(Context context){
@@ -29,6 +31,39 @@ public class SharedPreferencesUtils {
     public static void setServiceOnOff(Context context,Boolean value){
        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
        prefs.edit().putBoolean("locked", value).apply();
+    }
+
+    public static boolean isServiceRunning(Class<?> serviceClass , Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isOneORMoreSelected(Context context){
+        boolean checkArray = false;
+        for(Boolean object:getArrayBooleanPrefs(context)) {
+            if (object) {
+                checkArray = true;
+                break;
+            } else {
+                checkArray = false;
+            }
+        }
+        return checkArray;
+    }
+
+    public static boolean getLengthSelectedSound(Context context) {
+        int count = 0;
+        for (int i = 0; i<getArrayBooleanPrefs(context).size(); i++) {
+            if (getArrayBooleanPrefs(context).get(i)) {
+                count = count + 1;
+            }
+        }
+        return (count >= 2) ? false : true;
     }
 
     public static Boolean getServiceOnOff(Context context){
@@ -136,7 +171,6 @@ public class SharedPreferencesUtils {
          }
         return times;
     }
-
 }
 
 

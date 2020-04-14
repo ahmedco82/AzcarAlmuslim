@@ -5,23 +5,20 @@
     <string name="select_time_azkar">أوقات الاذكار</string>
     <string name="remember_me">ذكرني كل</string>
     <string name="remember_me2">التذكير كل</string>
-
     <string name="chooseless"> أختر عنصر واحد أو أثنين فقط</string>
     <string name="choosemore">يجب اختيار عنصر واحد على الاقل</string>
-
+    <string name="alarm_isworking"> تم تشغيل منبه الأذكار</string>
+    <string name="times_of_azcar">أوقات الاذكار</string>
+    <string name="alarm_stoped"> تسبيح المسلم</string>
     <string name="backtolistazcar">يجب اختيار عناصر من قائمة الأذكار </string>
-
     <string name="text_timer_selected0"> 1 دقيقة </string>
     <string name="text_timer_selected"> تحديد أوقات الأذكار </string>
     <string name="text_btn_start_remember">ابدأ التذكير</string>
-
-    <string name="empty_spaces">يوجد اماكن فراغه</string>
-
+    <string name="empty_spaces">تأكد من أختيار بعض العناصر</string>
     <string name="morethan_six_hour"> اختر أوقات صحيحه !</string>
     <string name="text_end_put_times">تم أضافة القيم المطلوبه</string>
     <string name="text_btn_stop_remember">تم أضافة القيم المطلوبه</string>
     <string name="text_btn_OK">تأكيد</string>
-
     <string name="run_inbackground">سيعمل منبه الأذكار فى الخلفيه ويتم الانتقال الى الصفحه الرئيسية</string>
     <string name="text_btn_No">الغاء</string>
     <string name="stop_remeber">إيقاف التذكير</string>

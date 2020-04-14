@@ -9,19 +9,20 @@ import com.ahmedcom.tasbeh55.interfaces.SoundAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerViewHandler {
+public class PlayerViewHandlerUtils {
 
     private MediaPlayer mediaPlayer;
     private int currentSound = 0;
     private int  quiteSound = 1;
     public int counterSound = 0;
+
     private List<Integer> repeatEachSound;
     public ArrayList<MediaPlayer> selectedSound;
     SoundAdapter soundAdapter;
 
     Context context;
 
-    public PlayerViewHandler(Context context) {
+    public PlayerViewHandlerUtils(Context context) {
         this.currentSound=0;
         this.counterSound=0;
         this.quiteSound= 1;
@@ -32,7 +33,7 @@ public class PlayerViewHandler {
         repeatEachSound.addAll(SharedPreferencesUtils.filterRepeatingSound(context));
     }
 
-    public PlayerViewHandler(AzcarListAdapter soundAdapter){
+    public PlayerViewHandlerUtils(AzcarListAdapter soundAdapter){
         this.soundAdapter = soundAdapter;
     }
 
@@ -83,38 +84,52 @@ public class PlayerViewHandler {
       }
    }
 
+
     public void playGrupSounds(MediaPlayer key) {
-        selectedSound.get(currentSound).start();
-        selectedSound.get(currentSound).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                if (repeatEachSound.get(currentSound) != 0) {
-                    if (quiteSound != 0) {
-                        counterSound += 1;
-                        if (counterSound == repeatEachSound.get(currentSound)) {
-                            counterSound = 0;
+     selectedSound.get(currentSound).start();
+      selectedSound.get(currentSound).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        @Override
+          public void onCompletion(MediaPlayer mp) {
+            // sound 0 = 1
+            if(repeatEachSound.get(currentSound) != 0){
+               // quiteSound = 1
+                if(quiteSound != 0){
+                    counterSound += 1;
+                      if(counterSound == repeatEachSound.get(currentSound)) {
+                          counterSound = 0;
                             quiteSound = 0;
-                        }
-                        playGrupSounds(selectedSound.get(currentSound));
-                    } else {
-                        currentSound += 1;
-                        if (currentSound < selectedSound.size())
-                            playGrupSounds(selectedSound.get(currentSound));
-                        else
+                              // quiteSound = 1;
+                            }
+                          playGrupSounds(selectedSound.get(currentSound));
+                        }else{
+                          currentSound += 1;
+                          if(currentSound<selectedSound.size()) {
+                              quiteSound = 1;
+                            // playGrupSounds(selectedSound.get(currentSound));
+                           }else{
                             currentSound = 0;
-                        quiteSound = 1;
+                            quiteSound = 1;
+                        }
                     }
+                 // repeatEachSound current == 0
                 }else{
                     currentSound += 1;
-                    if(currentSound<selectedSound.size())
-                        playGrupSounds(selectedSound.get(currentSound));
-                    else
+                    // ---------------------- // ---------------------- //
+                    if(currentSound<selectedSound.size()) {
+                        //playGrupSounds(selectedSound.get(currentSound));
+                        quiteSound = 1;
+                    } else {
                         currentSound = 0;
-                    quiteSound = 1;
-                }
-            }
-        });
-    }
+                        quiteSound = 1;
+                    }
+                 }
+             }
+         });
+     }
+
+
+
+
 
     /*
    public void playGrupSounds(MediaPlayer mediaPlayer){

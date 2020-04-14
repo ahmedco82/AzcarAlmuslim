@@ -1,15 +1,11 @@
 package com.ahmedcom.tasbeh55.ui.activities;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,86 +13,74 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ahmedcom.BackPressedCallingBack;
 import com.ahmedcom.tasbeh55.R;
 import com.ahmedcom.tasbeh55.adapters.GridViewAdapter;
-import com.ahmedcom.tasbeh55.models.ImagesGridView;
-import com.ahmedcom.tasbeh55.models.Times;
-import com.ahmedcom.tasbeh55.services.Alarm2;
+import com.ahmedcom.tasbeh55.presenter.HomeInteractor;
+import com.ahmedcom.tasbeh55.presenter.ViewHome;
+import com.ahmedcom.tasbeh55.models.IconsAndTitles;
+import com.ahmedcom.tasbeh55.presenter.HomePresenter;
 import com.ahmedcom.tasbeh55.ui.others.ActionBarView;
-import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private Button btnClose;
-    private GridView gvIcons;
-    private GridViewAdapter gridBaseAdapter;
-    private ArrayList<ImagesGridView> imageModelArrayList;
+public class HomeActivity extends AppCompatActivity implements ViewHome {
 
-    private int[] imageList = new int[]{
-            R.drawable.icon_quran, R.drawable.icon_radio, R.drawable.zeker
-            , R.drawable.icon_medal, R.drawable.icon_hands, R.drawable.icon_books, R.drawable.icon_convet, R.drawable.icon_azcartoday, R.drawable.icon_history};
-    private String[] textList = new String[]{
-            "قرءان كريم", "راديو", "تسبيح المسلم", "الأوائل",
-            "الدعاء فى القرءان", "احاديث نبويه",
-            "محول التقويم", "اذكار اليوم"
-            , "الاحاديث الاسلاميه"};
-
+    private GridViewAdapter gridViewAdapter;
+    HomePresenter homeActivityPresenter;
+    @BindView(R.id.gridview) GridView ButtonsOfIcons;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_default);
-        //btnClose = (Button) findViewById(R.id.button_close_app);
-        Bitmap bitmap = BitmapFactory.decodeResource(HomeActivity.this.getResources(), R.drawable.like_);
-        new ActionBarView(this, "تسبيح المسلم", bitmap, new BackPressedCallingBack(this));
-        gvIcons = findViewById(R.id.gridview);
-        imageModelArrayList = getList();
-        gridBaseAdapter = new GridViewAdapter(getApplicationContext(), imageModelArrayList);
-        gvIcons.setAdapter(gridBaseAdapter);
-       //Log.i("prints_getTimes0 ",""+SharedPreferencesUtils.getTimes(this).getEveryTime());
-         gvIcons.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-          @Override
-           public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-             Intent serviceIntent = new Intent(getBaseContext(), Alarm2.class);
-               if(position == 2){
-                 if(SharedPreferencesUtils.getServiceOnOff(getApplicationContext()) || isMyServiceRunning(Alarm2.class)){
-                    //Log.d("getServiceOnOff:  ","Don");
-                     Intent intent = new Intent(HomeActivity.this, RememberInfoActivity.class);
-                     startActivity(intent);
-                    }else{
-                     Intent intent = new Intent(HomeActivity.this, TimeSettingsActivity.class);
-                    startActivity(intent);
-                }
-             }
+    protected void onCreate(Bundle savedInstanceState){
+     super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_home);
+       initiItems();
+        ButtonsOfIcons.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+         @Override
+         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+         homeActivityPresenter.navigateToActivity(position);
          }
      });
   }
 
-
-
-     /*
-      Intent intent = new Intent(HomeActivity.this, RememberInfoActivity.class);
-     startActivity(intent);
-     */
-
-    private ArrayList<ImagesGridView> getList(){
-        ArrayList<ImagesGridView> list = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            ImagesGridView imageModel = new ImagesGridView();
-            imageModel.setName(textList[i]);
-            imageModel.setImage_drawable(imageList[i]);
-            list.add(imageModel);
-        }
-        return list;
+    private void initiItems(){
+        ButterKnife.bind(this);
+        homeActivityPresenter = new HomePresenter(this,new HomeInteractor());
+        Bitmap bitmap = BitmapFactory.decodeResource(HomeActivity.this.getResources(), R.drawable.like_);
+        new ActionBarView(this, getString(R.string.alarm_stoped), bitmap, new BackPressedCallingBack(this));
+        homeActivityPresenter.FindItemsGridview();
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
+    @Override
+    public void setItems(ArrayList<IconsAndTitles> listTextAndIcon) {
+        gridViewAdapter = new GridViewAdapter(HomeActivity.this,listTextAndIcon);
+        ButtonsOfIcons.setAdapter(gridViewAdapter);
+    }
+
+    @Override
+    public void gotoSettingsActivity() {
+        Intent intent = new Intent(HomeActivity.this , TimeSettingsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void gotoRememberInfoActivity() {
+        Intent intent = new Intent(HomeActivity.this, RememberInfoActivity.class);
+        startActivity(intent);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
