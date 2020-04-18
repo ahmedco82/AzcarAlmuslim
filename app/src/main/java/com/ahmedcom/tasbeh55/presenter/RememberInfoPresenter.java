@@ -38,9 +38,18 @@ public class RememberInfoPresenter {
             viewRememberInfo.get().DialogFromSharPref();
          }
         } else {
-          viewRememberInfo.get().getValuesFromTextBoxesTime();
+
+          if(SharedPreferencesUtils.getTimes((Context)  viewRememberInfo.get()).getStopTimer() == 1) {
+              viewRememberInfo.get().getValuesFromTextBoxesTimeWithClock();
+          }else{
+              viewRememberInfo.get().getValuesFromTextBoxesTime();
+          }
+           //viewRememberInfo.get().getValuesFromTextBoxesTime();
         }
     }
+
+
+
     public void gotoHomeOrShowDialogInfo(View v) {
       String getButtonName = String.valueOf(((Button)v).getTag());
         if(getButtonName.equals("Button_OK")){

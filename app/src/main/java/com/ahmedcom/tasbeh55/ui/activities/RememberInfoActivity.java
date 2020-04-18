@@ -36,8 +36,8 @@ public class RememberInfoActivity extends AppCompatActivity implements View.OnCl
     Intent serviceIntent2 = null;
     RememberInfoPresenter rememberInfoPresenter;
     private ActivityDialogRememberInfoBinding binding;
+    // static Context context;
 
-   // static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,26 +47,26 @@ public class RememberInfoActivity extends AppCompatActivity implements View.OnCl
         initiViews();
     }
 
-    private void initiViews() {
-        binding.btnStartRememberMe4.setTag("Button_OK");
-        binding.btnStartRememberMe4.setOnClickListener(this);
+    private void initiViews(){
+        binding.buttonConfirm.setTag("Button_OK");
+        binding.buttonConfirm.setOnClickListener(this);
         binding.textSelectTimeFromDialog.setEnabled(false);
         binding.textSelectTimeToDialog.setEnabled(false);
-        int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.95);
-        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.60);
-       getWindow().setLayout(width, height);
+        // int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.95);
+        // int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.60);
+        // getWindow().setLayout(width, height);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         rememberInfoPresenter.putTimesInTextBoxes();
     }
 
     @Override
     protected void onDestroy(){
-        super.onDestroy();
+       super.onDestroy();
         /*
         Log.d("destroy-Activity","Don");
         RefWatcher refWatcher = App.getRefWatcher(this);
         refWatcher.watch(this);
-         */
+       */
     }
 
     @Override
@@ -91,15 +91,19 @@ public class RememberInfoActivity extends AppCompatActivity implements View.OnCl
     public void gotoHome(){
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
-        finish();
+       // finish();
     }
 
-
-    //
+    @Override
+    public void getValuesFromTextBoxesTimeWithClock(){
+       binding.textSelectTimeFromDialog.setText("" + TimeUtils.getTimeStartWithAmPm(getApplicationContext()));
+       binding.textSelectTimeToDialog.setText("" + TimeUtils.getTimeEndWithAmPm(getApplicationContext()));
+        binding.textMinute5.setText(TimeUtils.getEverytime().get(SharedPreferencesUtils.getTimes(getApplicationContext()).getEveryTime()));
+    }
     @Override
     public void getValuesFromTextBoxesTime(){
-        binding.textSelectTimeFromDialog.setText("" + TimeUtils.getTimeStartWithAmPm(getApplicationContext()));
-        binding.textSelectTimeToDialog.setText("" + TimeUtils.getTimeEndWithAmPm(getApplicationContext()));
+     binding.textSelectTimeFromDialog.setText("");
+      binding.textSelectTimeToDialog.setText("");
         binding.textMinute5.setText(TimeUtils.getEverytime().get(SharedPreferencesUtils.getTimes(getApplicationContext()).getEveryTime()));
     }
 
@@ -111,7 +115,7 @@ public class RememberInfoActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void DialogFromSharPrefWithClock(){
-        binding.btnStartRememberMe4.setText("ايقاف التشغيل");
+        binding.buttonConfirm.setText("ايقاف التشغيل");
         binding.textSelectTimeFromDialog.setText("" + TimeUtils.getTimeStartWithAmPm(getApplicationContext()));
         binding.textSelectTimeToDialog.setText("" + TimeUtils.getTimeEndWithAmPm(getApplicationContext()));
         binding.textMinute5.setText(TimeUtils.getEverytime().get(SharedPreferencesUtils.getTimes(getApplicationContext()).getEveryTime()));
@@ -120,7 +124,7 @@ public class RememberInfoActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void DialogFromSharPref(){
-        binding.btnStartRememberMe4.setText("ايقاف التشغيل");
+        binding.buttonConfirm.setText("ايقاف التشغيل");
         binding.textSelectTimeFromDialog.setText("");
         binding.textSelectTimeToDialog.setText("");
         binding.textMinute5.setText(TimeUtils.getEverytime().get(SharedPreferencesUtils.getTimes(getApplicationContext()).getEveryTime()));

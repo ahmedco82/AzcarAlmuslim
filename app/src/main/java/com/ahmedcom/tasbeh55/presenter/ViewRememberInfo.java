@@ -13,4 +13,5 @@ public interface ViewRememberInfo {
     void showMsg(String text);
     void stopSmallerThanOreo();
     void stopOreoDeviceOrBigger();
+    void getValuesFromTextBoxesTimeWithClock();
 }

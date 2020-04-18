@@ -82,15 +82,6 @@ public class TimeUtils {
         try {
            Date start_time = sdf.parse(startTime);
             Date end_time = sdf.parse(endTime);
-            //Log.i("Date_1: ","-- "+start_time);
-           // Log.i("Date_2: ","-- "+end_time);
-             //Date date3 = sdf.parse(formatCurrnetTime);
-            /*
-            if (date1.before(date3) && date2.after(date3)) {
-
-                isBetween = true;
-            }
-              */
             if(start_time.before(end_time)){
                 return true;
             } else {
@@ -106,10 +97,11 @@ public class TimeUtils {
         String ampm ="";
         if(SharedPreferencesUtils.getTimes(context).getStart_AM_PM()==0)ampm="AM";
         else
-         ampm="PM";
+        ampm="PM";
         String result  ="" + SharedPreferencesUtils.getTimes(context).getHour_start() + ":"+SharedPreferencesUtils.getTimes(context).getMinute_start() +" "+ ampm;
         return result;
     }
+
 
     public static String getTimeEndWithAmPm(Context context){
         String ampm ="";
@@ -120,108 +112,6 @@ public class TimeUtils {
         return result;
     }
 }
-
-
-
-
-    /*
-    public static String compareTwoTime(String mStrStartTime, String mStrEndTime) {
-        Calendar startCalendar;
-        Calendar endCalendar;
-        Calendar currentCalendar;
-        String mStrToday = "";
-        String mStrTomorrow = "";
-        String mStrCompareStartTime[] = mStrStartTime.split(" ");
-        String mStrCompareEndTime[] = mStrEndTime.split(" ");
-        int mIStartTime = Integer.parseInt(mStrCompareStartTime[0].replace(":", ""));
-        int mIEndTime = Integer.parseInt(mStrCompareEndTime[0].replace(":", ""));
-        if (mIStartTime < mIEndTime && mStrCompareStartTime[1].equals("PM") && mStrCompareEndTime[1].equals("PM")) {
-            mStrToday = getCurrentDateUsingCalendar();
-            mStrTomorrow = getCurrentDateUsingCalendar();
-        } else if (mIStartTime < mIEndTime && mStrCompareStartTime[1].equals("AM") && mStrCompareEndTime[1].equals("AM")) {
-
-            mStrToday = getCurrentDateUsingCalendar();
-            mStrTomorrow = getCurrentDateUsingCalendar();
-
-        } else if (mIStartTime > mIEndTime && mStrCompareStartTime[1].equals("PM") && mStrCompareEndTime[1].equals("PM")) {
-            String mStrTime12[] = mStrCompareStartTime[0].split(":");
-            if (mStrTime12[0].equals("12")) {
-                mStrToday = getNextDateUsingCalendar();
-                mStrTomorrow = getNextDateUsingCalendar();
-            } else {
-                mStrToday = getCurrentDateUsingCalendar();
-                mStrTomorrow = getNextDateUsingCalendar();
-            }
-        } else if (mIStartTime > mIEndTime && mStrCompareStartTime[1].equals("AM") && mStrCompareEndTime[1].equals("AM")) {
-            String mStrTime12[] = mStrCompareStartTime[0].split(":");
-            if (mStrTime12[0].equals("12")) {
-                mStrToday = getNextDateUsingCalendar();
-                mStrTomorrow = getNextDateUsingCalendar();
-            } else {
-                mStrToday = getCurrentDateUsingCalendar();
-                mStrTomorrow = getNextDateUsingCalendar();
-            }
-        } else if (mStrCompareStartTime[1].equals("PM") && mStrCompareEndTime[1].equals("AM")) {
-            mStrToday = getCurrentDateUsingCalendar();
-            mStrTomorrow = getNextDateUsingCalendar();
-        } else if (mStrCompareStartTime[1].equals("AM") && mStrCompareEndTime[1].equals("PM")) {
-            mStrToday = getCurrentDateUsingCalendar();
-            mStrTomorrow = getCurrentDateUsingCalendar();
-        }
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm aa");
-        String mStrDifference = "";
-        try {
-            Date date1 = simpleDateFormat.parse(mStrToday + " " + mStrStartTime);
-            Date date2 = simpleDateFormat.parse(mStrTomorrow + " " + mStrEndTime);
-            mStrDifference = differenceDatesAndTime(date1, date2);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return mStrDifference;
-    }
-
-    public static String differenceDatesAndTime(Date mDateStart, Date mDateEnd) {
-        long different = mDateEnd.getTime() - mDateStart.getTime();
-        long secondsInMilli = 1000;
-        long minutesInMilli = secondsInMilli * 60;
-        long hoursInMilli = minutesInMilli * 60;
-        long daysInMilli = hoursInMilli * 24;
-        long elapsedDays = different / daysInMilli;
-        different = different % daysInMilli;
-        long elapsedHours = different / hoursInMilli;
-        different = different % hoursInMilli;
-        long elapsedMinutes = different / minutesInMilli;
-        long minutes = elapsedHours * 60 + elapsedMinutes;
-        long result = elapsedDays * 24 * 60 + minutes;
-        if (0 > result) {
-            result = result + 720;  //result is minus then add 12*60 minutes
-        }
-        return result + "";
-    }
-
-    //is value btween tow times ?
-    public static boolean compareBetweenTwoTime(int hStart, int mStart, int hEnd, int mEnd) {
-        String mStrToday = "";
-        String mStrTomorrow = "";
-        Calendar  startCalendar = Calendar.getInstance();
-        Calendar endCalendar = Calendar.getInstance();
-        Calendar currentCalendar = Calendar.getInstance();
-        startCalendar.setTimeZone(TimeZone.getDefault());
-        startCalendar.set(Calendar.HOUR, hStart);
-        startCalendar.set(Calendar.MINUTE, mStart);
-        endCalendar.setTimeZone(TimeZone.getDefault());
-        endCalendar.set(Calendar.HOUR, hEnd);
-        endCalendar.set(Calendar.MINUTE, mEnd);
-        if (hStart>12) hStart = hStart - 12;
-        if (hEnd>12) hEnd = hEnd - 12;
-        if (currentCalendar.getTimeInMillis()>startCalendar.getTimeInMillis() && currentCalendar.getTimeInMillis() < endCalendar.getTimeInMillis()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    */
-
 
 
 
