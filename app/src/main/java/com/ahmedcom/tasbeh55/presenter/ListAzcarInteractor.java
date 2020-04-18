@@ -13,12 +13,10 @@ import java.util.List;
 
 public class ListAzcarInteractor {
 
-
     ArrayList<AudioItem> audioItems = new ArrayList<>();
     private ArrayList<String> listText = new ArrayList<String>();
     public ArrayList<Boolean> selectedSound = new ArrayList<Boolean>();
     private ArrayList<Integer> repeatEachSound = new ArrayList<Integer>();
-
 
     public void defaultSelectedRepeatSounds(ListAzcarPresenter listAzcarPresenter) {
         for(int i = 0; i<createArrayListSounds().length; i++){
@@ -26,11 +24,11 @@ public class ListAzcarInteractor {
             selectedSound.add(false);
         }
     }
-
-    public void putNewSound(int position, boolean checked) {
+    public void putNewSound(int position, boolean checked){
         selectedSound.set(position, checked);
     }
     public void putRepeatingSound(int position, int i) {
+
         repeatEachSound.set(position, i);
     }
 
@@ -40,22 +38,12 @@ public class ListAzcarInteractor {
     }
 
 
-    public boolean LengthSelectedSound() {
-        int count = 0;
-        for (int i = 0; i<selectedSound.size(); i++) {
-            if (selectedSound.get(i)) {
-                count = count + 1;
-            }
-        }
-        return (count >= 2) ? false : true;
-    }
-
     public interface OnFinishedListener {
         void onFinished(ArrayList<String> arrayListText, ArrayList<AudioItem> arrayListSounds);
     }
     public void findItems(OnFinishedListener onFinishedListener){
         initiArraies(createArrayListSounds(),createArrayListText());
-        onFinishedListener.onFinished(listText,audioItems);
+        onFinishedListener.onFinished(listText , audioItems);
     }
 
     private int[] createArrayListSounds(){
@@ -73,9 +61,3 @@ public class ListAzcarInteractor {
         }
     }
 }
-
-
-
-
-
-

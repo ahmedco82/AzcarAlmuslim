@@ -1,5 +1,6 @@
 package com.ahmedcom.tasbeh55.ui.others;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
@@ -13,25 +14,26 @@ import com.ahmedcom.BackPressedCallingBack;
 import com.ahmedcom.tasbeh55.R;
 import com.ahmedcom.tasbeh55.interfaces.CallingBack;
 
+import java.lang.ref.WeakReference;
+
 public class ActionBarView implements View.OnClickListener{
 
-    private Context context;
     private String textTitle;
     private TextView textViewTitleBar;
     private ImageView imageIconBar;
-    private CallingBack callingBackRoot;
     private BackPressedCallingBack backPressedCallingBack;
 
-    public ActionBarView(Context context, String textTitle , Bitmap bitmap , BackPressedCallingBack callingBack) {
-        this.context = context;
+    private final WeakReference<Activity> mActivity;
+
+    public ActionBarView(Activity activity, String textTitle , Bitmap bitmap , BackPressedCallingBack callingBack) {
+        this.mActivity = new WeakReference<>(activity);
         this.textTitle = textTitle;
-        ActionBar actionBar = ((AppCompatActivity) context).getSupportActionBar();
+        ActionBar actionBar = ((AppCompatActivity) mActivity.get()).getSupportActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(R.layout.toolbar);
         actionBar.setElevation(1);
         View view = actionBar.getCustomView();
-        // getSupportActionBar().setIcon(R.drawable.dot1);
         imageIconBar = (ImageView)view.findViewById(R.id.Icon);
         backPressedCallingBack = callingBack;
         imageIconBar.setOnClickListener(this);
@@ -39,6 +41,7 @@ public class ActionBarView implements View.OnClickListener{
         textViewTitleBar = view.findViewById(R.id.text_title);
         view.findViewById(R.id.l_container).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         textViewTitleBar.setText(textTitle);
+        //   callBackPressed = null;
     }
 
     @Override

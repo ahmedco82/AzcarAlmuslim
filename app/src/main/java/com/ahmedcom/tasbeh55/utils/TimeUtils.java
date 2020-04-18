@@ -12,12 +12,8 @@ import java.util.Date;
 public class TimeUtils {
 
 
-
-
-
-
-
     public static int getTimeInMinutes(Context context) {
+        //  private WeakReference<MainActivity> mainActivity;
       int getTimes = SharedPreferencesUtils.getTimes(context).getEveryTime();
        int reuslt =1;
         getTimes = (getTimes==1) ? reuslt= 1 : (getTimes==1) ? reuslt= 2 : (getTimes==3) ? reuslt= 4 :

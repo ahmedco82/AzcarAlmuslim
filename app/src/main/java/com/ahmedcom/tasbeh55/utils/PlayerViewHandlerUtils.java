@@ -5,7 +5,9 @@ import android.media.MediaPlayer;
 
 import com.ahmedcom.tasbeh55.adapters.AzcarListAdapter;
 import com.ahmedcom.tasbeh55.interfaces.SoundAdapter;
+import com.ahmedcom.tasbeh55.ui.activities.ListAzcarActivity;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,15 +20,18 @@ public class PlayerViewHandlerUtils {
 
     private List<Integer> repeatEachSound;
     public ArrayList<MediaPlayer> selectedSound;
-    SoundAdapter soundAdapter;
+    //SoundAdapter soundAdapter;
 
-    Context context;
+    // Context context;
+
+    private WeakReference<Context> context;
+    private WeakReference<AzcarListAdapter> soundAdapter;
 
     public PlayerViewHandlerUtils(Context context) {
         this.currentSound=0;
         this.counterSound=0;
         this.quiteSound= 1;
-        this.context = context;
+        this.context = new WeakReference<>(context);
         selectedSound = new ArrayList<MediaPlayer>();
         selectedSound.addAll(SharedPreferencesUtils.filterSelectedSound(context));
         repeatEachSound = new ArrayList<Integer>();
@@ -34,7 +39,8 @@ public class PlayerViewHandlerUtils {
     }
 
     public PlayerViewHandlerUtils(AzcarListAdapter soundAdapter){
-        this.soundAdapter = soundAdapter;
+     this.soundAdapter = new WeakReference<>(soundAdapter);
+     //  this.soundAdapter = soundAdapter;
     }
 
     public void startMediaPlayer(Context context, int audioResId) {
@@ -51,12 +57,12 @@ public class PlayerViewHandlerUtils {
     private void releaseMediaPlayer() {
         mediaPlayer.release();
         mediaPlayer = null;
-        soundAdapter.refreshUiSound(false);
+        soundAdapter.get().refreshUiSound(false);
     }
 
     public void CheckisNull(){
         if (mediaPlayer != null) {
-            soundAdapter.refreshUiSound(true);
+            soundAdapter.get().refreshUiSound(true);
         }
     }
     public void Pause() {
@@ -126,44 +132,5 @@ public class PlayerViewHandlerUtils {
              }
          });
      }
-
-
-
-
-
-    /*
-   public void playGrupSounds(MediaPlayer mediaPlayer){
-    SharedPreferencesUtils.filterSelectedSound(context).get(currentSound).start();
-     SharedPreferencesUtils.filterSelectedSound(context).get(currentSound).setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-       @Override
-         public void onCompletion(MediaPlayer mp) {
-               if (SharedPreferencesUtils.filterRepeatingSound(context).get(currentSound) != 0) {
-                   if (quiteSound != 0) {
-                       counterSound += 1;
-                       if (counterSound == SharedPreferencesUtils.filterRepeatingSound(context).get(currentSound)) {
-                           counterSound = 0;
-                           quiteSound = 0;
-                       }
-                       playGrupSounds(SharedPreferencesUtils.filterSelectedSound(context).get(currentSound));
-                   } else {
-                       currentSound += 1;
-                       if (currentSound<SharedPreferencesUtils.filterSelectedSound(context).size())
-                           playGrupSounds(SharedPreferencesUtils.filterSelectedSound(context).get(currentSound));
-                       else
-                         currentSound = 0;
-                       quiteSound = 1;
-                   }
-               }else{
-                   currentSound += 1;
-                   if(currentSound<SharedPreferencesUtils.filterSelectedSound(context).size())
-                       playGrupSounds(SharedPreferencesUtils.filterSelectedSound(context).get(currentSound));
-                   else
-                       currentSound = 0;
-                   quiteSound = 1;
-               }
-           }
-       });
-   }
-
-     */
 }
+

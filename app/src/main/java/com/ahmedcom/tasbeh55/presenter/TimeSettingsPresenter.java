@@ -10,16 +10,20 @@ import com.ahmedcom.tasbeh55.models.Times;
 import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
 import com.ahmedcom.tasbeh55.utils.TextUtils;
 
+import java.lang.ref.WeakReference;
+
 public class TimeSettingsPresenter implements TimeSettingsInteractor.OnStopTimeAlertListener, TimeSettingsInteractor.OnPickerClockDialogListener {
 
-    ViewTimeSettings viewItems;
+    //ViewTimeSettings viewItems;
     Times time;
     private TimeSettingsInteractor timeSettingsInteractor;
+    final WeakReference<ViewTimeSettings>viewItems;
 
     public TimeSettingsPresenter(ViewTimeSettings viewItems, TimeSettingsInteractor timeSettingsInteractor) {
-        this.viewItems = viewItems;
+       // this.viewItems = viewItems;
+        this.viewItems = new WeakReference<>(viewItems);
         this.timeSettingsInteractor = timeSettingsInteractor;
-        viewItems.pickerDialogEveryTime();
+        this.viewItems.get().pickerDialogEveryTime();
         time = new Times();
     }
 
@@ -38,18 +42,18 @@ public class TimeSettingsPresenter implements TimeSettingsInteractor.OnStopTimeA
     public void saveTimes(int everyTime, int stopTimer) {
         time.setEveryTime(everyTime);
         time.setStopTimer(stopTimer);
-        SharedPreferencesUtils.saveTimes((Context) viewItems, time);
+        SharedPreferencesUtils.saveTimes((Context) viewItems.get(), time);
     }
 
     public void pickerDialogRememberInfo(AppCompatEditText textSelectTimeFrom, AppCompatEditText textSelectTimeTo) {
-      boolean boxesTimeIsEmpty = TextUtils.isEmpty(textSelectTimeFrom, textSelectTimeTo);
-        if(boxesTimeIsEmpty && SharedPreferencesUtils.isOneORMoreSelected((Context) viewItems)) {
-         viewItems.showDialogRememberInfo();
+        boolean boxesTimeIsEmpty = TextUtils.isEmpty(textSelectTimeFrom, textSelectTimeTo);
+        if(boxesTimeIsEmpty && SharedPreferencesUtils.isOneORMoreSelected((Context) viewItems.get())) {
+            viewItems.get().showDialogRememberInfo();
         }else{
-          if(SharedPreferencesUtils.getTimes((Context) viewItems).getStopTimer() == 0 && SharedPreferencesUtils.isOneORMoreSelected((Context) viewItems)) {
-            viewItems.showDialogRememberInfo();
+            if(SharedPreferencesUtils.getTimes((Context) viewItems.get()).getStopTimer() == 0 && SharedPreferencesUtils.isOneORMoreSelected((Context) viewItems.get())) {
+                viewItems.get().showDialogRememberInfo();
             }else{
-              Toast.makeText((Context) viewItems, R.string.empty_spaces, Toast.LENGTH_LONG).show();
+                Toast.makeText((Context) viewItems.get(), R.string.empty_spaces, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -59,12 +63,12 @@ public class TimeSettingsPresenter implements TimeSettingsInteractor.OnStopTimeA
     }
     @Override
     public void openStopTimeAlert() {
-        viewItems.clearTextBoxesOfTimes();
+        viewItems.get().clearTextBoxesOfTimes();
     }
 
     @Override
     public void closeStopTimeAlert(){
-        viewItems.setStopTimeAlert();
+        viewItems.get().setStopTimeAlert();
     }
 
     public void pickerClockDialog(int i){
@@ -72,14 +76,14 @@ public class TimeSettingsPresenter implements TimeSettingsInteractor.OnStopTimeA
     }
     @Override
     public void pickerClockDialogFrom(){
-        viewItems.showClockDialogFrom();
+        viewItems.get().showClockDialogFrom();
     }
     @Override
     public void pickerClockDialogTo(){
-        viewItems.showClockDialogTo();
+        viewItems.get().showClockDialogTo();
     }
     public void defaultTimesOfBoxes(){
-        viewItems.disabledTimesOfBoxes();
-        viewItems.clearTimesOfBoxes();
+        viewItems.get().disabledTimesOfBoxes();
+        viewItems.get().clearTimesOfBoxes();
     }
 }

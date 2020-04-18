@@ -2,8 +2,12 @@ package com.ahmedcom.tasbeh55.utils;
 import android.content.Context;
 import android.widget.EditText;
 
+import java.lang.ref.WeakReference;
+
 public class TextUtils{
     public static String getTimeFromFormatting(Context context){
+
+      //  private WeakReference<MainActivity> mainActivity;
        String textTimeFrom = "";
        textTimeFrom = SharedPreferencesUtils.getTimes(context).getStart_AM_PM()==1? SharedPreferencesUtils.getTimes(context).getHour_start() + ":" + SharedPreferencesUtils.getTimes(context).getMinute_start() + " " + "PM" :SharedPreferencesUtils.getTimes(context).getHour_start() + ":"
        + SharedPreferencesUtils.getTimes(context).getMinute_start() + " " + "AM";

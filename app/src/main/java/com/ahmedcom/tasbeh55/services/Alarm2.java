@@ -17,8 +17,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Alarm2 extends Service {
-    public int counter = 0;
-    Context context;
     public  int currentSound;
     public  int quiteSound;
     public  int counterSound;
@@ -27,25 +25,15 @@ public class Alarm2 extends Service {
     int step = 0;
     private  int stop_timer;
     private  boolean betweenTowTime =true;
-    public int getSeconds;
     public int Length;
-    public MediaPlayer[] allSounds;
-    private AlarmManager alarmManager;
     private int lengtListSound;
     SharedPreferencesUtils globalSharedPreferences;
     PlayerViewHandlerUtils playerViewHandler;
     MediaPlayer m = null;
-    public Alarm2(Context context) {
-        super();
-        this.context = context;
-        //Log.i("HERE", "here service created!");
-    }
-    public Alarm2(){
 
-    }
      //getBaseContext()
     private void installation(){
-        globalSharedPreferences = new SharedPreferencesUtils(this);
+        globalSharedPreferences = new SharedPreferencesUtils(getApplicationContext());
         currentSound = 0;
         quiteSound = 1;
         counterSound = 0;
@@ -58,7 +46,6 @@ public class Alarm2 extends Service {
         super.onCreate();
         installation();
         playerViewHandler = new PlayerViewHandlerUtils(getApplicationContext());
-        //copySoundsFromSharedPrefToArraies(allSounds);
     }
 
 
@@ -106,30 +93,28 @@ public class Alarm2 extends Service {
      }
 
     public void excute(){
-
-        stop_timer = SharedPreferencesUtils.getTimes(getApplicationContext()).getStopTimer();
-     //   boolean currenTime = TimeUtils.compareBetweenTwoTime( SharedPreferencesUtils.getTimes(this).getHour_start(), SharedPreferencesUtils.getTimes(this).getMinute_start(), SharedPreferencesUtils.getTimes(this).getHour_end(),SharedPreferencesUtils.getTimes(this).getMinute_end());
-        boolean currenTime= TimeUtils.isCurrentTimeBtween(TimeUtils.convert24HourTime(TimeUtils.getTimeStartWithAmPm(this)), TimeUtils.convert24HourTime(TimeUtils.getTimeEndWithAmPm(this)));
-
-        if(stop_timer == 1){
-            if(currenTime != betweenTowTime){
-
-                playerViewHandler.playGrupSounds(m);
-            }
+      stop_timer = SharedPreferencesUtils.getTimes(getApplicationContext()).getStopTimer();
+        boolean currenTime= TimeUtils.isCurrentTimeBtween(TimeUtils.convert24HourTime(TimeUtils.getTimeStartWithAmPm(getApplicationContext())), TimeUtils.convert24HourTime(TimeUtils.getTimeEndWithAmPm(getApplicationContext())));
+         if(stop_timer == 1){
+          if(currenTime != betweenTowTime){
+           playerViewHandler.playGrupSounds(m);
+          }
         }else{
-            playerViewHandler.playGrupSounds(m);
+          playerViewHandler.playGrupSounds(m);
         }
     }
 
     public void stoptimertask(){
        if(timer != null) {
-         timer.cancel();
+          timer.cancel();
           timer = null;
          }
         if(playerViewHandler.selectedSound.get(currentSound).isPlaying()) {
-            playerViewHandler.selectedSound.get(currentSound).stop();
+           playerViewHandler.selectedSound.get(currentSound).stop();
        }
     }
+
+
 
     @Nullable
     @Override

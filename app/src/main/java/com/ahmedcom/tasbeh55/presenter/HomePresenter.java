@@ -17,6 +17,7 @@ public class HomePresenter implements HomeInteractor.OnFinishedListener, HomeInt
     }
 
     public void FindItemsGridview(){
+        //findItemsInteractor.findItems(this);
         findItemsInteractor.findItems(this);
     }
 

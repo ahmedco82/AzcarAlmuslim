@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ToggleButton;
 import com.ahmedcom.BackPressedCallingBack;
@@ -19,7 +20,10 @@ import com.ahmedcom.tasbeh55.presenter.ListAzcarInteractor;
 import com.ahmedcom.tasbeh55.presenter.ListAzcarPresenter;
 import com.ahmedcom.tasbeh55.presenter.ViewListAzcar;
 import com.ahmedcom.tasbeh55.ui.others.ActionBarView;
+import com.ahmedcom.tasbeh55.utils.App;
 import com.ahmedcom.tasbeh55.utils.SharedPreferencesUtils;
+import com.squareup.leakcanary.RefWatcher;
+
 import java.util.ArrayList;
 
 public class ListAzcarActivity extends AppCompatActivity implements HasBack , RecyclerViewClickListener , ViewListAzcar {
@@ -27,6 +31,8 @@ public class ListAzcarActivity extends AppCompatActivity implements HasBack , Re
     AzcarListAdapter adapter;
     RecyclerView recyclerView;
     public ListAzcarPresenter  listAzcarPresenter;
+   // ViewListAzcar viewListAzcar= null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +40,7 @@ public class ListAzcarActivity extends AppCompatActivity implements HasBack , Re
         setContentView(R.layout.activity_listazcar);
         // repeatEachSound =  new int[lengthListSounds];
         listAzcarPresenter = new ListAzcarPresenter(this,new ListAzcarInteractor());
-        Bitmap bitmap = BitmapFactory.decodeResource(ListAzcarActivity.this.getResources(), R.drawable.left_arrow);
+        Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.left_arrow);
         new ActionBarView(this, "أذكار مع التكرار", bitmap, new BackPressedCallingBack(this));
         //currentSound = (MediaPlayer) MediaPlayer.create(this, R.raw.a1);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -57,6 +63,7 @@ public class ListAzcarActivity extends AppCompatActivity implements HasBack , Re
              listAzcarPresenter.repeatingSound(position, 2);
          }
         listAzcarPresenter.saveAllSounds();
+      //  finish();
     }
 
     @Override
@@ -68,4 +75,5 @@ public class ListAzcarActivity extends AppCompatActivity implements HasBack , Re
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
+
 }

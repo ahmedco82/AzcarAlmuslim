@@ -1,6 +1,7 @@
 package com.ahmedcom.tasbeh55.presenter;
 
 public interface ViewTimeSettings {
+
     void showDialogRememberInfo();
     void pickerDialogEveryTime();
     void setStopTimeAlert();

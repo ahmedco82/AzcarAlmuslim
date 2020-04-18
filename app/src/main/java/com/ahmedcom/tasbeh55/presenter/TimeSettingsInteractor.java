@@ -2,7 +2,13 @@ package com.ahmedcom.tasbeh55.presenter;
 
 import android.view.View;
 
+import java.lang.ref.WeakReference;
+
 public class TimeSettingsInteractor {
+
+   // OnStopTimeAlertListener mListenerOnStopTimeAlert = null;
+  //  OnPickerClockDialogListener mListenerOnPickerClockDialog= null;
+   // WeakReference<OnStopTimeAlertListener>mListenerOnStopTimeAlert;
 
     public interface OnStopTimeAlertListener {
         void openStopTimeAlert();
@@ -12,19 +18,20 @@ public class TimeSettingsInteractor {
         void pickerClockDialogFrom();
         void pickerClockDialogTo();
     }
-
     public void setStopTimeAlert(boolean setOrNot , OnStopTimeAlertListener listener){
+       final WeakReference<OnStopTimeAlertListener>mListenerOnStopTimeAlert =new WeakReference<>(listener);
         if (setOrNot == true) {
-            listener.openStopTimeAlert();
+            mListenerOnStopTimeAlert.get().openStopTimeAlert();
         } else {
-            listener.closeStopTimeAlert();
+            mListenerOnStopTimeAlert.get().closeStopTimeAlert();
         }
     }
-    public void chosePickerClockDialog( int i ,OnPickerClockDialogListener listener){
+    public void chosePickerClockDialog( int i , OnPickerClockDialogListener listener){
+        final WeakReference<OnPickerClockDialogListener>mListenerOnPickerClockDialog =new WeakReference<>(listener);
         if(i==1){
-            listener.pickerClockDialogFrom();
+            mListenerOnPickerClockDialog.get().pickerClockDialogFrom();
         }else {
-            listener.pickerClockDialogTo();
+            mListenerOnPickerClockDialog.get().pickerClockDialogTo();
         }
     }
 }

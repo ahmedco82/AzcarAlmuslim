@@ -14,7 +14,7 @@ import com.ahmedcom.tasbeh55.presenter.TimeSettingsPresenter;
 import java.util.Calendar;
 
 
-public class TimePickerDialog extends DialogFragment implements android.app.TimePickerDialog.OnTimeSetListener {
+public  class TimePickerDialog extends DialogFragment implements android.app.TimePickerDialog.OnTimeSetListener {
 
     public int currentEditText = 0;
     public String AM_PM = "";

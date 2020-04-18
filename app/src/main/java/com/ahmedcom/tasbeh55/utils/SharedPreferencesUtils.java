@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,12 +30,15 @@ public class SharedPreferencesUtils {
     }
 
     public static void setServiceOnOff(Context context,Boolean value){
-       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        final WeakReference<Context> mContext =  new WeakReference<>(context);
+       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext.get());
        prefs.edit().putBoolean("locked", value).apply();
     }
 
     public static boolean isServiceRunning(Class<?> serviceClass , Context context) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        final WeakReference<Context> mContext =  new WeakReference<>(context);
+
+        ActivityManager manager = (ActivityManager)  mContext.get().getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
                 return true;
@@ -45,7 +49,8 @@ public class SharedPreferencesUtils {
 
     public static boolean isOneORMoreSelected(Context context){
         boolean checkArray = false;
-        for(Boolean object:getArrayBooleanPrefs(context)) {
+        final WeakReference<Context> mContext =  new WeakReference<>(context);
+        for(Boolean object:getArrayBooleanPrefs(mContext.get())) {
             if (object) {
                 checkArray = true;
                 break;
@@ -57,8 +62,9 @@ public class SharedPreferencesUtils {
     }
 
     public static boolean getLengthSelectedSound(Context context) {
+        final WeakReference<Context> mContext =  new WeakReference<>(context);
         int count = 0;
-        for (int i = 0; i<getArrayBooleanPrefs(context).size(); i++) {
+        for (int i = 0; i<getArrayBooleanPrefs(mContext.get()).size(); i++) {
             if (getArrayBooleanPrefs(context).get(i)) {
                 count = count + 1;
             }
@@ -66,14 +72,17 @@ public class SharedPreferencesUtils {
         return (count >= 2) ? false : true;
     }
 
+
     public static Boolean getServiceOnOff(Context context){
-      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        final WeakReference<Context> mContext =  new WeakReference<>(context);
+       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext.get());
        Boolean yourLocked = prefs.getBoolean("locked", false);
       return  yourLocked;
     }
 
-    public static void setArrayIntPrefs(ArrayList<Integer> array, Context mContext) {
-        SharedPreferences prefs = mContext.getSharedPreferences("preferencename", 0);
+    public static void setArrayIntPrefs(ArrayList<Integer> array, Context context) {
+        final WeakReference<Context> mContext =  new WeakReference<>(context);
+        SharedPreferences prefs = mContext.get().getSharedPreferences("preferencename", 0);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("arrayNameInt", array.size());
         for(int i=0;i<array.size();i++)
@@ -81,8 +90,9 @@ public class SharedPreferencesUtils {
         editor.apply();
     }
 
-    public static ArrayList<Integer> getArrayIntPrefs(Context mContext) {
-        SharedPreferences prefs = mContext.getSharedPreferences("preferencename", 0);
+    public static ArrayList<Integer> getArrayIntPrefs(Context context) {
+        final WeakReference<Context> mContext =  new WeakReference<>(context);
+        SharedPreferences prefs = mContext.get().getSharedPreferences("preferencename", 0);
         int size = prefs.getInt("arrayNameInt", 0);
         ArrayList<Integer> array = new ArrayList<>(size);
         for(int i=0;i<size;i++)
@@ -90,8 +100,10 @@ public class SharedPreferencesUtils {
         return array;
     }
 
-    public static void setArrayBooleanPrefs(ArrayList<Boolean> array, Context mContext) {
-     SharedPreferences prefs = mContext.getSharedPreferences("preferencename", 0);
+    public static void setArrayBooleanPrefs(ArrayList<Boolean> array, Context context) {
+
+     final WeakReference<Context> mContext =  new WeakReference<>(context);
+     SharedPreferences prefs = mContext.get().getSharedPreferences("preferencename", 0);
       SharedPreferences.Editor editor = prefs.edit();
        editor.putInt("arrayNameBool", array.size());
         for(int i=0;i<array.size();i++)
@@ -99,8 +111,9 @@ public class SharedPreferencesUtils {
            editor.apply();
     }
 
-    public static ArrayList<Boolean> getArrayBooleanPrefs(Context mContext) {
-      SharedPreferences prefs = mContext.getSharedPreferences("preferencename", 0);
+    public static ArrayList<Boolean> getArrayBooleanPrefs(Context context) {
+       final WeakReference<Context> mContext =  new WeakReference<>(context);
+        SharedPreferences prefs = mContext.get().getSharedPreferences("preferencename", 0);
         int size = prefs.getInt("arrayNameBool", 0);
           ArrayList<Boolean> array = new ArrayList<Boolean>(size);
            for(int i=0;i<size;i++)
@@ -108,21 +121,25 @@ public class SharedPreferencesUtils {
         return array;
     }
 
-    public static void saveTimes(Context con , Times times){
+    public static void saveTimes(Context context , Times times){
+        final WeakReference<Context> mContext =  new WeakReference<>(context);
         Gson gson = new Gson();
         String var ="variable";
         String stringUser = gson.toJson(times);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(con);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext.get());
         prefs.edit().putString(var, stringUser).apply();
     }
 
+
+
     public static ArrayList<MediaPlayer> filterSelectedSound (Context context) {
-      int[] soundsRowsId = new int[]{R.raw.a1, R.raw.a2, R.raw.a3, R.raw.a4, R.raw.a5, R.raw.a6};
+     final WeakReference<Context> mContext =  new WeakReference<>(context);
+     int[] soundsRowsId = new int[]{R.raw.a1, R.raw.a2, R.raw.a3, R.raw.a4, R.raw.a5, R.raw.a6};
        MediaPlayer mPlayer;
         ArrayList<Integer>repeatingEverySound= new ArrayList<Integer>();
          ArrayList<MediaPlayer> selectedSound = new ArrayList<MediaPlayer>();
-           for(int i = 0; i <getArrayBooleanPrefs(context).size(); i++) {
-              if(getArrayBooleanPrefs(context).get(i) == true) {
+           for(int i = 0; i <getArrayBooleanPrefs(mContext.get()).size(); i++) {
+              if(getArrayBooleanPrefs(mContext.get()).get(i) == true) {
                   mPlayer = MediaPlayer.create(context, soundsRowsId[i]);
                   selectedSound.add(mPlayer);
                 }
@@ -131,19 +148,21 @@ public class SharedPreferencesUtils {
     }
 
     public static ArrayList<Integer> filterRepeatingSound (Context context) {
+        final WeakReference<Context> mContext =  new WeakReference<>(context);
         ArrayList<Integer>repeatingEverySound= new ArrayList<Integer>();
-        for(int i = 0; i < getArrayBooleanPrefs(context).size(); i++) {
-            if(getArrayBooleanPrefs(context).get(i) == true) {
-                repeatingEverySound.add(getArrayIntPrefs(context).get(i));
+        for(int i = 0; i < getArrayBooleanPrefs(mContext.get()).size(); i++) {
+            if(getArrayBooleanPrefs(mContext.get()).get(i) == true) {
+                repeatingEverySound.add(getArrayIntPrefs(mContext.get()).get(i));
             }
         }
         return new ArrayList<Integer>(repeatingEverySound);
     }
 
-    public static Times getTimes(Context con){
+    public static Times getTimes(Context context){
       Times times = new Times();
         String var ="variable";
-         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(con);
+        final WeakReference<Context> mContext =  new WeakReference<>(context);
+         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext.get());
           String data = prefs.getString(var, "");
             List<String> values = new ArrayList<String>();
              try{
@@ -172,139 +191,3 @@ public class SharedPreferencesUtils {
         return times;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-    public void setInt(Context con,String key, int value) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(con);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(key, value);
-        editor.apply();
-    }
-
-
-    public  int getInt(Context con,String key) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(con);
-        return prefs.getInt(key , 0);
-    }
-
-    public void setStr(String key, String value) {
-        SharedPreferences sharedPref = App.getAppContext().getSharedPreferences(PREFS_NAME,0);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
-
-    public String getStr(String key) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME , 0);
-        return prefs.getString(key ,"DNF");
-    }
-
-    public  void setBool(String key , boolean value) {
-        SharedPreferences sharedPref = context.getSharedPreferences(PREFS_NAME,0);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(key, value);
-        editor.apply();
-    }
-
-    public  boolean getBool(String key) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME , 0);
-        return prefs.getBoolean(key,false);
-    }
-    */
-/*
-
-    public  void saveMap(Map<String, Integer> inputMap) {
-        SharedPreferences pSharedPref = context.getSharedPreferences("Variables" , MODE_PRIVATE);
-        if (pSharedPref != null){
-            JSONObject jsonObject = new JSONObject(inputMap);
-            String jsonString = jsonObject.toString();
-            SharedPreferences.Editor editor = pSharedPref.edit();
-            editor.remove(mapKey).apply();
-            editor.putString(mapKey, jsonString);
-            editor.commit();
-        }
-    }
-
-
-    public  Map< String , Integer > loadMap() {
-        Map<String, Integer> outputMap = new HashMap<>();
-        SharedPreferences pSharedPref = context.getSharedPreferences("Variables", MODE_PRIVATE);
-        try{
-            if(pSharedPref != null) {
-                String jsonString = pSharedPref.getString(mapKey, (new JSONObject()).toString());
-                JSONObject jsonObject = new JSONObject(jsonString);
-                Iterator<String> keysItr = jsonObject.keys();
-                while (keysItr.hasNext()) {
-                    String key = keysItr.next();
-                    outputMap.put(key,(Integer)jsonObject.get(key));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return outputMap;
-    }
-
-
-
-
-    public void saveOject(Times objTimes){
-        SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
-        prefsEditor.putString("MyObject", objectToString(objTimes));
-        prefsEditor.commit();
-    }
-
-    public Times getfromOject(){
-      SharedPreferences mPrefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-       String value= mPrefs.getString("MyObject", "");
-        Times obj = stringToObjectS(value);
-      return obj;
-    }
-
-    public <T extends Serializable>T stringToObjectS(String string) {
-        byte[] bytes = Base64.decode(string, 0);
-        T object = null;
-        try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            object = (T) objectInputStream.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return object;
-    }
-
-
-    public  String objectToString(Serializable object){
-        String encoded = null;
-        try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-            objectOutputStream.writeObject(object);
-            objectOutputStream.close();
-            encoded = new String(Base64.encodeToString(byteArrayOutputStream.toByteArray(), 0));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return encoded;
-    }
-*/

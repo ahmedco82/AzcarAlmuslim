@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.ahmedcom.tasbeh55.R;
 import com.ahmedcom.tasbeh55.models.IconsAndTitles;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -20,15 +21,13 @@ import butterknife.ButterKnife;
 public class GridViewAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
-    private Context ctx;
+    final WeakReference<Context>ctx;
     private ArrayList<IconsAndTitles> iconsAndTitles;
     @BindView(R.id.ivGallery) ImageView iconButton;
     @BindView(R.id.tv)TextView titleIcon;
 
-
-
-    public GridViewAdapter(Context ctx, ArrayList<IconsAndTitles> imageModelArrayList) {
-        this.ctx = ctx;
+    public GridViewAdapter(Context ctx, ArrayList<IconsAndTitles> imageModelArrayList){
+        this.ctx = new WeakReference<>(ctx);
         this.iconsAndTitles = imageModelArrayList;
     }
 
@@ -50,7 +49,7 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position , View convertView , ViewGroup parent){
-         inflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+         inflater = (LayoutInflater)ctx.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
          View itemView = inflater.inflate(R.layout.grid_item, parent, false);
          ButterKnife.bind(this, itemView);
          iconButton.setImageResource(iconsAndTitles.get(position).getImage_drawable());
